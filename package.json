@@ -35,9 +35,9 @@
     "varebot-sub": "varebot-sub"
   },
   "scripts": {
-    "start": "node based.js",
-    "code": "node based.js code",
-    "qr": "node based.js qr"
+    "start": "NODE_TLS_REJECT_UNAUTHORIZED=0 node based.js",
+    "code": "NODE_TLS_REJECT_UNAUTHORIZED=0 node based.js code",
+    "qr": "NODE_TLS_REJECT_UNAUTHORIZED=0 node based.js qr"
   },
   "dependencies": {
     "@hapi/boom": "^10.0.1",
