@@ -1,87 +1,39 @@
-# BLD-BLOOD-BOT 🚀
-
 <p align="center">
-  <img src="https://img.shields.io/github/stars/BLOOD212/BLD-BLOOD-BOT?style=for-the-badge&color=red" alt="Stars">
-  <img src="https://img.shields.io/github/forks/BLOOD212/BLD-BLOOD-BOT?style=for-the-badge&color=red" alt="Forks">
-  <img src="https://img.shields.io/github/license/BLOOD212/BLD-BLOOD-BOT?style=for-the-badge&color=red" alt="License">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=35&pause=1000&color=FF0000&center=true&vCenter=true&width=500&lines=🩸+BLD-BLOOD-BOT+🩸;IL+RE+DEI+BOT;VELOCE+•+INTELLIGENTE;BY+BLOOD212" alt="Typing SVG" />
 </p>
 
 <p align="center">
-  <b>Il miglior bot WhatsApp intelligente e veloce.</b><br>
-  Costruito per essere potente, fluido e personalizzabile.
+  <img src="https://img.shields.io/github/stars/BLOOD212/BLD-BLOOD-BOT?style=for-the-badge&logo=github&color=red" />
+  <img src="https://img.shields.io/github/forks/BLOOD212/BLD-BLOOD-BOT?style=for-the-badge&logo=git&color=red" />
+  <img src="https://img.shields.io/github/issues/BLOOD212/BLD-BLOOD-BOT?style=for-the-badge&logo=github&color=red" />
 </p>
-
----
-
-## ✨ Caratteristiche Principali
-
-* ⚡ **Performance Ultra-Veloci:** Risposte istantanee grazie all'ottimizzazione del codice.
-* 🤖 **Intelligenza Integrata:** Gestione avanzata dei comandi e delle risposte.
-* 🛠️ **Facile da Configurare:** Setup guidato per essere operativo in pochi minuti.
-* 🔄 **Sempre Aggiornato:** Supporto continuo e nuove feature in arrivo.
-
----
-
-## 🛠️ Requisiti
-
-Prima di iniziare, assicurati di avere installato:
-* [Node.js](https://nodejs.org/) (Versione 16 o superiore)
-* [Git](https://git-scm.com/)
-* Uno smartphone con WhatsApp per scansionare il QR Code.
-
----
-
-## 🚀 Installazione Rapida
-
-Segui questi semplici passaggi per avviare il tuo bot:
-
-1.  **Clona il repository:**
-    ```bash
-    git clone [https://github.com/BLOOD212/BLD-BLOOD-BOT.git](https://github.com/BLOOD212/BLD-BLOOD-BOT.git)
-    cd BLD-BLOOD-BOT
-    ```
-
-2.  **Installa le dipendenze:**
-    ```bash
-    npm install
-    ```
-
-3.  **Avvia il bot:**
-    ```bash
-    npm start
-    ```
-
----
-
-## ⚙️ Configurazione
-
-Puoi personalizzare il comportamento del bot modificando il file `config.js` (o il file relativo alle impostazioni):
-
-| Variabile | Descrizione | Default |
-| :--- | :--- | :--- |
-| `PREFIX` | Il simbolo per attivare i comandi | `!` |
-| `OWNER` | Numero del proprietario | `TuoNumero` |
-| `MODE` | Modalità (Pubblica/Privata) | `public` |
-
----
-
-## 🤝 Contributi
-
-I contributi rendono la comunità open source un posto fantastico! 
-1. Fai il **Fork** del progetto.
-2. Crea il tuo **Feature Branch** (`git checkout -b feature/AmazingFeature`).
-3. Fai il **Commit** delle tue modifiche (`git commit -m 'Add some AmazingFeature'`).
-4. Fai il **Push** sul branch (`git push origin feature/AmazingFeature`).
-5. Apri una **Pull Request**.
-
----
-
-## 🛡️ Licenza
-
-Distribuito sotto licenza MIT. Vedi il file `LICENSE` per maggiori informazioni.
-
----
 
 <p align="center">
-  Sviluppato con ❤️ da <a href="https://github.com/BLOOD212">BLOOD212</a>
+  <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%">
 </p>
+
+## ⚡ DOMINA WHATSAPP
+**BLD-BLOOD-BOT** è l'assistente definitivo, progettato per la massima velocità e potenza. Trasforma la tua esperienza su WhatsApp con un bot d'élite.
+
+### 💎 Funzionalità Principali
+* 🧪 **Core Ultra-Light:** Consumo di risorse ridotto all'osso.
+* 🤖 **AI Brain:** Risposte intelligenti e gestione conversazioni.
+* 🎭 **Multimediale:** Downloader per TikTok, IG, YT e creazione Sticker istantanea.
+* 🛡️ **Protezione Totale:** Sistema Anti-Ban e gestione gruppi avanzata.
+
+---
+
+## 🛠️ INSTALLAZIONE RAPIDA
+
+```bash
+# 1. Clona il repository
+git clone [https://github.com/BLOOD212/BLD-BLOOD-BOT.git](https://github.com/BLOOD212/BLD-BLOOD-BOT.git)
+
+# 2. Entra nella cartella
+cd BLD-BLOOD-BOT
+
+# 3. Installa le dipendenze
+npm install
+
+# 4. Avvia il bot
+npm start
