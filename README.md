@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=45&pause=1000&color=FF0000&center=true&vCenter=true&width=600&height=100&lines=🩸+BLD-BLOOD-BOT+🩸;IL+RE+DEI+BOT+WHATSAPP;BY+BLOOD+DEVELOPER" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=50&pause=1000&color=FF0000&center=true&vCenter=true&width=700&height=120&lines=🩸+BLD-BLOOD-BOT+🩸;THE+MOST+POWERFUL+BOT;DEVELOPED+BY+BLOOD" alt="Typing SVG" />
 </p>
 
 <p align="center">
@@ -8,36 +8,36 @@
 
 <p align="center">
   <a href="https://whatsapp.com/channel/0029VbCIFecBadmZCxG8ug0W">
-    <img src="https://img.shields.io/badge/UNISCITI_AL_CANALE-CANALE_UFFICIALE-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" />
+    <img src="https://img.shields.io/badge/CANALE_WHATSAPP-UNISCITI_ORA-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Canale WhatsApp" />
   </a>
 </p>
 
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=20&pause=500&color=00FF00&center=true&vCenter=true&width=400&height=50&lines=STATUS:+ONLINE+✅;VERSION:+1.0.0+🚀;SPEED:+ULTRA+FAST+⚡" alt="Status SVG" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=25&pause=800&color=00FF00&center=true&vCenter=true&width=600&height=60&lines=STATUS:+ONLINE+✅;SYSTEM:+STABLE+🚀;OWNER:+BLOOD+🧛‍♂️" alt="Status SVG" />
 </p>
 
----
+<p align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=30&pause=500&color=FF0000&center=true&vCenter=true&width=700&height=80&lines=DESCRIZIONE;SPECIFICHE+TECNICHE" alt="Titolo Descrizione Animato" />
+</p>
 
-## 📝 DESCRIZIONE DETTAGLIATA
-**BLD-BLOOD-BOT** non è solo un bot, è un ecosistema completo per WhatsApp. Progettato con un'architettura modulare e un core ultra-leggero, offre una stabilità senza precedenti. La sua intelligenza artificiale avanzata gli permette di comprendere il contesto, rendendo l'interazione fluida e naturale. 
+**BLD-BLOOD-BOT** non è solo un semplice bot, è un ecosistema avanzato e completo per la gestione delle chat di WhatsApp, costruito meticolosamente per garantire la massima potenza e stabilità operativa in ogni situazione.
 
-> [!NOTE]
-> Il bot è costantemente aggiornato per evitare ban e migliorare le funzioni.
-
----
-
-## ⚡ COMANDI POPOLARI
-* `!menu` - Visualizza la lista completa.
-* `!ai` - Chiedi all'intelligenza artificiale.
-* `!yt` - Scarica video da YouTube HD.
-* `!sticker` - Crea sticker istantanei.
-* `!kick` - Rimuovi utenti dal gruppo.
+### 🛡️ Specifiche del Sistema:
+* **Core Ultra-Rapido:** Sviluppato in Node.js (V16+) con architettura asincrona e non bloccante per performance superiori.
+* **Intelligenza Integrata:** Sistema neurale di base per l'elaborazione del linguaggio naturale e risposte contestuali.
+* **Stabilità Garantita:** Buffer intelligente di gestione dei messaggi in ingresso e uscita per prevenire crash anche sotto carichi pesanti o spam.
+* **Sicurezza Avanzata:** Algoritmo Anti-Ban 4.0 costantemente aggiornato, con rotazione automatica degli header e simulazione di comportamento umano.
+* **Multitasking Efficiente:** Gestione contemporanea e parallela di download multimediali in HD (fino a 1080p e oltre) e comandi di amministrazione del gruppo.
 
 ---
 
-## 🛠️ METODI DI INSTALLAZIONE
+<p align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=30&pause=500&color=FF0000&center=true&vCenter=true&width=700&height=80&lines=METODI;DI+INSTALLAZIONE" alt="Titolo Installazione Animato" />
+</p>
 
 ### 📱 METODO 1: TERMUX (Android)
+Copia e incolla questi comandi nel tuo terminale Android, uno alla volta, per installare e configurare il bot in pochi minuti:
+
 ```bash
 pkg update && pkg upgrade
 pkg install git nodejs -y
