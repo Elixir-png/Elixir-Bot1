@@ -46,6 +46,11 @@ git clone [https://github.com/BLOOD212/BLD-BLOOD-BOT.git](https://github.com/BLO
 cd BLD-BLOOD-BOT
 npm install
 npm start
+
+
+
+
+
 <p align="center">
 <img src="https://www.google.com/search?q=https://readme-typing-svg.herokuapp.com%3Ffont%3DOrbitron%26size%3D30%26pause%3D500%26color%3DFF0000%26center%3Dtrue%26vCenter%3Dtrue%26width%3D700%26height%3D80%26lines%3DCOLLEGAMENTO%3BSISTEMA%2BVPS" alt="Titolo VPS Animato" />
 </p>
