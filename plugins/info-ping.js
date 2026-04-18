@@ -2,52 +2,50 @@ import os from 'os'
 
 let handler = async (m, { conn, usedPrefix }) => {
   try {
-    // Misurazione Nanometrica (High-Resolution Time)
+    // Misurazione ad altissima precisione (Nanosecondi)
     const start = process.hrtime.bigint()
     await conn.readMessages([m.key])
     const end = process.hrtime.bigint()
     
-    // Calcolo latenza convertendo nanosecondi in millisecondi (con 6 decimali)
-    const latency = (Number(end - start) / 1000000).toFixed(6)
-    
+    // Conversione in ms con precisione al millesimo
+    const latency = (Number(end - start) / 1000000).toFixed(3)
+
     const uptimeMs = process.uptime() * 1000
-    const { rss, heapUsed, heapTotal } = process.memoryUsage()
-    
-    // Load Average (Precisione Linux)
-    const load = os.loadavg().map(l => l.toFixed(2)).join(' | ')
-    const cpu = os.cpus()[0].model.replace(/Core\(TM\)|CPU|@|骁龙|Processor|with IBPB/g, '').trim()
+    const uptimeStr = clockString(uptimeMs)
+
+    // Calcolo esatto timestamp di avvio
+    const botStartTime = new Date(Date.now() - uptimeMs)
+    const activationTime = botStartTime.toLocaleString('it-IT', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    })
 
     const message = `
-🩸 *ＢＬＯＯＤ ＳＹＳＴＥＭ* 🩸
-『 *ᴘᴇʀғᴏʀᴍᴀɴᴄᴇ ᴍᴏɴɪᴛᴏʀ* 』
+╭━━━━━━•✦•━━━━━━╮
+              ✨ ᴘɪɴɢ ✨
+            ʙʟᴏᴏᴅ-ʙᴏᴛ
+╰━━━━━━•✦•━━━━━━╯
 
-┏━━━━━━━━━━━━━━━━━━━━━┓
-┃ 🧪 *LATENZA:* \`${latency} ms\`
-┃ ⏳ *UPTIME:* \`${clockString(uptimeMs)}\`
-┃ 📡 *HOST:* \`${os.platform().toUpperCase()}\`
-┗━━━━━━━━━━━━━━━━━━━━━┛
+◈ 𝖴𝗉𝗍𝗂𝗆𝖾: \`${uptimeStr}\`
+◈ 𝖫𝖺𝗍𝖾𝗇𝗓𝖺: \`${latency} ms\`
+◈ 𝖠𝗏𝗏𝗂𝗈: \`${activationTime}\`
 
-   〔 *🖥️ HARDWARE DATA* 〕
-  
-   ◈ *CPU:* \`${cpu}\`
-   ◈ *LOAD:* \`${load}\`
-   ◈ *RAM:* \`${(heapUsed / 1024 / 1024).toFixed(2)}MB / ${(os.totalmem() / 1024 / 1024 / 1024).toFixed(1)}GB\`
-   ◈ *HEAP:* \`${(heapTotal / 1024 / 1024).toFixed(2)} MB\`
-   ◈ *RSS:* \`${(rss / 1024 / 1024).toFixed(2)} MB\`
-
-   ┍━━━━━━━━━━━━━━━━━━━━━┑
-      *OFFLINE IS NOT AN OPTION*
-   ┕━━━━━━━━━━━━━━━━━━━━━┙
-
-      *OWNER:* *BLOOD*
+╭━━━━━━•✦•━━━━━━╮
+   𝖮𝗐𝗇𝖾𝗋: *BLOOD*
+   𝖲𝗍𝖺𝗍𝗈: _Online_
+╰━━━━━━•✦•━━━━━━╯
 `.trim()
 
     await conn.sendMessage(m.chat, {
       text: message,
       contextInfo: {
         externalAdReply: {
-          title: `[ ⚡ ] PRECISION: ${latency}ms`,
-          body: `LOAD: ${load}`,
+          title: `ʙʟᴏᴏᴅ ᴘᴇʀғᴏʀᴍᴀɴᴄᴇ ᴄᴏɴᴛʀᴏʟ`,
+          body: `Latenza reale: ${latency}ms`,
           mediaType: 1,
           previewType: 0,
           renderLargerThumbnail: false,
@@ -65,7 +63,7 @@ function clockString(ms) {
   let h = Math.floor(ms / 3600000)
   let m = Math.floor((ms % 3600000) / 60000)
   let s = Math.floor((ms % 60000) / 1000)
-  return `${h}h ${m}m ${s}s`
+  return [h, m, s].map(v => v.toString().padStart(2, '0')).join(':')
 }
 
 handler.help = ['ping']
