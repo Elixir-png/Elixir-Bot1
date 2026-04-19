@@ -317,7 +317,7 @@ async function handler(messageInfo) {
   await fs.unlink(tempFile).catch(() => {})
 }
 
-handler.help = ['compra (numero)']
+handler.help = ['buy (numero)']
 handler.tags = ['euro']
 handler.command = ['compra', 'compratutto']
 handler.register = false
