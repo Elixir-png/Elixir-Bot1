@@ -1,17 +1,8 @@
-import { createCanvas, loadImage } from 'canvas'
+import { createCanvas } from 'canvas'
 import GIFEncoder from 'gif-encoder-2'
 
 // --- CONFIGURAZIONI ---
-// Usiamo PNG invece di SVG per evitare l'errore di node-canvas
 const fruits = ['🍒', '🍋', '🍉', '🍇', '🍎', '🍓']
-const fruitURLs = {
-    '🍒': 'https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/png/72x72/1F352.png',
-    '🍋': 'https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/png/72x72/1F34B.png',
-    '🍉': 'https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/png/72x72/1F349.png',
-    '🍇': 'https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/png/72x72/1F347.png',
-    '🍎': 'https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/png/72x72/1F34E.png',
-    '🍓': 'https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/png/72x72/1F353.png'
-}
 const cavalliConfig = [
     { nome: 'ROSSO', color: '#ff4d4d' },
     { nome: 'BLU', color: '#4d94ff' },
@@ -67,32 +58,36 @@ let handler = async (m, { conn, command, args, usedPrefix }) => {
             return conn.sendMessage(m.chat, { text: '🏇 *Scegli il cavallo vincente (X3):*', buttons }, { quoted: m })
         }
 
-        // --- LOGICA SLOT ---
+        // --- LOGICA SLOT (Senza caricamento immagini esterne) ---
         if (command === 'slot') {
             if (!checkMoney(100)) return
-            const encoder = new GIFEncoder(600, 250)
+            const encoder = new GIFEncoder(600, 200)
             encoder.start(); encoder.setRepeat(0); encoder.setDelay(100); encoder.setQuality(10)
-            const canvas = createCanvas(600, 250); const ctx = canvas.getContext('2d')
+            const canvas = createCanvas(600, 200); const ctx = canvas.getContext('2d')
             
             let final = [fruits[Math.floor(Math.random()*6)], fruits[Math.floor(Math.random()*6)], fruits[Math.floor(Math.random()*6)]]
             let win = (final[0] === final[1] || final[1] === final[2] || final[0] === final[2])
             
-            const imgs = {}; 
-            for(let f of fruits) imgs[f] = await loadImage(fruitURLs[f])
+            ctx.font = '80px Arial'
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'middle'
 
+            // Animazione
             for(let i=0; i<8; i++) {
-                ctx.fillStyle = '#111'; ctx.fillRect(0,0,600,250)
+                ctx.fillStyle = '#1a1a1a'; ctx.fillRect(0,0,600,200)
+                // Disegna i rulli
                 for(let j=0; j<3; j++) {
                     let rand = fruits[Math.floor(Math.random()*6)]
-                    ctx.drawImage(imgs[rand], 100+(j*150), 50, 100, 100)
+                    ctx.fillText(rand, 100 + (j*200), 100)
                 }
                 encoder.addFrame(ctx)
             }
             
-            ctx.fillStyle = '#111'; ctx.fillRect(0,0,600,250)
-            ctx.drawImage(imgs[final[0]], 100, 50, 100, 100)
-            ctx.drawImage(imgs[final[1]], 250, 50, 100, 100)
-            ctx.drawImage(imgs[final[2]], 400, 50, 100, 100)
+            // Frame finale
+            ctx.fillStyle = '#1a1a1a'; ctx.fillRect(0,0,600,200)
+            ctx.fillText(final[0], 100, 100)
+            ctx.fillText(final[1], 300, 100)
+            ctx.fillText(final[2], 500, 100)
             for(let i=0; i<10; i++) encoder.addFrame(ctx)
             
             encoder.finish()
@@ -124,8 +119,9 @@ let handler = async (m, { conn, command, args, usedPrefix }) => {
             for(let f=0; f<7; f++) {
                 ctx.fillStyle = '#2e7d32'; ctx.fillRect(0,0,600,300); 
                 ctx.strokeStyle = '#fff'; ctx.lineWidth = 5; ctx.strokeRect(100, 50, 400, 200)
-                ctx.fillStyle = '#fff'; ctx.beginPath(); 
-                ctx.arc(300 + (pos[tiro]-300)*(f/6), 250 - (150*(f/6)), 15, 0, Math.PI*2); ctx.fill()
+                // Palla (Emoji)
+                ctx.font = '30px Arial'
+                ctx.fillText('⚽', 300 + (pos[tiro]-300)*(f/6) - 15, 250 - (150*(f/6)))
                 encoder.addFrame(ctx)
             }
             encoder.finish()
@@ -157,7 +153,7 @@ let handler = async (m, { conn, command, args, usedPrefix }) => {
                 cavalliConfig.forEach((c, i) => {
                     let x = 50 + (f === 9 && i === winnerIdx ? 450 : Math.random()*350)
                     ctx.fillStyle = c.color; ctx.beginPath(); ctx.arc(x, 60+(i*60), 15, 0, Math.PI*2); ctx.fill()
-                    ctx.fillStyle = '#fff'; ctx.font = '12px Arial'; ctx.fillText(c.nome, 10, 65+(i*60))
+                    ctx.fillStyle = '#fff'; ctx.font = 'bold 14px Arial'; ctx.fillText(c.nome, 10, 65+(i*60))
                 })
                 encoder.addFrame(ctx)
             }
@@ -193,7 +189,7 @@ let handler = async (m, { conn, command, args, usedPrefix }) => {
 
     } catch (e) {
         console.error(e)
-        m.reply(`❌ Errore critico: ${e.message}`)
+        m.reply(`❌ Errore critico nel casinò: ${e.message}`)
     }
 }
 
