@@ -1,53 +1,47 @@
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=50&pause=1000&color=FF0000&center=true&vCenter=true&width=700&height=120&lines=🩸+ELIXIR-BOT+🩸;THE+MOST+POWERFUL+BOT;DEVELOPED+BY+BLOOD" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Cinzel+Decorative&size=50&pause=1000&color=D4AF37&center=true&vCenter=true&width=750&height=130&lines=✧+ELIXIR-BOT+✧;L'ECCELLENZA+DELL'AUTOMAZIONE;DESIGN+ED+ELEGANZA+SUREMA" alt="Elixir Bot Title" />
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png" width="100%">
+  <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/golden.png" width="100%">
 </p>
 
 <p align="center">
-  <a href="https://whatsapp.com/channel/0029VbCIFecBadmZCxG8ug0W">
-    <img src="https://img.shields.io/badge/CANALE_WHATSAPP-UNISCITI_ORA-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Canale WhatsApp" />
-  </a>
-</p>
-
-<p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=25&pause=800&color=00FF00&center=true&vCenter=true&width=600&height=60&lines=STATUS:+ONLINE+✅;SYSTEM:+STABLE+🚀;OWNER:+BLOOD" alt="Status SVG" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Montserrat&size=25&pause=800&color=FFFFFF&center=true&vCenter=true&width=600&height=60&lines=STATUS:+OPERATIVO+✨;CORE:+ELIXIR+ENGINE+💎;DEVELOPER:+ELIXIR" alt="Status SVG" />
 </p>
 
 ---
 
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=30&pause=500&color=FF0000&center=true&vCenter=true&width=700&height=80&lines=DESCRIZIONE;SPECIFICHE+TECNICHE" alt="Descrizione" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Cinzel&size=35&pause=500&color=D4AF37&center=true&vCenter=true&width=700&height=80&lines=DESCRIZIONE+DEL+SISTEMA;FILOSOFIA+E+POTENZA" alt="Descrizione" />
 </p>
 
-**ELIXIR-BOT** è un ecosistema avanzato per WhatsApp, costruito per garantire la massima potenza e stabilità.
+**Elixir-Bot** rappresenta l'evoluzione raffinata dell'automazione per WhatsApp. Non è solo un bot, ma un ecosistema digitale meticolosamente rifinito per offrire prestazioni d'élite e un'estetica superiore.
 
-* **Core Ultra-Rapido:** Sviluppato in Node.js (V16+) con architettura asincrona.
-* **Sicurezza:** Algoritmo Anti-Ban 4.0 con rotazione degli header.
-* **Stabilità:** Gestione intelligente dei messaggi per prevenire crash.
+* **💎 Architettura Premium:** Costruito su Node.js (V18+) con un'elaborazione dei processi asincrona per una risposta istantanea.
+* **🛡️ Sicurezza Elixir:** Algoritmi avanzati di offuscamento e rotazione dei pacchetti per garantire la massima protezione dell'account.
+* **✨ Interfaccia Elegante:** Ogni interazione è studiata per essere pulita, leggibile e visivamente appagante.
+* **🚀 Stabilità Assoluta:** Gestione intelligente del carico per operare 24/7 senza rallentamenti.
 
 ---
 
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=30&pause=500&color=FF0000&center=true&vCenter=true&width=700&height=80&lines=GUIDA;INSTALLAZIONE+DETTAGLIATA" alt="Installazione" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Cinzel&size=35&pause=500&color=D4AF37&center=true&vCenter=true&width=700&height=80&lines=GUIDA+ALL'INSTALLAZIONE;CONFIGURAZIONE+ELITE" alt="Installazione" />
 </p>
 
-### 📱 METODO 1: TERMUX (Android)
-*Apri Termux e incolla questi comandi uno alla volta:*
+### 📱 METODO 1: TERMUX (Mobile)
+*Copia e incolla i seguenti comandi per un'installazione rapida:*
 
-1.  **Preparazione:** 
-    ```bash
+1.  **Aggiornamento Ambiente:** ```bash
     pkg update && pkg upgrade -y
     pkg install git nodejs -y
     ```
-2.  **Clone del Bot:**
+2.  **Download Sorgente:**
     ```bash
-    git clone [https://github.com/BLOOD212/ELIXIR-BOT.git](https://github.com/BLOOD212/ELIXIR-BOT.git)
-    cd ELIXIR-BOT
+    git clone [https://github.com/ELIXIR/Elixir-Bot.git](https://github.com/ELIXIR/Elixir-Bot.git)
+    cd Elixir-Bot
     ```
-3.  **Avvio:**
+3.  **Inizializzazione:**
     ```bash
     npm install
     npm start
@@ -55,53 +49,52 @@
 
 ---
 
-### 💻 METODO 2: VPS (Linux/Ubuntu)
-*Per chi vuole il bot attivo 24 ore su 24.*
+### 💻 METODO 2: VPS (Linux / Cloud)
+*Per una presenza costante e professionale.*
 
-1.  **Installazione Core:** Assicurati di avere Node.js e Git sulla VPS.
-2.  **Persistenza con PM2:**
+1.  **Preparazione:** Assicurati di avere l'ultima versione di Node.js installata.
+2.  **Gestione Persistente:**
     ```bash
     npm install -g pm2
-    pm2 start index.js --name "blood-bot"
+    pm2 start index.js --name "elixir-bot"
     pm2 save
     pm2 startup
     ```
-3.  **Monitoraggio:** Usa `pm2 logs blood-bot` per visualizzare il QR Code e i log.
+3.  **Controllo:** Monitora le attività in tempo reale con `pm2 logs`.
 
 ---
 
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=30&pause=500&color=FF0000&center=true&vCenter=true&width=700&height=80&lines=STATISTICHE;LIVE+REPORT" alt="Analisi" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Cinzel&size=35&pause=500&color=D4AF37&center=true&vCenter=true&width=700&height=80&lines=REPORT+E+ANALISI;STATISTICHE+LIVE" alt="Analisi" />
 </p>
 
 <p align="center">
-  <img src="https://gpvc.arturio.dev/BLOOD212/ELIXIR-BOT" alt="Views" />
-  <img src="https://img.shields.io/github/forks/BLOOD212/ELIXIR-BOT?style=for-the-badge&label=FORKS&color=red" alt="Forks" />
-  <img src="https://img.shields.io/github/stars/BLOOD212/ELIXIR-BOT?style=for-the-badge&label=STARS&color=yellow" alt="Stars" />
+  <img src="https://img.shields.io/github/stars/ELIXIR/Elixir-Bot?style=for-the-badge&label=PRESTIGE&color=D4AF37" alt="Stars" />
+  <img src="https://img.shields.io/github/forks/ELIXIR/Elixir-Bot?style=for-the-badge&label=COPIES&color=white" alt="Forks" />
 </p>
 
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api/pin/?username=BLOOD212&repo=ELIXIR-BOT&theme=blood-dark&title_color=ff0000&icon_color=ff0000" width="100%" alt="Stats" />
+  <img src="https://github-readme-stats.vercel.app/api/pin/?username=ELIXIR&repo=Elixir-Bot&theme=luxury&title_color=D4AF37&icon_color=D4AF37&text_color=ffffff&bg_color=000000" width="100%" alt="Stats" />
 </p>
 
 ---
 
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=30&pause=500&color=FF0000&center=true&vCenter=true&width=700&height=80&lines=STAFF;CONTATTI" alt="Staff" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Cinzel&size=35&pause=500&color=D4AF37&center=true&vCenter=true&width=700&height=80&lines=CONTATTI+UFFICIALI;SUPPORTO+TECNICO" alt="Staff" />
 </p>
 
-* **Sviluppatore:** Blood 
-* **Supporto WhatsApp:** [+39 370 133 0693](https://wa.me/393701330693)
-* **Community:** [UNISCITI AL CANALE](https://whatsapp.com/channel/0029VbCIFecBadmZCxG8ug0W)
+* **Sviluppatore Capo:** [Elixir]
+* **Supporto WhatsApp:** [+39 378 440 9415](https://wa.me/393784409415)
+* **Email Business:** support@elixir-bot.com
 
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=20&pause=2000&color=FF0000&center=true&vCenter=true&width=650&height=60&lines=SUPPORT+BY+GIVING+A+STAR+⭐;THANKS+FOR+USING+ELIXIR-BOT!" alt="Thanks" />
-</p>
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png" width="100%">
+  <img src="https://readme-typing-svg.herokuapp.com?font=Montserrat&size=20&pause=2000&color=D4AF37&center=true&vCenter=true&width=650&height=60&lines=SOSTIENI+IL+PROGETTO+CON+UNA+STAR+⭐;ECCELLENZA+SENZA+COMPROMESSI" alt="Thanks" />
 </p>
 
 <p align="center">
-  <b>© 2026 ELIXIR-BOT • Sviluppato by Blood</b>
+  <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/golden.png" width="100%">
+</p>
+
+<p align="center">
+  <b style="color: #D4AF37;">© 2026 ELIXIR-BOT • Engineered with Elegance by Elixir</b>
 </p>
