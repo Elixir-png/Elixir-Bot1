@@ -27,7 +27,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     const message = `
 ╭━━━━━━•✦•━━━━━━╮
               ✨ ᴘɪɴɢ ✨
-            ʙʟᴏᴏᴅ-ʙᴏᴛ
+            ELIXIR-BOT
 ╰━━━━━━•✦•━━━━━━╯
 
 ◈ 𝖴𝗉𝗍𝗂𝗆𝖾: \`${uptimeStr}\`
@@ -35,7 +35,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 ◈ 𝖠𝗏𝗏𝗂𝗈: \`${activationTime}\`
 
 ╭━━━━━━•✦•━━━━━━╮
-   𝖮𝗐𝗇𝖾𝗋: *BLOOD*
+   𝖮𝗐𝗇𝖾𝗋: *ELIXIR*
    𝖲𝗍𝖺𝗍𝗈: _Online_
 ╰━━━━━━•✦•━━━━━━╯
 `.trim()
@@ -44,7 +44,7 @@ let handler = async (m, { conn, usedPrefix }) => {
       text: message,
       contextInfo: {
         externalAdReply: {
-          title: `ʙʟᴏᴏᴅ ᴘᴇʀғᴏʀᴍᴀɴᴄᴇ ᴄᴏɴᴛʀᴏʟ`,
+          title: `ᴇʟɪxɪʀ ᴘᴇʀꜰᴏʀᴍᴀɴᴄᴇ ᴄᴏɴᴛʀᴏʟ`,
           body: `Latenza reale: ${latency}ms`,
           mediaType: 1,
           previewType: 0,
