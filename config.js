@@ -11,7 +11,7 @@ import NodeCache from 'node-cache'
 const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))
 const moduleCache = new NodeCache({ stdTTL: 300 });
 
-/*⭑⭒━━━✦❘༻☾⋆⁺₊✧ 𝖇𝖑𝖔𝖔𝖉𝖇𝖔𝖙✧₊⁺⋆☽༺❘✦━━━⭒⭑*/
+/*⭑⭒━━━✦❘༻☾⋆⁺₊✧ 𝕰𝕷𝕴𝖃𝕴𝕽𝕭𝕺𝕿✧₊⁺⋆☽༺❘✦━━━⭒⭑*/
 
 global.sam = ['393784409415',]
 global.owner = [
@@ -26,12 +26,12 @@ global.prems = ['xxxxxxxxxxx', 'xxxxxxxxxxx', 'xxxxxxxxxxx']
 
 /*⭑⭒━━━✦❘༻🩸 INFO BOT 🕊️༺❘✦━━━⭒⭑*/
 
-global.nomepack = 'BLD-BLOOD'
-global.nomebot = 'BLD-BLOOD'
-global.wm = 'BLD-BLOOD'
+global.nomepack = '𝓔𝓛𝓘𝓧𝓘𝓡-𝓑𝓞𝓣'
+global.nomebot = '𝓔𝓛𝓘𝓧𝓘𝓡-𝓑𝓞𝓣'
+global.wm = '𝓔𝓛𝓘𝓧𝓘𝓡-𝓑𝓞𝓣'
 global.autore = 'BLOOD'
 global.dev = 'BLOOD'
-global.testobot = `BLD-BLOOD`
+global.testobot = `𝓔𝓛𝓘𝓧𝓘𝓡-𝓑𝓞𝓣`
 global.versione = pkg.version
 global.errore = '*ERRORE INATTESO*, UTILIZZA IL COMANDO .segnala (errore) per contattare lo sviluppatore. contatto diretto:+39 370 133 0693'
 

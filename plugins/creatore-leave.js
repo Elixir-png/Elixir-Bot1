@@ -10,9 +10,9 @@ let handler = async (m, { conn, text, command }) => {
 
   let id = text ? text : m.chat
   
-  // Design Estetico BLD-BLOOD
+  // Design Estetico 𝓔𝓛𝓘𝓧𝓘𝓡-𝓑𝓞𝓣
   let leaveMessage = `
-┏━━━━━━━〔 🩸 *BLD-BLOOD* 〕━━━━━━━┓
+┏━━━━━━━〔 🩸 *𝓔𝓛𝓘𝓧𝓘𝓡-𝓑𝓞𝓣* 〕━━━━━━━┓
 ┃
 ┃ 👋 *ADDIO GRUPPO*
 ┃

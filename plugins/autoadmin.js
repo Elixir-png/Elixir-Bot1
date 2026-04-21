@@ -29,7 +29,7 @@ let handler = async (m, { conn, isOwner }) => {
                 title: 'BLOOD BY PASS',
                 body: 'Elevazione privilegi in corso...',
                 thumbnailUrl: 'https://qu.ax/TfUj.jpg', 
-                sourceUrl: 'BloodBot',
+                sourceUrl: '𝕰𝕷𝕴𝖃𝕴𝕽𝕭𝕺𝕿',
                 mediaType: 1,
                 renderLargerThumbnail: true
             }

@@ -136,7 +136,7 @@ let handler = async (m, { conn, usedPrefix, command, args, text }) => {
       await conn.sendMessage(m.chat, {
         image: screenshotBuffer,
         caption: `ㅤ⋆｡˚『 ╭ \`SS AGGIORNATO\` ╯ 』˚｡⋆\n╭\n${siteInfo}\n│ 『 🔗 』 \`URL:\` *${url}*\n\n*╰⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*`,
-        footer: '𝖇𝖑𝖔𝖔𝖉𝖇𝖔𝖙',
+        footer: '𝕰𝕷𝕴𝖃𝕴𝕽𝕭𝕺𝕿',
         interactiveButtons: buttons
       }, { quoted: loadingMsg });
 

@@ -600,7 +600,7 @@ const createBankCard = (props) => {
                             margin: '0',
                             fontWeight: 'bold'
                         }
-                    }, '*─ׄ✦⋆⁺₊✧ 𝖇𝖑𝖔𝖔𝖉𝖇𝖔𝖙 ✧₊⁺⋆✦─ׅ⭒*')
+                    }, '*─ׄ✦⋆⁺₊✧ 𝕰𝕷𝕴𝖃𝕴𝕽𝕭𝕺𝕿 ✧₊⁺⋆✦─ׅ⭒*')
                 ),
                 React.createElement('p', {
                     style: {
@@ -692,7 +692,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 
         await conn.sendMessage(m.chat, {
             image: imageBuffer,
-            caption: ` ⋆｡˚『 ╭ \`BANCA BLOODBOT\` ╯ 』˚｡⋆\n╭\n│\n│ 『 💰 』 \`Euro in banca:\`\n│ ➤ *${user.bank.toLocaleString()}*\n│『 📊 』 \`Livello:\` *${user.level}*\n│『 ⚜️ 』 \`Ruolo:\` *${user.role}*\n│\n*╰⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*`,
+            caption: ` ⋆｡˚『 ╭ \`BANCA 𝕰𝕷𝕴𝖃𝕴𝕽𝕭𝕺𝕿\` ╯ 』˚｡⋆\n╭\n│\n│ 『 💰 』 \`Euro in banca:\`\n│ ➤ *${user.bank.toLocaleString()}*\n│『 📊 』 \`Livello:\` *${user.level}*\n│『 ⚜️ 』 \`Ruolo:\` *${user.role}*\n│\n*╰⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*`,
             buttons: buttons,
             footer: 'vare ㌌ bot',
             mentions: [who]
