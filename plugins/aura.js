@@ -1,124 +1,129 @@
-import { createCanvas, loadImage } from 'canvas';
+import { createCanvas, registerFont } from 'canvas';
 import crypto from 'crypto';
+
+// Nota: Assicurati di avere i font installati sul sistema o usa registerFont
+// Se sei su Linux/Heroku, i font standard come 'sans-serif' o 'Arial' funzioneranno.
 
 let handler = async (m, { conn, usedPrefix }) => {
   try {
-    // Definizione del target (chi viene analizzato)
     let target = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : 
                  (m.quoted && m.quoted.sender ? m.quoted.sender : m.sender);
 
     const pushName = conn.getName(target) || "User";
     
-    // Messaggio iniziale di caricamento
-    await m.reply('🌀 *Accesso al database dell\'Aura in corso...*');
+    await m.reply('🌀 *Sincronizzazione con il Sistema Aura...*');
 
-    // Calcolo Logica: Valore unico per utente/giorno (Seed deterministico)
     const date = new Date().toISOString().slice(0, 10);
     const seed = `${target}-${date}`;
     const hash = crypto.createHash('sha256').update(seed).digest('hex');
     const auraValue = parseInt(hash.slice(0, 8), 16) % 1000000; 
 
-    // Definizione Rank e Colori
-    let rank, color, borderColor;
+    // Logica Rank migliorata per i testi dell'immagine
+    let rank, color;
     if (auraValue > 850000) {
       rank = "DIVINITÀ";
-      color = "#FFD700"; // Oro
-      borderColor = "#ffae00";
+      color = "#FFD700"; 
     } else if (auraValue > 500000) {
       rank = "ELITE";
-      color = "#A020F0"; // Viola
-      borderColor = "#7a10b8";
+      color = "#A020F0";
     } else {
       rank = "GUERRIERO";
-      color = "#00F2FF"; // Ciano Cyber
-      borderColor = "#008b94";
+      color = "#00F2FF"; 
     }
 
-    // --- CREAZIONE CANVAS ---
-    const width = 800;
-    const height = 450;
+    const width = 1000; // Leggermente più largo per somigliare al formato dell'immagine
+    const height = 562;
     const canvas = createCanvas(width, height);
     const ctx = canvas.getContext('2d');
 
-    // Sfondo Scuro con gradiente radiale
-    const bgGradient = ctx.createRadialGradient(width/2, height/2, 50, width/2, height/2, 400);
-    bgGradient.addColorStop(0, '#1c1c2e');
-    bgGradient.addColorStop(1, '#0a0a0f');
-    ctx.fillStyle = bgGradient;
+    // 1. SFONDO E GRIGLIA
+    ctx.fillStyle = '#0a0b14';
     ctx.fillRect(0, 0, width, height);
 
-    // Effetto griglia futuristica (opzionale ma stiloso)
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+    // Disegno griglia sottile
+    ctx.strokeStyle = 'rgba(0, 242, 255, 0.05)';
     ctx.lineWidth = 1;
-    for(let i=0; i<width; i+=40) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,height); ctx.stroke(); }
-    for(let i=0; i<height; i+=40) { ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(width,i); ctx.stroke(); }
+    for(let i=0; i<width; i+=30) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,height); ctx.stroke(); }
+    for(let i=0; i<height; i+=30) { ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(width,i); ctx.stroke(); }
 
-    // Bordo Neon
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 8;
-    ctx.strokeRect(15, 15, width - 30, height - 30);
+    // 2. CORNICE NEON DOPPIA
     ctx.shadowBlur = 15;
     ctx.shadowColor = color;
-    ctx.strokeRect(15, 15, width - 30, height - 30);
-    ctx.shadowBlur = 0; // Reset ombre
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 10;
+    ctx.strokeRect(20, 20, width - 40, height - 40);
+    
+    ctx.shadowBlur = 0; // Reset per non sfocare il testo
+    ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(25, 25, width - 50, height - 50);
 
-    // Titolo
+    // 3. INTESTAZIONE (AURA SYSTEM)
     ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 45px Arial';
+    ctx.fillText('AURA SYSTEM IDENTIFICATION', 60, 85);
+    
+    ctx.fillStyle = color;
+    ctx.fillRect(60, 105, 380, 5); // Linea sotto titolo
+
+    // 4. CODICI IDENTIFICATIVI (I quadratini bianchi nell'immagine)
+    ctx.font = '16px monospace';
+    ctx.fillStyle = '#ffffff';
+    for(let i=0; i<6; i++) {
+        let fakeCode = Math.random().toString(16).substring(2, 6).toUpperCase();
+        ctx.strokeStyle = '#ffffff';
+        ctx.strokeRect(60 + (i * 65), 140, 60, 50);
+        ctx.fillText('01D', 70 + (i * 65), 160);
+        ctx.fillText(fakeCode, 70 + (i * 65), 180);
+    }
     ctx.font = 'bold 30px Arial';
-    ctx.fillText('AURA SYSTEM IDENTIFICATION', 50, 60);
+    ctx.fillText(`+39 #${pushName.toLowerCase()}`, 460, 175);
 
-    // Linea separatrice
+    // 5. POWER POINTS (Il numero grande)
+    const formattedAura = auraValue.toLocaleString();
+    ctx.font = 'bold 120px Arial';
     ctx.fillStyle = color;
-    ctx.fillRect(50, 75, 300, 3);
-
-    // Testo Nome Utente
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '40px sans-serif';
-    ctx.fillText(pushName.toUpperCase(), 50, 140);
-
-    // Valore Aura Numerico
-    ctx.font = 'bold 80px Courier New';
-    ctx.fillStyle = color;
-    ctx.fillText(`${auraValue.toLocaleString()}`, 50, 230);
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = color;
+    ctx.fillText(formattedAura, 60, 320);
     
-    ctx.font = '30px sans-serif';
+    ctx.shadowBlur = 0;
+    ctx.font = 'bold 40px Arial';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('POWER POINTS', 50 + ctx.measureText(`${auraValue.toLocaleString()}`).width + 20, 225);
+    const textWidth = ctx.measureText(formattedAura).width;
+    ctx.fillText('POWER POINTS', 80 + textWidth, 310);
 
-    // Barra di Caricamento (Contenitore)
-    ctx.fillStyle = '#333';
-    ctx.beginPath();
-    ctx.roundRect(50, 280, 700, 50, 10);
+    // 6. BARRA DI CARICAMENTO STILE CYBER
+    // Sfondo barra
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.roundRect(60, 380, 880, 65, 10);
     ctx.fill();
 
-    // Barra di Caricamento (Livello Effettivo)
-    const barProgress = (auraValue / 1000000) * 700;
-    const barGradient = ctx.createLinearGradient(50, 0, 750, 0);
-    barGradient.addColorStop(0, borderColor);
-    barGradient.addColorStop(1, color);
-    
-    ctx.fillStyle = barGradient;
-    ctx.beginPath();
-    ctx.roundRect(50, 280, barProgress, 50, 10);
+    // Progresso
+    const barWidth = (auraValue / 1000000) * 880;
+    ctx.fillStyle = color;
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = color;
+    ctx.roundRect(60, 380, barWidth, 65, 10);
     ctx.fill();
 
-    // Rango in basso a destra
+    // 7. RANGO (In basso a destra)
+    ctx.shadowBlur = 0;
     ctx.textAlign = 'right';
-    ctx.font = 'bold 50px sans-serif';
+    ctx.font = 'bold 80px Arial';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText(rank, 750, 400);
+    ctx.fillText(rank, 940, 510);
 
-    // Conversione e Invio
     const buffer = canvas.toBuffer();
     await conn.sendMessage(m.chat, { 
       image: buffer, 
-      caption: `✅ *Analisi Completata*\n👤 *Soggetto:* @${target.split('@')[0]}\n📊 *Grado:* ${rank}`,
+      caption: `🚨 *Rilevamento Completato*\n👤 *User:* ${pushName}\n💠 *Livello Aura:* ${formattedAura}`,
       mentions: [target] 
     }, { quoted: m });
 
   } catch (e) {
     console.error(e);
-    m.reply('❌ Errore durante la generazione dell\'immagine.');
+    m.reply('❌ Errore critico nel sistema Aura.');
   }
 };
 
