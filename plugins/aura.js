@@ -24,7 +24,7 @@ let handler = async (m, { conn }) => {
   const pushName = target.split("@")[0];
 
   // 3. Costruzione del messaggio
-  let messaggio = `✨ L'Aura di @${pushName} è di: **${auraValue.toLocaleString()}**`;
+  let messaggio = `✨ L'Aura di @${pushName} è di: *${auraValue.toLocaleString()}*`;
   
   if (auraValue > 1000000) messaggio += `\n\n👑 *Incredibile! Un'aura leggendaria!*`;
   if (auraValue === 0) messaggio += `\n\n💀 *Zero aura... che imbarazzo.*`;
