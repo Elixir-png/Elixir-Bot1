@@ -6,19 +6,17 @@ let handler = async (m, { conn }) => {
     let target = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : 
                  (m.quoted && m.quoted.sender ? m.quoted.sender : m.sender);
 
-    // Gestione Nome: pulizia da emoji/codici o fallback su numero
+    // Gestione Nome per il Canvas
     let rawName = conn.getName(target);
-    let cleanName = rawName.replace(/[^\x00-\x7F]/g, "").trim(); // Rimuove caratteri non ASCII (emoji/simboli)
+    let cleanName = rawName.replace(/[^\x00-\x7F]/g, "").trim(); 
     if (!cleanName || cleanName.length < 1) {
-      cleanName = target.split('@')[0]; // Fallback al numero di telefono
+      cleanName = target.split('@')[0]; 
     }
     
     await m.reply('🌀 *Sincronizzazione biometrica in corso...*');
 
-    // Valore Aura totalmente casuale ogni volta
     const auraValue = Math.floor(Math.random() * 1000000); 
 
-    // Sistema Gradi migliorato
     let rank, color;
     if (auraValue >= 900000) { rank = "DIVINITÀ"; color = "#FFD700"; }
     else if (auraValue >= 750000) { rank = "ELITE"; color = "#A020F0"; }
@@ -56,7 +54,7 @@ let handler = async (m, { conn }) => {
     ctx.fillStyle = color;
     ctx.fillRect(70, 105, 400, 4);
 
-    // SUBJECT (NOME O NUMERO)
+    // SUBJECT
     ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
     ctx.font = '28px sans-serif';
     ctx.fillText('SUBJECT IDENTIFIED:', 70, 160);
@@ -64,20 +62,20 @@ let handler = async (m, { conn }) => {
     ctx.font = 'bold 45px sans-serif';
     ctx.fillText(cleanName.toUpperCase(), 70, 210);
 
-    // POWER POINTS (Layout verticale per evitare sovrapposizioni)
+    // POWER POINTS
     ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
     ctx.font = 'bold 25px sans-serif';
-    ctx.fillText('POWER POINTS', 75, 275); // Etichetta sopra
+    ctx.fillText('POWER POINTS', 75, 275);
 
     const formattedAura = auraValue.toLocaleString('it-IT');
     ctx.shadowBlur = 15;
     ctx.shadowColor = color;
     ctx.fillStyle = color;
     ctx.font = 'bold 140px sans-serif';
-    ctx.fillText(formattedAura, 70, 390); // Numero enorme sotto l'etichetta
+    ctx.fillText(formattedAura, 70, 390);
     ctx.shadowBlur = 0;
 
-    // BARRA DI CARICAMENTO
+    // BARRA
     ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
     ctx.beginPath();
     ctx.roundRect(70, 420, 860, 40, 5);
@@ -100,9 +98,11 @@ let handler = async (m, { conn }) => {
     ctx.fillText(rank, 930, 510);
 
     const buffer = canvas.toBuffer();
+    
+    // INVIO CON TAG FUNZIONANTE
     await conn.sendMessage(m.chat, { 
       image: buffer, 
-      caption: `✅ *Analisi Completata*\n👤 *User:* ${cleanName}\n📊 *Aura:* ${formattedAura}\n🏆 *Rank:* ${rank}`,
+      caption: `✅ *Analisi Completata*\n👤 *User:* @${target.split('@')[0]}\n📊 *Aura:* ${formattedAura}\n🏆 *Rank:* ${rank}`,
       mentions: [target] 
     }, { quoted: m });
 
