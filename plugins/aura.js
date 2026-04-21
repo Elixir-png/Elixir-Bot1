@@ -1,32 +1,47 @@
-const auraCommand = (message) => {
-  // Controlla se il messaggio inizia esattamente con .aura
-  if (!message.content.startsWith('.aura')) return;
+let handler = async (m, { conn }) => {
+  let target = null;
 
-  // 1. Identifica il destinatario (Target)
-  // Controlla se c'è un tag (@user), una risposta a un messaggio, o se stesso
-  let target = message.mentions.users.first(); 
-  
-  if (!target && message.reference) {
-    // Se non c'è tag ma è una risposta, prendi l'autore del messaggio originale
-    // Nota: dipende dalla struttura dell'oggetto message del tuo framework
+  // 1. Identifica il target (chi riceve l'aura)
+  if (m.mentionedJid && m.mentionedJid[0]) {
+    target = m.mentionedJid[0]; // Se c'è un tag @user
+  } else if (m.quoted && m.quoted.sender) {
+    target = m.quoted.sender;   // Se è una risposta a un messaggio
+  } else {
+    target = m.sender;          // Se non c'è nulla, il target è chi scrive
   }
-  
-  if (!target) target = message.author;
 
-  // 2. Generatore di Aura "Super Random" (da 0 a potenzialmente infinito)
-  // Usiamo una funzione esponenziale per rendere i numeri enormi molto rari
+  // 2. Generatore di Aura con percentuali "super random"
   const generateAura = () => {
-    const chance = Math.random();
-    if (chance > 0.99) return Math.floor(Math.random() * 1000000); // 1% di probabilità: Milionario
-    if (chance > 0.90) return Math.floor(Math.random() * 50000);  // 9% di probabilità: Decine di migliaia
-    if (chance > 0.50) return Math.floor(Math.random() * 5000);   // 40% di probabilità: Migliaia
-    return Math.floor(Math.random() * 500);                      // 50% di probabilità: Numeri bassi
+    const roll = Math.random() * 100;
+    if (roll < 0.05) return Math.floor(Math.random() * 999999999); // 0.05% Divino
+    if (roll < 1) return Math.floor(Math.random() * 1000000);      // 1% Leggendario
+    if (roll < 10) return Math.floor(Math.random() * 50000);       // 9% Epico
+    if (roll < 40) return Math.floor(Math.random() * 5000);        // 30% Raro
+    return Math.floor(Math.random() * 500);                       // 60% Comune
   };
 
-  const auraPoints = generateAura();
+  const auraValue = generateAura();
+  const pushName = target.split("@")[0];
+
+  // 3. Costruzione del messaggio
+  let messaggio = `✨ L'Aura di @${pushName} è di: **${auraValue.toLocaleString()}**`;
   
-  // 3. Risposta
-  const response = `✨ **${target.username}** ha guadagnato **${auraPoints.toLocaleString()}** punti Aura!`;
-  
-  message.channel.send(response);
+  if (auraValue > 1000000) messaggio += `\n\n👑 *Incredibile! Un'aura leggendaria!*`;
+  if (auraValue === 0) messaggio += `\n\n💀 *Zero aura... che imbarazzo.*`;
+
+  await conn.sendMessage(
+    m.chat,
+    {
+      text: messaggio,
+      mentions: [target]
+    },
+    { quoted: m }
+  );
 };
+
+handler.help = ['aura'];
+handler.tags = ['giochi'];
+handler.command = /^(aura)$/i; // Risponde esattamente a .aura (o !aura / /aura a seconda dei prefissi)
+handler.group = true; // Funziona nei gruppi
+
+export default handler;
