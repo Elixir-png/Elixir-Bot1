@@ -1,75 +1,49 @@
-let handler = async (m, { conn }) => {
-  let target = null;
+import crypto from 'crypto';
 
-  // Identifica il target (Tag, Risposta o se stesso)
-  if (m.mentionedJid && m.mentionedJid[0]) {
-    target = m.mentionedJid[0];
-  } else if (m.quoted && m.quoted.sender) {
-    target = m.quoted.sender;
-  } else {
-    target = m.sender;
-  }
+let handler = async (m, { conn }) => {
+  let target = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : 
+               (m.quoted && m.quoted.sender ? m.quoted.sender : m.sender);
 
   const pushName = target.split("@")[0];
-
-  // 1. Invia il messaggio iniziale e salva la "key" per modificarlo
+  
+  // 1. Primo messaggio: Scansione
   let { key } = await conn.sendMessage(m.chat, { 
-    text: `🔍 *Analisi frequenza aura per @${pushName}...*`,
+    text: `🔍 *Analisi Aura per @${pushName}...*`,
     mentions: [target] 
   }, { quoted: m });
 
-  // 2. Sequenza di caricamento (modifica lo stesso messaggio)
-  const frames = [
-    "✨ ▒▒▒▒▒▒▒▒▒▒ 10%",
-    "✨ ███▒▒▒▒▒▒▒ 35%",
-    "✨ ██████▒▒▒▒ 60%",
-    "✨ █████████▒ 90%",
-    "✨ ██████████ 100%",
-    "🔮 **ANALISI COMPLETATA** 🔮"
-  ];
-
-  for (let frame of frames) {
-    // Aspetta un breve istante tra un frame e l'altro
-    await new Promise(resolve => setTimeout(resolve, 350)); 
-    await conn.sendMessage(m.chat, { text: frame, edit: key, mentions: [target] });
-  }
-
-  // 3. Calcolo Aura
-  const generateAura = () => {
-    const roll = Math.random() * 100;
-    if (roll < 0.1) return Math.floor(Math.random() * 1000000000); 
-    if (roll < 5) return Math.floor(Math.random() * 1000000);      
-    if (roll < 30) return Math.floor(Math.random() * 50000);       
-    return Math.floor(Math.random() * 5000);                      
+  // Funzione per aggiornare il messaggio in sicurezza
+  const editMsg = async (txt) => {
+    return await conn.sendMessage(m.chat, { text: txt, edit: key, mentions: [target] }).catch(e => null);
   };
 
-  const auraValue = generateAura();
+  // 2. Animazione semplificata (3 step rapidi per evitare blocchi)
+  await new Promise(r => setTimeout(r, 800));
+  await editMsg("✨ [ ████▒▒▒▒▒▒ ] 40%");
   
-  let rank = "";
-  let emoji = "";
-  if (auraValue > 1000000) { rank = "DIVINITÀ"; emoji = "🌌"; }
-  else if (auraValue > 50000) { rank = "ELITE"; emoji = "💎"; }
-  else if (auraValue > 5000) { rank = "GUERRIERO"; emoji = "⚔️"; }
-  else { rank = "PLEBEO"; emoji = "🍂"; }
+  await new Promise(r => setTimeout(r, 800));
+  await editMsg("✨ [ ████████▒▒ ] 80%");
 
-  // 4. Risultato finale (modifica finale del messaggio)
-  const report = `
+  // 3. Calcolo Aura (Random o Fisso per oggi)
+  const date = new Date().toISOString().slice(0, 10);
+  const seed = `${target}-${date}`;
+  const hash = crypto.createHash('sha256').update(seed).digest('hex');
+  const auraValue = parseInt(hash.slice(0, 8), 16) % 1000000; 
+
+  let rank = auraValue > 800000 ? "👑 DIVINITÀ" : (auraValue > 400000 ? "💎 ELITE" : "⚔️ GUERRIERO");
+
+  // 4. Risultato finale
+  const finalReport = `
 ┏━━━━━━━━━━━━━━┓
-  ${emoji} **REPORT AURA** ${emoji}
+   ✨ **REPORT AURA** ✨
 ┗━━━━━━━━━━━━━━┛
-👤 **Utente:** @${pushName}
-🌀 **Aura:** ${auraValue.toLocaleString()}
+👤 **Target:** @${pushName}
+🌀 **Valore:** ${auraValue.toLocaleString()}
 📊 **Rango:** ${rank}
 ━━━━━━━━━━━━━━━`.trim();
 
-  // Pausa finale prima di mostrare il risultato
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
-  await conn.sendMessage(m.chat, { 
-    text: report, 
-    edit: key, 
-    mentions: [target] 
-  });
+  await new Promise(r => setTimeout(r, 800));
+  await editMsg(finalReport);
 };
 
 handler.help = ['aura'];
