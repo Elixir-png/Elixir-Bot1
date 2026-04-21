@@ -1,7 +1,7 @@
 let handler = async (m, { conn }) => {
   let target = null;
 
-  // Identifica il target
+  // Identifica il target (Tag, Risposta o se stesso)
   if (m.mentionedJid && m.mentionedJid[0]) {
     target = m.mentionedJid[0];
   } else if (m.quoted && m.quoted.sender) {
@@ -12,58 +12,61 @@ let handler = async (m, { conn }) => {
 
   const pushName = target.split("@")[0];
 
-  // 1. Messaggio iniziale di "scansione"
+  // 1. Invia il messaggio iniziale e salva la "key" per modificarlo
   let { key } = await conn.sendMessage(m.chat, { 
-    text: `🔍 Scansione dell'aura per @${pushName} in corso...`,
+    text: `🔍 *Analisi frequenza aura per @${pushName}...*`,
     mentions: [target] 
   }, { quoted: m });
 
-  // 2. Animazione elegante (sequenza di messaggi)
+  // 2. Sequenza di caricamento (modifica lo stesso messaggio)
   const frames = [
-    "✨ ▒▒▒▒▒▒▒▒▒▒ 0%",
-    "✨ █▒▒▒▒▒▒▒▒▒ 10%",
-    "✨ ███▒▒▒▒▒▒▒ 30%",
-    "✨ █████▒▒▒▒▒ 50%",
-    "✨ ███████▒▒▒ 75%",
+    "✨ ▒▒▒▒▒▒▒▒▒▒ 10%",
+    "✨ ███▒▒▒▒▒▒▒ 35%",
+    "✨ ██████▒▒▒▒ 60%",
+    "✨ █████████▒ 90%",
     "✨ ██████████ 100%",
     "🔮 **ANALISI COMPLETATA** 🔮"
   ];
 
   for (let frame of frames) {
-    await new Promise(resolve => setTimeout(resolve, 400)); // Velocità dell'animazione
-    await conn.sendMessage(m.chat, { text: frame, edit: key });
+    // Aspetta un breve istante tra un frame e l'altro
+    await new Promise(resolve => setTimeout(resolve, 350)); 
+    await conn.sendMessage(m.chat, { text: frame, edit: key, mentions: [target] });
   }
 
-  // 3. Calcolo Aura Super Random
+  // 3. Calcolo Aura
   const generateAura = () => {
     const roll = Math.random() * 100;
-    if (roll < 0.01) return Math.floor(Math.random() * 999999999999); // Divinità
-    if (roll < 1) return Math.floor(Math.random() * 100000000);      // Leggendario
-    if (roll < 10) return Math.floor(Math.random() * 500000);        // Epico
-    if (roll < 40) return Math.floor(Math.random() * 10000);         // Raro
-    return Math.floor(Math.random() * 1000);                         // Comune
+    if (roll < 0.1) return Math.floor(Math.random() * 1000000000); 
+    if (roll < 5) return Math.floor(Math.random() * 1000000);      
+    if (roll < 30) return Math.floor(Math.random() * 50000);       
+    return Math.floor(Math.random() * 5000);                      
   };
 
   const auraValue = generateAura();
+  
   let rank = "";
-  if (auraValue > 100000000) rank = "🌌 **LIVELLO: DIVINITÀ SUPREMA**";
-  else if (auraValue > 1000000) rank = "👑 **LIVELLO: RE DELL'AURA**";
-  else if (auraValue > 10000) rank = "💎 **LIVELLO: ELITE**";
-  else if (auraValue > 1000) rank = "⚔️ **LIVELLO: GUERRIERO**";
-  else rank = "🍂 **LIVELLO: PLEBEO**";
+  let emoji = "";
+  if (auraValue > 1000000) { rank = "DIVINITÀ"; emoji = "🌌"; }
+  else if (auraValue > 50000) { rank = "ELITE"; emoji = "💎"; }
+  else if (auraValue > 5000) { rank = "GUERRIERO"; emoji = "⚔️"; }
+  else { rank = "PLEBEO"; emoji = "🍂"; }
 
-  // 4. Risultato Finale
-  const messaggioFinale = `
+  // 4. Risultato finale (modifica finale del messaggio)
+  const report = `
 ┏━━━━━━━━━━━━━━┓
-  ✨ **REPORT AURA** ✨
+  ${emoji} **REPORT AURA** ${emoji}
 ┗━━━━━━━━━━━━━━┛
 👤 **Utente:** @${pushName}
 🌀 **Aura:** ${auraValue.toLocaleString()}
-📊 ${rank}
+📊 **Rango:** ${rank}
 ━━━━━━━━━━━━━━━`.trim();
 
+  // Pausa finale prima di mostrare il risultato
+  await new Promise(resolve => setTimeout(resolve, 500));
+  
   await conn.sendMessage(m.chat, { 
-    text: messaggioFinale, 
+    text: report, 
     edit: key, 
     mentions: [target] 
   });
