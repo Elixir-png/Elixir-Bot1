@@ -1,80 +1,125 @@
-import { createCanvas, loadImage, registerFont } from 'canvas';
+import { createCanvas, loadImage } from 'canvas';
 import crypto from 'crypto';
 
-let handler = async (m, { conn }) => {
-  let target = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : 
-               (m.quoted && m.quoted.sender ? m.quoted.sender : m.sender);
+let handler = async (m, { conn, usedPrefix }) => {
+  try {
+    // Definizione del target (chi viene analizzato)
+    let target = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : 
+                 (m.quoted && m.quoted.sender ? m.quoted.sender : m.sender);
 
-  const pushName = target.split("@")[0];
-  
-  // Messaggio di attesa
-  await conn.sendMessage(m.chat, { text: 🎨 Generando il report aura per @${pushName}..., mentions: [target] }, { quoted: m });
+    const pushName = conn.getName(target) || "User";
+    
+    // Messaggio iniziale di caricamento
+    await m.reply('🌀 *Accesso al database dell\'Aura in corso...*');
 
-  // Calcolo logica (costante per il giorno stesso)
-  const date = new Date().toISOString().slice(0, 10);
-  const seed = ${target}-${date};
-  const hash = crypto.createHash('sha256').update(seed).digest('hex');
-  const auraValue = parseInt(hash.slice(0, 8), 16) % 1000000; 
+    // Calcolo Logica: Valore unico per utente/giorno (Seed deterministico)
+    const date = new Date().toISOString().slice(0, 10);
+    const seed = `${target}-${date}`;
+    const hash = crypto.createHash('sha256').update(seed).digest('hex');
+    const auraValue = parseInt(hash.slice(0, 8), 16) % 1000000; 
 
-  let rank = "GUERRIERO";
-  let color = "#3498db"; // Blu
-  if (auraValue > 400000) { rank = "ELITE"; color = "#9b59b6"; } // Viola
-  if (auraValue > 800000) { rank = "DIVINITÀ"; color = "#f1c40f"; } // Oro
+    // Definizione Rank e Colori
+    let rank, color, borderColor;
+    if (auraValue > 850000) {
+      rank = "DIVINITÀ";
+      color = "#FFD700"; // Oro
+      borderColor = "#ffae00";
+    } else if (auraValue > 500000) {
+      rank = "ELITE";
+      color = "#A020F0"; // Viola
+      borderColor = "#7a10b8";
+    } else {
+      rank = "GUERRIERO";
+      color = "#00F2FF"; // Ciano Cyber
+      borderColor = "#008b94";
+    }
 
-  // --- COSTRUZIONE CANVAS ---
-  const canvas = createCanvas(800, 400);
-  const ctx = canvas.getContext('2d');
+    // --- CREAZIONE CANVAS ---
+    const width = 800;
+    const height = 450;
+    const canvas = createCanvas(width, height);
+    const ctx = canvas.getContext('2d');
 
-  // 1. Sfondo sfumato
-  const gradient = ctx.createLinearGradient(0, 0, 800, 400);
-  gradient.addColorStop(0, '#1a1a2e');
-  gradient.addColorStop(1, '#16213e');
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Sfondo Scuro con gradiente radiale
+    const bgGradient = ctx.createRadialGradient(width/2, height/2, 50, width/2, height/2, 400);
+    bgGradient.addColorStop(0, '#1c1c2e');
+    bgGradient.addColorStop(1, '#0a0a0f');
+    ctx.fillStyle = bgGradient;
+    ctx.fillRect(0, 0, width, height);
 
-  // 2. Decorazioni grafiche (Rettangolo bordo)
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 10;
-  ctx.strokeRect(20, 20, 760, 360);
+    // Effetto griglia futuristica (opzionale ma stiloso)
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+    ctx.lineWidth = 1;
+    for(let i=0; i<width; i+=40) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,height); ctx.stroke(); }
+    for(let i=0; i<height; i+=40) { ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(width,i); ctx.stroke(); }
 
-  // 3. Testo Titolo
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 40px sans-serif';
-  ctx.fillText('REPORT AURA', 50, 80);
+    // Bordo Neon
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 8;
+    ctx.strokeRect(15, 15, width - 30, height - 30);
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = color;
+    ctx.strokeRect(15, 15, width - 30, height - 30);
+    ctx.shadowBlur = 0; // Reset ombre
 
-  // 4. Info Utente
-  ctx.font = '30px sans-serif';
-  ctx.fillStyle = '#bdc3c7';
-  ctx.fillText(Utente: ${pushName}, 50, 150);
+    // Titolo
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 30px Arial';
+    ctx.fillText('AURA SYSTEM IDENTIFICATION', 50, 60);
 
-  // 5. Valore Aura
-  ctx.font = 'bold 60px sans-serif';
-  ctx.fillStyle = color;
-  ctx.fillText(${auraValue.toLocaleString()} pts, 50, 230);
+    // Linea separatrice
+    ctx.fillStyle = color;
+    ctx.fillRect(50, 75, 300, 3);
 
-  // 6. Barra dell'Aura (Background)
-  ctx.fillStyle = '#2c3e50';
-  ctx.fillRect(50, 260, 700, 40);
+    // Testo Nome Utente
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '40px sans-serif';
+    ctx.fillText(pushName.toUpperCase(), 50, 140);
 
-  // 7. Barra dell'Aura (Progresso)
-  const barWidth = (auraValue / 1000000) * 700;
-  ctx.fillStyle = color;
-  ctx.fillRect(50, 260, barWidth, 40);
+    // Valore Aura Numerico
+    ctx.font = 'bold 80px Courier New';
+    ctx.fillStyle = color;
+    ctx.fillText(`${auraValue.toLocaleString()}`, 50, 230);
+    
+    ctx.font = '30px sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('POWER POINTS', 50 + ctx.measureText(`${auraValue.toLocaleString()}`).width + 20, 225);
 
-  // 8. Rango
-  ctx.font = 'bold 35px sans-serif';
-  ctx.fillStyle = '#ffffff';
-  ctx.textAlign = 'right';
-  ctx.fillText(rank, 750, 350);
+    // Barra di Caricamento (Contenitore)
+    ctx.fillStyle = '#333';
+    ctx.beginPath();
+    ctx.roundRect(50, 280, 700, 50, 10);
+    ctx.fill();
 
-  // Conversione in Buffer e invio
-  const buffer = canvas.toBuffer('image/png');
-  
-  await conn.sendMessage(m.chat, { 
-    image: buffer, 
-    caption: ✨ Ecco il livello di aura di @${pushName} per oggi!,
-    mentions: [target] 
-  }, { quoted: m });
+    // Barra di Caricamento (Livello Effettivo)
+    const barProgress = (auraValue / 1000000) * 700;
+    const barGradient = ctx.createLinearGradient(50, 0, 750, 0);
+    barGradient.addColorStop(0, borderColor);
+    barGradient.addColorStop(1, color);
+    
+    ctx.fillStyle = barGradient;
+    ctx.beginPath();
+    ctx.roundRect(50, 280, barProgress, 50, 10);
+    ctx.fill();
+
+    // Rango in basso a destra
+    ctx.textAlign = 'right';
+    ctx.font = 'bold 50px sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(rank, 750, 400);
+
+    // Conversione e Invio
+    const buffer = canvas.toBuffer();
+    await conn.sendMessage(m.chat, { 
+      image: buffer, 
+      caption: `✅ *Analisi Completata*\n👤 *Soggetto:* @${target.split('@')[0]}\n📊 *Grado:* ${rank}`,
+      mentions: [target] 
+    }, { quoted: m });
+
+  } catch (e) {
+    console.error(e);
+    m.reply('❌ Errore durante la generazione dell\'immagine.');
+  }
 };
 
 handler.help = ['aura'];
