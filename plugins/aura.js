@@ -1,3 +1,4 @@
+import { createCanvas, loadImage, registerFont } from 'canvas';
 import crypto from 'crypto';
 
 let handler = async (m, { conn }) => {
@@ -6,44 +7,74 @@ let handler = async (m, { conn }) => {
 
   const pushName = target.split("@")[0];
   
-  // 1. Primo messaggio: Scansione
-  let { key } = await conn.sendMessage(m.chat, { 
-    text: `🔍 *Analisi Aura per @${pushName}...*`,
-    mentions: [target] 
-  }, { quoted: m });
+  // Messaggio di attesa
+  await conn.sendMessage(m.chat, { text: 🎨 Generando il report aura per @${pushName}..., mentions: [target] }, { quoted: m });
 
-  // Funzione per aggiornare il messaggio in sicurezza
-  const editMsg = async (txt) => {
-    return await conn.sendMessage(m.chat, { text: txt, edit: key, mentions: [target] }).catch(e => null);
-  };
-
-  // 2. Animazione semplificata (3 step rapidi per evitare blocchi)
-  await new Promise(r => setTimeout(r, 800));
-  await editMsg("✨ [ ████▒▒▒▒▒▒ ] 40%");
-  
-  await new Promise(r => setTimeout(r, 800));
-  await editMsg("✨ [ ████████▒▒ ] 80%");
-
-  // 3. Calcolo Aura (Random o Fisso per oggi)
+  // Calcolo logica (costante per il giorno stesso)
   const date = new Date().toISOString().slice(0, 10);
-  const seed = `${target}-${date}`;
+  const seed = ${target}-${date};
   const hash = crypto.createHash('sha256').update(seed).digest('hex');
   const auraValue = parseInt(hash.slice(0, 8), 16) % 1000000; 
 
-  let rank = auraValue > 800000 ? "👑 DIVINITÀ" : (auraValue > 400000 ? "💎 ELITE" : "⚔️ GUERRIERO");
+  let rank = "GUERRIERO";
+  let color = "#3498db"; // Blu
+  if (auraValue > 400000) { rank = "ELITE"; color = "#9b59b6"; } // Viola
+  if (auraValue > 800000) { rank = "DIVINITÀ"; color = "#f1c40f"; } // Oro
 
-  // 4. Risultato finale
-  const finalReport = `
-┏━━━━━━━━━━━━━━┓
-   ✨ **REPORT AURA** ✨
-┗━━━━━━━━━━━━━━┛
-👤 **Target:** @${pushName}
-🌀 **Valore:** ${auraValue.toLocaleString()}
-📊 **Rango:** ${rank}
-━━━━━━━━━━━━━━━`.trim();
+  // --- COSTRUZIONE CANVAS ---
+  const canvas = createCanvas(800, 400);
+  const ctx = canvas.getContext('2d');
 
-  await new Promise(r => setTimeout(r, 800));
-  await editMsg(finalReport);
+  // 1. Sfondo sfumato
+  const gradient = ctx.createLinearGradient(0, 0, 800, 400);
+  gradient.addColorStop(0, '#1a1a2e');
+  gradient.addColorStop(1, '#16213e');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // 2. Decorazioni grafiche (Rettangolo bordo)
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 10;
+  ctx.strokeRect(20, 20, 760, 360);
+
+  // 3. Testo Titolo
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 40px sans-serif';
+  ctx.fillText('REPORT AURA', 50, 80);
+
+  // 4. Info Utente
+  ctx.font = '30px sans-serif';
+  ctx.fillStyle = '#bdc3c7';
+  ctx.fillText(Utente: ${pushName}, 50, 150);
+
+  // 5. Valore Aura
+  ctx.font = 'bold 60px sans-serif';
+  ctx.fillStyle = color;
+  ctx.fillText(${auraValue.toLocaleString()} pts, 50, 230);
+
+  // 6. Barra dell'Aura (Background)
+  ctx.fillStyle = '#2c3e50';
+  ctx.fillRect(50, 260, 700, 40);
+
+  // 7. Barra dell'Aura (Progresso)
+  const barWidth = (auraValue / 1000000) * 700;
+  ctx.fillStyle = color;
+  ctx.fillRect(50, 260, barWidth, 40);
+
+  // 8. Rango
+  ctx.font = 'bold 35px sans-serif';
+  ctx.fillStyle = '#ffffff';
+  ctx.textAlign = 'right';
+  ctx.fillText(rank, 750, 350);
+
+  // Conversione in Buffer e invio
+  const buffer = canvas.toBuffer('image/png');
+  
+  await conn.sendMessage(m.chat, { 
+    image: buffer, 
+    caption: ✨ Ecco il livello di aura di @${pushName} per oggi!,
+    mentions: [target] 
+  }, { quoted: m });
 };
 
 handler.help = ['aura'];
