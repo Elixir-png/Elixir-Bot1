@@ -27,7 +27,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     const message = `
 ╭━━━━━━•✦•━━━━━━╮
               ✨ ᴘɪɴɢ ✨
-            ELIXIR-BOT
+            ᴇʟɪxɪʀ-ʙᴏᴛ
 ╰━━━━━━•✦•━━━━━━╯
 
 ◈ 𝖴𝗉𝗍𝗂𝗆𝖾: \`${uptimeStr}\`
@@ -35,7 +35,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 ◈ 𝖠𝗏𝗏𝗂𝗈: \`${activationTime}\`
 
 ╭━━━━━━•✦•━━━━━━╮
-   𝖮𝗐𝗇𝖾𝗋: *ELIXIR*
+   𝖮𝗐𝗇𝖾𝗋: *ᴇʟɪxɪʀ*
    𝖲𝗍𝖺𝗍𝗈: _Online_
 ╰━━━━━━•✦•━━━━━━╯
 `.trim()
