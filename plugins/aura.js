@@ -6,49 +6,42 @@ let handler = async (m, { conn }) => {
     let target = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : 
                  (m.quoted && m.quoted.sender ? m.quoted.sender : m.sender);
 
-    const pushName = conn.getName(target) || "User";
+    // Gestione Nome: pulizia da emoji/codici o fallback su numero
+    let rawName = conn.getName(target);
+    let cleanName = rawName.replace(/[^\x00-\x7F]/g, "").trim(); // Rimuove caratteri non ASCII (emoji/simboli)
+    if (!cleanName || cleanName.length < 1) {
+      cleanName = target.split('@')[0]; // Fallback al numero di telefono
+    }
     
-    await m.reply('🌀 *Scansione frequenza Aura in corso...*');
+    await m.reply('🌀 *Sincronizzazione biometrica in corso...*');
 
-    // RENDIAMO L'AURA CASUALE OGNI VOLTA
-    // Usiamo il timestamp per far sì che il valore cambi a ogni esecuzione
+    // Valore Aura totalmente casuale ogni volta
     const auraValue = Math.floor(Math.random() * 1000000); 
 
-    // SISTEMA GRADI CORRETTO
+    // Sistema Gradi migliorato
     let rank, color;
-    if (auraValue >= 900000) {
-      rank = "DIVINITÀ";
-      color = "#FFD700"; // Oro
-    } else if (auraValue >= 700000) {
-      rank = "CAMPIONE";
-      color = "#FF4500"; // Arancio/Rosso
-    } else if (auraValue >= 400000) {
-      rank = "ELITE";
-      color = "#A020F0"; // Viola
-    } else if (auraValue >= 100000) {
-      rank = "GUERRIERO";
-      color = "#00F2FF"; // Ciano
-    } else {
-      rank = "RECLUTA";
-      color = "#7FFF00"; // Verde
-    }
+    if (auraValue >= 900000) { rank = "DIVINITÀ"; color = "#FFD700"; }
+    else if (auraValue >= 750000) { rank = "ELITE"; color = "#A020F0"; }
+    else if (auraValue >= 500000) { rank = "CAMPIONE"; color = "#FF4500"; }
+    else if (auraValue >= 250000) { rank = "GUERRIERO"; color = "#00F2FF"; }
+    else { rank = "RECLUTA"; color = "#7FFF00"; }
 
     const width = 1000;
-    const height = 562;
+    const height = 560;
     const canvas = createCanvas(width, height);
     const ctx = canvas.getContext('2d');
 
-    // 1. SFONDO
+    // SFONDO
     ctx.fillStyle = '#0a0b14';
     ctx.fillRect(0, 0, width, height);
 
-    // Griglia
-    ctx.strokeStyle = 'rgba(0, 242, 255, 0.05)';
+    // GRIGLIA TECNICA
+    ctx.strokeStyle = 'rgba(0, 242, 255, 0.04)';
     ctx.lineWidth = 1;
-    for(let i=0; i<width; i+=40) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,height); ctx.stroke(); }
-    for(let i=0; i<height; i+=40) { ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(width,i); ctx.stroke(); }
+    for(let i=0; i<width; i+=45) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,height); ctx.stroke(); }
+    for(let i=0; i<height; i+=45) { ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(width,i); ctx.stroke(); }
 
-    // 2. CORNICE NEON
+    // CORNICE NEON
     ctx.shadowBlur = 20;
     ctx.shadowColor = color;
     ctx.strokeStyle = color;
@@ -56,71 +49,66 @@ let handler = async (m, { conn }) => {
     ctx.strokeRect(30, 30, width - 60, height - 60);
     ctx.shadowBlur = 0;
 
-    // 3. INTESTAZIONE
+    // TITOLO
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 40px Arial';
-    ctx.fillText('AURA SYSTEM IDENTIFICATION', 70, 90);
-    
+    ctx.font = 'bold 35px sans-serif';
+    ctx.fillText('AURA SYSTEM IDENTIFICATION', 70, 85);
     ctx.fillStyle = color;
-    ctx.fillRect(70, 110, 450, 4);
+    ctx.fillRect(70, 105, 400, 4);
 
-    // 4. SUBJECT (NOME)
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-    ctx.font = '35px Arial';
-    ctx.fillText(`SUBJECT: ${pushName.toUpperCase()}`, 70, 175);
+    // SUBJECT (NOME O NUMERO)
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+    ctx.font = '28px sans-serif';
+    ctx.fillText('SUBJECT IDENTIFIED:', 70, 160);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 45px sans-serif';
+    ctx.fillText(cleanName.toUpperCase(), 70, 210);
 
-    // 5. POWER POINTS (SISTEMATA SOVRAPPOSIZIONE)
-    const formattedAura = auraValue.toLocaleString();
+    // POWER POINTS (Layout verticale per evitare sovrapposizioni)
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.font = 'bold 25px sans-serif';
+    ctx.fillText('POWER POINTS', 75, 275); // Etichetta sopra
+
+    const formattedAura = auraValue.toLocaleString('it-IT');
     ctx.shadowBlur = 15;
     ctx.shadowColor = color;
     ctx.fillStyle = color;
-    ctx.font = 'bold 130px Arial';
-    ctx.fillText(formattedAura, 70, 320); // Numero Grande
-    
+    ctx.font = 'bold 140px sans-serif';
+    ctx.fillText(formattedAura, 70, 390); // Numero enorme sotto l'etichetta
     ctx.shadowBlur = 0;
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 30px Arial';
-    // Posizioniamo "POWER POINTS" dopo il numero, con un margine di sicurezza
-    const textWidth = ctx.measureText(formattedAura).width;
-    ctx.fillText('POWER POINTS', 90 + textWidth, 310);
 
-    // 6. BARRA DI CARICAMENTO DINAMICA
-    // Sfondo barra
+    // BARRA DI CARICAMENTO
     ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
     ctx.beginPath();
-    ctx.roundRect(70, 390, 860, 50, 10);
+    ctx.roundRect(70, 420, 860, 40, 5);
     ctx.fill();
 
-    // Calcolo larghezza barra in base all'aura (percentuale su 1.000.000)
     const barWidth = (auraValue / 1000000) * 860;
-    
-    // Gradiente barra
     const grad = ctx.createLinearGradient(70, 0, 70 + barWidth, 0);
     grad.addColorStop(0, color);
     grad.addColorStop(1, '#ffffff');
 
     ctx.fillStyle = grad;
     ctx.beginPath();
-    // La barra ora cresce correttamente in base al valore
-    ctx.roundRect(70, 390, Math.max(barWidth, 20), 50, 10); 
+    ctx.roundRect(70, 420, Math.max(barWidth, 15), 40, 5);
     ctx.fill();
 
-    // 7. RANK (In basso a destra)
+    // RANK
     ctx.textAlign = 'right';
-    ctx.font = 'italic bold 80px Arial';
+    ctx.font = 'italic bold 75px sans-serif';
     ctx.fillStyle = '#ffffff';
     ctx.fillText(rank, 930, 510);
 
     const buffer = canvas.toBuffer();
     await conn.sendMessage(m.chat, { 
       image: buffer, 
-      caption: `✅ *Analisi Completata*\n👤 *Soggetto:* ${pushName}\n📊 *Valore:* ${formattedAura}\n🏆 *Grado:* ${rank}`,
+      caption: `✅ *Analisi Completata*\n👤 *User:* ${cleanName}\n📊 *Aura:* ${formattedAura}\n🏆 *Rank:* ${rank}`,
       mentions: [target] 
     }, { quoted: m });
 
   } catch (e) {
     console.error(e);
-    m.reply('❌ Errore nel processamento dei dati Aura.');
+    m.reply('❌ Errore critico nel modulo Canvas.');
   }
 };
 
