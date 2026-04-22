@@ -7,7 +7,7 @@ import path from 'path';
 import os from 'os';
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
-  if (!text) return m.reply(`🩸 *𝐁𝐋𝐎𝐎𝐃 𝐁𝐎𝐓*\n\n💡 _Scrivi:_ ${usedPrefix + command} nome canzone`);
+  if (!text) return m.reply(`🩸 *ᴇʟɪxɪʀ ʙᴏᴛ*\n\n💡 _Scrivi:_ ${usedPrefix + command} nome canzone`);
 
   try {
     const search = await yts(text);
@@ -18,7 +18,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
     if (command === 'play') {
         let infoMsg = `┏━━━━━━━━━━━━━━━━━━━━┓\n`;
-        infoMsg += `   🎧  *𝐁𝐋𝐎𝐎𝐃 𝐁𝐎𝐓 𝐏𝐋𝐀𝐘𝐄𝐑* 🎧\n`;
+        infoMsg += `   🎧  *ᴇʟɪxɪʀ ʙᴏᴛ ᴘʟᴀʏᴇʀ* 🎧\n`;
         infoMsg += `┗━━━━━━━━━━━━━━━━━━━━┛\n\n`;
         infoMsg += `◈ 📌 *𝗧𝗶𝘁𝗼𝗹𝗼:* ${vid.title}\n`;
         infoMsg += `◈ ⏱️ *𝗗𝘂𝗿𝗮𝘁𝗮:* ${vid.timestamp}\n\n`;
@@ -27,7 +27,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         return await conn.sendMessage(m.chat, {
             image: { url: vid.thumbnail },
             caption: infoMsg,
-            footer: '𝐁𝐋𝐎𝐎𝐃 𝐁𝐎𝐓 • 𝟤𝟢𝟤𝟨',
+              footer: 'ᴇʟɪxɪʀ ʙᴏᴛ • 𝟤𝟢𝟤𝟨',
             buttons: [
                 { buttonId: `${usedPrefix}playaud ${url}`, buttonText: { displayText: '🎵 𝗔𝗨𝗗𝗜𝗢 (𝗠𝗣𝟯)' }, type: 1 },
                 { buttonId: `${usedPrefix}playvid ${url}`, buttonText: { displayText: '🎬 𝗩𝗜𝗗𝗘𝗢 (𝗠𝗣𝟰)' }, type: 1 }
@@ -79,7 +79,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         await conn.sendMessage(m.chat, {
             video: fs.readFileSync(inputPath),
             mimetype: 'video/mp4',
-            caption: `✅ *𝐒𝐜𝐚𝐫𝐢𝐜𝐚𝐭𝐨 𝐝𝐚 𝐁𝐋𝐎𝐎𝐃 𝐁𝐎𝐓*`,
+            caption: `✅ *𝐒𝐜𝐚𝐫𝐢𝐜𝐚𝐭𝐨 𝐝𝐚 ᴇʟɪxɪʀ ʙᴏᴛ*`,
         }, { quoted: m });
     }
 
@@ -89,7 +89,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
   } catch (e) {
     console.error(e);
-    m.reply('🚀 *𝐁𝐋𝐎𝐎𝐃 𝐁𝐎𝐓 𝐄𝐑𝐑𝐎𝐑:* File non disponibile o server offline.');
+    m.reply('🚀 *ᴇʟɪxɪʀ ʙᴏᴛ 𝐄𝐑𝐑𝐎𝐑:* File non disponibile o server offline.');
   }
 };
 
