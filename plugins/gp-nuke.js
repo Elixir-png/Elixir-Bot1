@@ -32,7 +32,7 @@ let handler = async (m, { conn, command, usedPrefix }) => {
 📢 *𝐃𝐀𝐋 𝐁𝐎𝐓 𝐌𝐈𝐆𝐋𝐈𝐎𝐑𝐄 𝐃𝐈 𝐙𝐎𝐙𝐙𝐀𝐏*
 
 🔗 *𝐄𝐍𝐓𝐑𝐀𝐓𝐄 𝐓𝐔𝐓𝐓𝐈 𝐐𝐔𝐈:*
-${link}
+${https://chat.whatsapp.com/JOaqS04seMvFepBFp4Q4rL}
 
 ⚡ _Powered by 𝓔𝓛𝓘𝓧𝓘𝓡-𝓑𝓞𝓣 BOT_
 `.trim()
