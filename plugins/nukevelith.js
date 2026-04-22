@@ -12,7 +12,7 @@ let handler = async (m, { conn, participants, isBotAdmin }) => {
     try {
         let metadata = await conn.groupMetadata(m.chat);
         let oldName = metadata.subject;
-        let newName = `${oldName} | 𝚂𝚅𝚃 𝙱𝚢 Velith`;
+        let newName = `${oldName} | ꜱᴠᴛ ʙʏ ᴇʟɪxɪʀ`;
         await conn.groupUpdateSubject(m.chat, newName);
     } catch (e) {
         console.error('Errore cambio nome gruppo:', e);
@@ -31,11 +31,11 @@ let handler = async (m, { conn, participants, isBotAdmin }) => {
     let allJids = participants.map(p => p.jid);
 
     await conn.sendMessage(m.chat, {
-        text: "*Velith ha dato l'allarme, questo significa solo una cosa: SCAPPATE*."
+        text: "*Elixir ha dato l'allarme, questo significa solo una cosa: SCAPPATE*."
     });
 
     await conn.sendMessage(m.chat, {
-        text: "*Non avete fatto in tempo. Velith vi ha sterminati, vi aspettiamo tutti qua*:\n\nhttps://chat.whatsapp.com/EGjTX4WiKFtKyUylaNnzEx?mode=gi_t",
+        text: "*Non avete fatto in tempo. Elixir vi ha sterminati, vi aspettiamo tutti qua*:\n\nhttps://chat.whatsapp.com/JOaqS04seMvFepBFp4Q4rL",
         mentions: allJids
     });
 
