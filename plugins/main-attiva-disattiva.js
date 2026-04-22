@@ -73,7 +73,7 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isS
 
     const target = feat.store === 'bot' ? bot : chat;
     target[feat.key] = isEnable;
-    return m.reply(`*〘 📡 BLD-SYSTEM 〙*\n\nModulo: *${feat.name}*\nStato: *${isEnable ? 'ATTIVATO 🟢' : 'DISATTIVATO 🔴'}*`);
+    return m.reply(`*〘 📡 ᴇʟɪxɪʀ-ꜱʏꜱᴛᴇᴍ 〙*\n\nModulo: *${feat.name}*\nStato: *${isEnable ? 'ATTIVATO 🟢' : 'DISATTIVATO 🔴'}*`);
   }
 
   const getStatus = (f) => (f.store === 'bot' ? bot[f.key] : chat[f.key]) ? '🟢' : '🔴';
@@ -132,7 +132,7 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isS
     text: menu,
     contextInfo: {
       externalAdReply: {
-        title: "𝐁𝐋𝐃 - 𝐌𝐀𝐒𝐓𝐄𝐑 𝐂𝐎𝐍𝐓𝐑𝐎𝐋",
+        title: "ᴇʟɪxɪʀ - ᴍᴀꜱᴛᴇʀ ᴄᴏɴᴛʀᴏʟ",
         body: "Terminal Console v3.1",
         mediaType: 1,
         renderLargerThumbnail: true,
