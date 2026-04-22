@@ -15,20 +15,29 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     if (!vid) return m.reply('⚠️ *𝗥𝗶𝘀𝘂𝗹𝘁𝗮𝘁𝗼 𝗻𝗼𝗻 𝘁𝗿𝗼𝘃𝗮𝘁𝗼.*');
 
     const url = vid.url;
+    // Estrazione dati aggiuntivi
+    const views = vid.views.toLocaleString('it-IT');
+    const published = vid.ago || "Data non disponibile";
 
-    // Se l'utente scrive solo .play, mostriamo le info e istruzioni (i bottoni spesso non vanno)
     if (command === 'play') {
-        let infoMsg = `┏━━━━━━━━━━━━━━━━━━━┓\n`;
-        infoMsg += `🎧  *ᴇʟɪxɪʀ ʙᴏᴛ ᴘʟᴀʏᴇʀ* 🎧\n`;
-        infoMsg += `┗━━━━━━━━━━━━━━━━━━━┛\n\n`;
+        let infoMsg = `┏━━━━━━━━━━━━━━━━━━━━┓\n`;
+        infoMsg += `   🎧  *ᴇʟɪxɪʀ ʙᴏᴛ ᴘʟᴀʏᴇʀ* 🎧\n`;
+        infoMsg += `┗━━━━━━━━━━━━━━━━━━━━┛\n\n`;
         infoMsg += `◈ 📌 *𝗧𝗶𝘁𝗼𝗹𝗼:* ${vid.title}\n`;
-        infoMsg += `◈ ⏱️ *𝗗𝘂𝗿𝗮𝘁𝗮:* ${vid.timestamp}\n\n`;
-        infoMsg += `*Digita:* \n- _${usedPrefix}playaud ${url}_ (Audio)\n- _${usedPrefix}playvid ${url}_ (Video)`;
+        infoMsg += `◈ ⏱️ *𝗗𝘂𝗿𝗮𝘁𝗮:* ${vid.timestamp}\n`;
+        infoMsg += `◈ 👁️ *𝗩𝗶𝘀𝘂𝗮𝗹𝗶𝘇𝘇𝗮𝘇𝗶𝗼𝗻𝗶:* ${views}\n`;
+        infoMsg += `◈ 📅 *𝗨𝘀𝗰𝗶𝘁𝗼:* ${published}\n\n`;
+        infoMsg += `*𝗦𝗲𝗹𝗲𝘇𝗶𝗼𝗻𝗮 𝗶𝗹 𝗳𝗼𝗿𝗺𝗮𝘁𝗼:*`;
 
         return await conn.sendMessage(m.chat, {
             image: { url: vid.thumbnail },
             caption: infoMsg,
-            footer: 'ᴇʟɪxɪʀ ʙᴏᴛ • 𝟤𝟢𝟤𝟨'
+            footer: 'ᴇʟɪxɪʀ ʙᴏᴛ • 𝟤𝟢𝟤𝟨',
+            buttons: [
+                { buttonId: `${usedPrefix}playaud ${url}`, buttonText: { displayText: '🎵 𝗔𝗨𝗗𝗜𝗢 (𝗠𝗣𝟯)' }, type: 1 },
+                { buttonId: `${usedPrefix}playvid ${url}`, buttonText: { displayText: '🎬 𝗩𝗜𝗗𝗘𝗢 (𝗠𝗣𝟰)' }, type: 1 }
+            ],
+            headerType: 4
         }, { quoted: m });
     }
 
@@ -37,37 +46,34 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     let downloadUrl = null;
     const isAudio = command === 'playaud';
 
-    // Prova API 1: Dylux
+    // Sistema di Fallback API migliorato
     try {
         let res = isAudio ? await fg.yta(url) : await fg.ytv(url);
         if (res && res.dl_url) downloadUrl = res.dl_url;
-    } catch (e) {
-        // Prova API 2: Vreden
+    } catch {
         try {
             let api = isAudio ? 'ytmp3' : 'ytmp4';
-            let res = await fetch(`https://api.vreden.my.id/api/${api}?url=${url}`);
+            let res = await fetch(`https://vreden.my.id{api}?url=${url}`);
             let json = await res.json();
             downloadUrl = json.result?.download?.url || json.result?.url;
-        } catch (e2) {
-            // Prova API 3: Iniman (Fallback finale)
+        } catch {
             let res = await fetch(`https://skizo.tech{url}&apikey=bocchi`);
             let json = await res.json();
             downloadUrl = isAudio ? json.audio : json.video;
         }
     }
 
-    if (!downloadUrl) throw new Error("Link di download non generato");
+    if (!downloadUrl) throw new Error("Link non trovato");
 
     const tmpDir = os.tmpdir();
     const inputPath = path.join(tmpDir, `input_${Date.now()}`);
     const outputPath = path.join(tmpDir, `output_${Date.now()}.${isAudio ? 'mp3' : 'mp4'}`);
 
-    const response = await fetch(downloadUrl);
-    const buffer = await response.buffer();
+    const resDownload = await fetch(downloadUrl);
+    const buffer = await resDownload.buffer();
     fs.writeFileSync(inputPath, buffer);
 
     if (isAudio) {
-        // Conversione FFmpeg per garantire compatibilità MP3
         await new Promise((resolve, reject) => {
             exec(`ffmpeg -i "${inputPath}" -vn -ar 44100 -ac 2 -b:a 128k "${outputPath}"`, (err) => {
                 if (err) reject(err);
@@ -86,18 +92,17 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             video: fs.readFileSync(inputPath),
             mimetype: 'video/mp4',
             caption: `✅ *𝐒𝐜𝐚𝐫𝐢𝐜𝐚𝐭𝐨 𝐝𝐚 ᴇʟɪxɪʀ ʙᴏᴛ*`,
-            fileName: `${vid.title}.mp4`
         }, { quoted: m });
     }
 
-    // Pulizia file temporanei
+    // Pulizia file
     if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
     await conn.sendMessage(m.chat, { react: { text: "✅", key: m.key } });
 
   } catch (e) {
     console.error(e);
-    m.reply('🚀 *ᴇʟɪxɪʀ ʙᴏᴛ 𝐄𝐑𝐑𝐎𝐑:* Il server YouTube o le API sono sovraccarichi. Riprova tra poco.');
+    m.reply('🚀 *ᴇʟɪxɪʀ ʙᴏᴛ 𝐄𝐑𝐑𝐎𝐑:* Impossibile scaricare il file. Prova con un altro titolo.');
   }
 };
 
