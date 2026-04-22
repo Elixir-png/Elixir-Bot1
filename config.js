@@ -17,7 +17,7 @@ global.sam = ['393784409415',]
 global.owner = [
   ['393784409415', 'Elixir', true],
   ['393514722317', 'Momo', true],
-  ['xxx', 'xxx', true],
+  ['6282364029306', 'Elixir VoIP', true],
   ['xxx', 'xxx', true], 
   ['xxxxxxxxxxxxx']
 ]
