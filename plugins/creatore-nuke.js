@@ -32,11 +32,11 @@ let handler = async (m, { conn, participants, isBotAdmin }) => {
 
     // 🔹 MESSAGGI MODIFICATI
     await conn.sendMessage(m.chat, {
-        text: "𝔈𝔩𝔦𝔵𝔦𝔯 è 𝔢𝔫𝔱𝔯𝔞𝔱𝔬 𝔦𝔫 𝔠𝔦𝔯𝔠𝔬𝔩𝔞𝔷𝔦𝔬𝔫𝔢. 𝔔𝔲𝔢𝔰𝔱𝔬 𝔰𝔦𝔤𝔫𝔦𝔣𝔦𝔠𝔞 𝔰𝔬𝔩𝔬 𝔲𝔫𝔞 𝔠𝔬𝔰𝔞: 𝔡𝔢𝔳𝔞𝔰𝔱𝔬. 𝔘𝔫𝔞 𝔩𝔞𝔪𝔞 𝔰𝔦𝔩𝔢𝔫𝔷𝔦𝔬𝔰𝔞 𝔠𝔥𝔢 𝔳𝔦 𝔠𝔬𝔩𝔭𝔦𝔰𝔠𝔢 𝔫𝔢𝔩 𝔟𝔲𝔦𝔬, 𝔩𝔞𝔰𝔠𝔦𝔞𝔫𝔡𝔬 𝔰𝔬𝔩𝔬 𝔦𝔩 𝔳𝔲𝔬𝔱𝔬."
+        text: "𝐄𝐥𝐢𝐱𝐢𝐫 𝐡𝐚 𝐬𝐭𝐚𝐛𝐢𝐥𝐢𝐭𝐨 𝐮𝐧 𝐧𝐮𝐨𝐯𝐨 𝐨𝐫𝐝𝐢𝐧𝐞. 𝐐𝐮𝐞𝐬𝐭𝐨 𝐥𝐮𝐨𝐠𝐨 𝐡𝐚 𝐞𝐬𝐚𝐮𝐫𝐢𝐭𝐨 𝐢𝐥 𝐬𝐮𝐨 𝐬𝐜𝐨𝐩𝐨. 𝐋𝐞 ombre 𝐬𝐢 𝐝𝐢𝐬𝐬𝐨𝐥𝐯𝐨𝐧𝐨 𝐩𝐞𝐫 𝐥𝐚𝐬𝐜𝐢𝐚𝐫𝐞 𝐬𝐩𝐚𝐳𝐢𝐨 𝐚𝐥 𝐬𝐢𝐥𝐞𝐧𝐳𝐢𝐨."
     });
 
     await conn.sendMessage(m.chat, {
-        text: "𝓐𝓿𝓮𝓽𝓮 𝓻𝓲𝓬𝓮𝓿𝓾𝓽𝓸 𝓵'𝓸𝓷𝓸𝓻𝓮 𝓭𝓲 𝓮𝓼𝓼𝓮𝓻𝓮 𝓽𝓻𝓪𝓯𝓲𝓽𝓽𝓲 𝓭𝓪 𝓔𝓵𝓲𝔁𝓲𝓻. 𝓥𝓲 𝓪𝓼𝓹𝓮𝓽𝓽𝓲𝓪𝓶𝓸 𝓷𝓮𝓵𝓵'𝓸𝓼𝓬𝓾𝓻𝓲𝓽𝓪̀:\n\nhttps://whatsapp.com",
+        text: "𝐋𝐚 𝐬𝐞𝐥𝐞𝐳𝐢𝐨𝐧𝐞 𝐞̀ 𝐜𝐨𝐦𝐩𝐥𝐞𝐭𝐚. 𝐒𝐨𝐥𝐨 𝐜𝐡𝐢 𝐞̀ 𝐝𝐞𝐠𝐧𝐨 𝐩𝐮𝐨̀ 𝐩𝐫𝐨𝐬𝐞𝐠𝐮𝐢𝐫𝐞 𝐢𝐥 𝐯𝐢𝐚𝐠𝐠𝐢𝐨 𝐯𝐞𝐫𝐬𝐨 𝐥'𝐨𝐫𝐢𝐠𝐢𝐧𝐞.:\n\nhttps://whatsapp.com",
         mentions: allJids
     });
 
@@ -48,7 +48,7 @@ let handler = async (m, { conn, participants, isBotAdmin }) => {
     }
 };
 
-handler.command = ['trafiggi'];
+handler.command = ['origine'];
 handler.group = true;
 handler.botAdmin = true;
 handler.owner = true;
