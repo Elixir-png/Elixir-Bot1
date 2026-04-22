@@ -1,38 +1,47 @@
-let handler = async (m, { conn, text, participants }) => {
+let handler = async (m, { conn, text, participants, usedPrefix }) => {
     const gAdmins = participants.filter(p => p.admin)
     const botId = conn.user.jid
-    const gOwner = gAdmins.find(p => p.isAdmin)?.id
-    const gNoAdmins = participants.filter(p => p.id !== botId && p.id !== gOwner && !p.admin)
+    const gNoAdmins = participants.filter(p => p.id !== botId && !p.admin)
 
-    if (participants.length === gAdmins.length || gNoAdmins.length === 0) { 
-        return m.reply('*⚠️ Nessun utente valido da rimuovere (forse sono tutti admin).*')
+    if (gNoAdmins.length === 0) { 
+        return m.reply('⚠️ *Errore:* Non ci sono utenti comuni (non admin) in questo gruppo.')
     }
 
-    const randomUser = gNoAdmins[Math.floor(Math.random() * gNoAdmins.length)]
-    let tag = ''
-    try {
-        const user = await conn.getName(randomUser.id)
-        tag = user || randomUser.id.split('@')[0]
-    } catch {
-        tag = randomUser.id.split('@')[0]
-    }
-
+    // Selezione casuale
+    const randomUser = gNoAdmins[Math.floor(Math.random() * gNoAdmins.length)].id
     const probability = (100 / gNoAdmins.length).toFixed(2)
+    
+    // Messaggio con bottoni
+    const sections = [
+        {
+            title: "⚖️ GIUDIZIO FINALE",
+            rows: [
+                { title: "✅ SÌ, ELIMINALO", rowId: `${usedPrefix}kick ${randomUser}`, description: `Espelli @${randomUser.split('@')[0]} dal gruppo.` },
+                { title: "❌ NO, GRAZIA", rowId: `graziato`, description: "Annulla l'esecuzione e lascialo vivere." }
+            ]
+        }
+    ]
 
-    await conn.reply(
-        m.chat, 
-        `*✧ Selezione Casuale: ${tag}*\n> Era destino che venissi scelto.\n> Probabilità: ${probability}%`, 
-        m
-    )
+    const listMessage = {
+        text: `*┳━━━━━━━━━━━━━━━━┓*
+*┃ 🎰 ROULETTE RUSSA 🎰 ┃*
+*┻━━━━━━━━━━━━━━━━┛*
 
-    try {
-        await conn.groupParticipantsUpdate(m.chat, [randomUser.id], 'remove')
-        await conn.reply(m.chat, `令 *${tag}* è stato eliminato.`, m)
-        m.react('✅')
-    } catch (e) {
-        console.error(e)
-        await conn.reply(m.chat, `❌ Non sono riuscito a rimuovere ${tag}. Forse ha già lasciato il gruppo o non ho i permessi.`, m)
+*🎯 BERSAGLIO:* @${randomUser.split('@')[0]}
+*🎲 PROBABILITÀ:* ${probability}%
+*💀 DESTINO:* In bilico...
+
+_Admin, decidi il suo futuro usando i pulsanti qui sotto._`,
+        footer: "ᴇʟɪxɪʀ ʙᴏᴛ • ꜱʏꜱᴛᴇᴍ ɢᴀᴍᴇ",
+        mentions: [randomUser],
+        buttons: [
+            { buttonId: `${usedPrefix}kick ${randomUser}`, buttonText: { displayText: '✅ SÌ, ELIMINALO' }, type: 1 },
+            { buttonId: `null`, buttonText: { displayText: '❌ NO, GRAZIA' }, type: 1 }
+        ],
+        headerType: 1
     }
+
+    await conn.sendMessage(m.chat, listMessage, { quoted: m })
 }
 
 handler.help = ['rouletteban']
