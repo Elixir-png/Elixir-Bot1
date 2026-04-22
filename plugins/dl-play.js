@@ -79,7 +79,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         await conn.sendMessage(m.chat, {
             video: fs.readFileSync(inputPath),
             mimetype: 'video/mp4',
-            caption: `✅ *𝐒𝐜𝐚𝐫𝐢𝐜𝐚𝐭𝐨 𝐝𝐚 𝐁𝐋𝐎𝐎𝐃 𝐁𝐎𝐓*`,
+            caption: `✅ *𝐒𝐜𝐚𝐫𝐢𝐜𝐚𝐭𝐨 𝐝𝐚 ᴇʟɪxɪʀ ʙᴏᴛ*`,
         }, { quoted: m });
     }
 
@@ -89,7 +89,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
   } catch (e) {
     console.error(e);
-    m.reply('🚀 *𝐁𝐋𝐎𝐎𝐃 𝐁𝐎𝐓 𝐄𝐑𝐑𝐎𝐑:* File non disponibile o server offline.');
+    m.reply('🚀 *ᴇʟɪxɪʀ ʙᴏᴛ ᴇʀʀᴏʀ:* File non disponibile o server offline.');
   }
 };
 
