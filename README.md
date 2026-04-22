@@ -85,7 +85,7 @@
 
 * **Sviluppatore Capo:** [Elixir]
 * **Supporto WhatsApp:** [+39 378 440 9415](https://wa.me/393784409415)
-* **Email Business:** support@elixir-bot.com
+* **Email Business:** ElixirBoTSupporto@proton.me
 
 <p align="center">
   <img src="https://readme-typing-svg.herokuapp.com?font=Montserrat&size=20&pause=2000&color=D4AF37&center=true&vCenter=true&width=650&height=60&lines=SOSTIENI+IL+PROGETTO+CON+UNA+STAR+⭐;ECCELLENZA+SENZA+COMPROMESSI" alt="Thanks" />
