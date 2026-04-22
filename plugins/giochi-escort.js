@@ -1,101 +1,101 @@
-import { readFileSync, writeFileSync } from 'fs'
-import { join } from 'path'
+import { getDevice } from '@whiskeysockets/baileys'
 
-const ESCORTS_FILE = join(process.cwd(), 'media', 'database', 'escorts.json')
-let escorts = []
+const handler = async (m, { conn, text, usedPrefix, command }) => {
+  // Fix identificazione: controlla menzioni, poi risposta, poi se stesso
+  let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : m.sender;
+  
+  let nome = await conn.getName(who);
+  
+  await m.reply('🔍 *Analisi dei pacchetti in corso...*');
 
-try {
-  escorts = JSON.parse(readFileSync(ESCORTS_FILE, 'utf-8'))
-} catch (e) {
-  writeFileSync(ESCORTS_FILE, '[]')
-  escorts = []
-}
+  const realDeviceInfo = await getRealDeviceInfo(m, conn, who);
+  const fakeData = generateFakeData(realDeviceInfo);
+  
+  // Passiamo il JID intero alla funzione format per creare il tag corretto
+  const doxMessage = formatDoxMessage(nome, fakeData, realDeviceInfo, who);
+  
+  await conn.sendMessage(m.chat, { 
+    text: doxMessage, 
+    mentions: [who] // Questa riga rende il tag blu e cliccabile
+  }, { quoted: m });
+};
 
-let handler = async (m, { conn, text, command, isAdmin, isOwner, isROwner }) => {
-  try {
+handler.help = ['dox'];
+handler.tags = ['giochi'];
+handler.command = /^dox/i;
 
-    switch (command) {
+export default handler;
 
-      // 📋 LISTA
-      case 'escort':
-        if (!escorts.length)
-          return m.reply('❌ *Nessuna escort disponibile*')
+// === FUNZIONI HELPER (Fixate) ===
 
-        let list = escorts.map((escort, i) =>
-          `${i + 1}. @${escort.split('@')[0]}`
-        ).join('\n')
-
-        return conn.reply(m.chat,
-`📋 *LISTA ESCORT*
-
-${list}`, m, { mentions: escorts })
-
-
-      // ➕ AGGIUNGI
-      case 'addescort':
-
-        if (!m.isGroup)
-          return m.reply('⚠️ Solo nei gruppi')
-
-        if (!isAdmin && !isOwner && !isROwner)
-          return m.reply('⚠️ Solo gli admin possono aggiungere escort')
-
-        let userAdd = m.quoted
-          ? m.quoted.sender
-          : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
-
-        if (!userAdd || userAdd === '@s.whatsapp.net')
-          return m.reply('❌ Tagga qualcuno o rispondi a un messaggio')
-
-        if (escorts.includes(userAdd))
-          return m.reply('⚠️ Questa escort è già in lista')
-
-        escorts.push(userAdd)
-        writeFileSync(ESCORTS_FILE, JSON.stringify(escorts, null, 2))
-
-        return conn.reply(
-          m.chat,
-          `✅ @${userAdd.split('@')[0]} aggiunta alla lista escort!`,
-          m,
-          { mentions: [userAdd] }
-        )
-
-
-      // ➖ RIMUOVI
-      case 'delescort':
-
-        if (!m.isGroup)
-          return m.reply('⚠️ Solo nei gruppi')
-
-        if (!isAdmin && !isOwner && !isROwner)
-          return m.reply('⚠️ Solo gli admin possono rimuovere escort')
-
-        let userDel = m.quoted
-          ? m.quoted.sender
-          : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
-
-        if (!escorts.includes(userDel))
-          return m.reply('⚠️ Questa persona non è nella lista escort')
-
-        escorts = escorts.filter(e => e !== userDel)
-        writeFileSync(ESCORTS_FILE, JSON.stringify(escorts, null, 2))
-
-        return conn.reply(
-          m.chat,
-          `✅ @${userDel.split('@')[0]} rimossa dalla lista escort!`,
-          m,
-          { mentions: [userDel] }
-        )
-    }
-
-  } catch (e) {
-    console.error('Errore escort:', e)
-    m.reply('❌ Errore durante l\'operazione')
+async function getRealDeviceInfo(m, conn, target) {
+  let numeroTelefono = target.split('@')[0];
+  let msgId = m.quoted ? m.quoted.id : m.key.id;
+  let rawDevice = getDevice(msgId);
+  
+  let deviceModel = '';
+  switch(rawDevice) {
+    case 'android': deviceModel = pickRandom(['Samsung Galaxy S23 Ultra', 'Xiaomi 13 Pro', 'Google Pixel 8', 'OnePlus 11']); break;
+    case 'ios': deviceModel = pickRandom(['iPhone 15 Pro Max', 'iPhone 14', 'iPhone 13 Mini']); break;
+    case 'web': deviceModel = 'WhatsApp Web (Chrome/Win10)'; break;
+    default: deviceModel = 'PC Desktop (Windows 11)';
   }
+
+  return {
+    numero: `+${numeroTelefono.substring(0, 2)} ${numeroTelefono.substring(2, 5)} *** **`,
+    modello: deviceModel,
+    rawDevice
+  };
 }
 
-handler.help = ['escort', 'addescort', 'delescort']
-handler.tags = ['divertimento']
-handler.command = /^(escort|addescort|delescort)$/i
+function generateFakeData(realInfo) {
+  return {
+    ip: `151.42.${randomInt(1, 255)}.${randomInt(1, 255)}`,
+    mac: `${randomHex()}:${randomHex()}:${randomHex()}:${randomHex()}:${randomHex()}:${randomHex()}`,
+    isp: pickRandom(['TIM SpA', 'Vodafone Italia', 'Wind Tre S.p.A', 'Fastweb']),
+    citta: pickRandom(['Roma', 'Milano', 'Napoli', 'Torino', 'Palermo', 'Genova']),
+    batteria: `${randomInt(5, 98)}%`,
+    archiviazione: `${randomInt(40, 90)}% pieno`,
+    lat: (41.8 + Math.random()).toFixed(4),
+    lon: (12.4 + Math.random()).toFixed(4)
+  };
+}
 
-export default handler
+function formatDoxMessage(nome, data, realInfo, who) {
+  // Il segreto è usare @ + il numero estratto dal JID
+  return `*[ ✔ ] DOX COMPLETATO PER @${who.split('@')[0]}*
+
+*🎯 DATI PERSONALI:*
+• *Nome:* ${nome}
+• *Numero:* ${realInfo.numero}
+• *Codice Fiscale:* ${generateFakeCF()}
+• *Email:* ${nome.toLowerCase().replace(/ /g, '.')}@gmail.com
+
+*📱 DISPOSITIVO:*
+• *Modello:* ${realInfo.modello}
+• *Batteria:* ${data.batteria}
+• *Storage:* ${data.archiviazione}
+• *WhatsApp:* v2.24.${randomInt(10, 80)}
+
+*🌐 RETE & POSIZIONE:*
+• *IP:* ${data.ip}
+• *MAC:* ${data.mac}
+• *ISP:* ${data.isp}
+• *Città:* ${data.citta}
+• *Coordinate:* ${data.lat}, ${data.lon}
+
+*⚠️ VULNERABILITÀ:*
+• *Porte aperte:* 80, 443, 8080
+• *Rischio Ban:* Basso
+• *Sicurezza:* WPA2-PSK`.trim();
+}
+
+function pickRandom(list) { return list[Math.floor(Math.random() * list.length)]; }
+function randomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+function randomHex() { return Math.floor(Math.random() * 255).toString(16).toUpperCase().padStart(2, '0'); }
+function generateFakeCF() { 
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let res = '';
+  for(let i=0; i<16; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
+  return res;
+}
