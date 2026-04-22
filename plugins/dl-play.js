@@ -15,17 +15,13 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     if (!vid) return m.reply('⚠️ *𝗥𝗶𝘀𝘂𝗹𝘁𝗮𝘁𝗼 𝗻𝗼𝗻 𝘁𝗿𝗼𝘃𝗮𝘁𝗼.*');
 
     const url = vid.url;
-    const views = vid.views.toLocaleString('it-IT');
-    const published = vid.ago || "Data non disponibile";
 
     if (command === 'play') {
-        let infoMsg = `┏━━━━━━━━━━━━━━━━━━━┓\n`;
-        infoMsg += `     🎧  *ᴇʟɪxɪʀ ʙᴏᴛ ᴘʟᴀʏᴇʀ* 🎧\n`;
-        infoMsg += `┗━━━━━━━━━━━━━━━━━━━┛\n\n`;
+        let infoMsg = `┏━━━━━━━━━━━━━━━━━━━━┓\n`;
+        infoMsg += `   🎧  *ᴇʟɪxɪʀ ʙᴏᴛ ᴘʟᴀʏᴇʀ* 🎧\n`;
+        infoMsg += `┗━━━━━━━━━━━━━━━━━━━━┛\n\n`;
         infoMsg += `◈ 📌 *𝗧𝗶𝘁𝗼𝗹𝗼:* ${vid.title}\n`;
-        infoMsg += `◈ ⏱️ *𝗗𝘂𝗿𝗮𝘁𝗮:* ${vid.timestamp}\n`;
-        infoMsg += `◈ 👁️ *𝗩𝗶𝘀𝘂𝗮𝗹𝗶𝘇𝘇𝗮𝘇𝗶𝗼𝗻𝗶:* ${views}\n`;
-        infoMsg += `◈ 📅 *𝗨𝘀𝗰𝗶𝘁𝗼:* ${published}\n\n`;
+        infoMsg += `◈ ⏱️ *𝗗𝘂𝗿𝗮𝘁𝗮:* ${vid.timestamp}\n\n`;
         infoMsg += `*𝗦𝗲𝗹𝗲𝘇𝗶𝗼𝗻𝗮 𝗶𝗹 𝗳𝗼𝗿𝗺𝗮𝘁𝗼:*`;
 
         return await conn.sendMessage(m.chat, {
@@ -45,40 +41,29 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     let downloadUrl = null;
     const isAudio = command === 'playaud';
 
-    // FIX API URLS
     try {
         let res = isAudio ? await fg.yta(url) : await fg.ytv(url);
         if (res && res.dl_url) downloadUrl = res.dl_url;
     } catch {
-        try {
-            let apiType = isAudio ? 'ytmp3' : 'ytmp4';
-            let res = await fetch(`https://vreden.my.id{apiType}?url=${url}`);
-            let json = await res.json();
-            downloadUrl = json.result?.download?.url || json.result?.url;
-        } catch {
-            try {
-                let res = await fetch(`https://skizo.tech{url}&apikey=bocchi`);
-                let json = await res.json();
-                downloadUrl = isAudio ? json.audio : json.video;
-            } catch (e) {
-                console.error("Tutte le API hanno fallito");
-            }
-        }
+        let api = isAudio ? 'ytmp3' : 'ytmp4';
+        let res = await fetch(`https://api.vreden.my.id/api/${api}?url=${url}`);
+        let json = await res.json();
+        downloadUrl = json.result?.download?.url || json.result?.url;
     }
 
-    if (!downloadUrl) throw new Error("Link non trovato");
+    if (!downloadUrl) throw new Error();
 
     const tmpDir = os.tmpdir();
     const inputPath = path.join(tmpDir, `input_${Date.now()}`);
     const outputPath = path.join(tmpDir, `output_${Date.now()}.${isAudio ? 'mp3' : 'mp4'}`);
 
-    const resDownload = await fetch(downloadUrl);
-    const arrayBuffer = await resDownload.arrayBuffer();
+    const res = await fetch(downloadUrl);
+    const arrayBuffer = await res.arrayBuffer();
     fs.writeFileSync(inputPath, Buffer.from(arrayBuffer));
 
     if (isAudio) {
         await new Promise((resolve, reject) => {
-            exec(`ffmpeg -i "${inputPath}" -vn -ar 44100 -ac 2 -b:a 128k "${outputPath}"`, (err) => {
+            exec(`ffmpeg -i ${inputPath} -vn -ar 44100 -ac 2 -b:a 128k ${outputPath}`, (err) => {
                 if (err) reject(err);
                 else resolve();
             });
@@ -94,8 +79,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         await conn.sendMessage(m.chat, {
             video: fs.readFileSync(inputPath),
             mimetype: 'video/mp4',
-            caption: `✅ *𝐒𝐜𝐚𝐫𝐢𝐜𝐚𝐭𝐨 𝐝𝐚 ᴇʟɪxɪʀ ʙᴏᴛ*`,
-            fileName: `${vid.title}.mp4`
+            caption: `✅ *𝐒𝐜𝐚𝐫𝐢𝐜𝐚𝐭𝐨 𝐝𝐚 𝐁𝐋𝐎𝐎𝐃 𝐁𝐎𝐓*`,
         }, { quoted: m });
     }
 
@@ -105,7 +89,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
   } catch (e) {
     console.error(e);
-    m.reply('🚀 *ᴇʟɪxɪʀ ʙᴏᴛ 𝐄𝐑𝐑𝐎𝐑:* Servizio momentaneamente non disponibile. Riprova più tardi.');
+    m.reply('🚀 *𝐁𝐋𝐎𝐎𝐃 𝐁𝐎𝐓 𝐄𝐑𝐑𝐎𝐑:* File non disponibile o server offline.');
   }
 };
 
