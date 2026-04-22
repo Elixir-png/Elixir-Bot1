@@ -83,7 +83,7 @@
   <img src="https://readme-typing-svg.herokuapp.com?font=Cinzel&size=35&pause=500&color=D4AF37&center=true&vCenter=true&width=700&height=80&lines=CONTATTI+UFFICIALI;SUPPORTO+TECNICO" alt="Staff" />
 </p>
 
-* **Sviluppatore Capo:** [Elixir]
+* **Sviluppatore Capo:** ᴇʟɪxɪʀ
 * **Supporto WhatsApp:** [+39 378 440 9415](https://wa.me/393784409415)
 * **Email Business:** ElixirBoTSupporto@proton.me
 
