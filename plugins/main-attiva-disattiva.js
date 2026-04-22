@@ -9,7 +9,7 @@ const PERM = {
 };
 
 const featureRegistry = [
-  { key: 'bestemmiometro', store: 'chat', perm: PERM.ADMIN, name: '🤬 Bestemmiometro', desc: 'Rileva e conta le bestemmie' },
+  { key: 'bestemmiometro', store: 'chat', perm: PERM.ADMIN, name: '🤬 Bestemmiometro', desc: 'Rileva e conta le bestemmie' }, // AGGIUNTO QUI
   { key: 'antidelete', store: 'chat', perm: PERM.ADMIN, name: '🗑️ Antidelete', desc: 'Recupera messaggi eliminati' },
   { key: 'welcome', store: 'chat', perm: PERM.ADMIN, name: '👋 Welcome', desc: 'Messaggio di benvenuto' },
   { key: 'goodbye', store: 'chat', perm: PERM.ADMIN, name: '🚪 Addio', desc: 'Messaggio di addio' },
@@ -38,7 +38,7 @@ const featureRegistry = [
   { key: 'autolevelup', store: 'chat', perm: PERM.ADMIN, name: '⬆️ Autolivello', desc: 'Messaggio di level up' },
   { key: 'antinuke', store: 'chat', perm: PERM.OWNER, name: '🛡️ Antinuke', desc: 'Protezione totale anti-raid' },
   { key: 'antiprivato', store: 'bot', perm: PERM.OWNER, name: '🔒 Blocco privato', desc: 'Blocca chi scrive in DM al bot' },
-  { key: 'soloe', store: 'bot', perm: PERM.sam, name: '👑 Solocreatore', desc: 'Bot utilizzabile solo dal Fondatore' },
+  { key: 'soloe', store: 'bot', perm: PERM.sam, name: '👑 Solocreatore', desc: 'Bot utilizzabile solo da Blood' },
   { key: 'multiprefix', store: 'bot', perm: PERM.OWNER, name: '🔣 Multiprefix', desc: 'Abilita più prefissi (.!/)' },
   { key: 'jadibotmd', store: 'bot', perm: PERM.OWNER, name: '🧬 Subbots', desc: 'Abilita sessioni secondarie' },
   { key: 'antispambot', store: 'bot', perm: PERM.OWNER, name: '🤖 Anti-spam comandi', desc: 'Limita spam comandi globale' },
@@ -67,53 +67,57 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isS
     const feat = aliasMap.get(type);
     if (!feat) return m.reply(`『 ❌ 』 Modulo *${type}* non trovato.`);
 
-    if (feat.perm === PERM.sam && !isSam) return m.reply('『 ❌ 』 Accesso negato: Solo Fondatore.');
+    if (feat.perm === PERM.sam && !isSam) return m.reply('『 ❌ 』 Accesso negato: Solo Blood.');
     if (feat.perm === PERM.OWNER && !isOwner && !isSam) return m.reply('『 ❌ 』 Accesso negato: Solo Owner.');
     if (feat.perm === PERM.ADMIN && m.isGroup && !(isAdmin || isOwner || isSam)) return m.reply('『 ❌ 』 Richiesti permessi Admin.');
 
     const target = feat.store === 'bot' ? bot : chat;
     target[feat.key] = isEnable;
-    return m.reply(`*───〔 ✧ 𝐄𝐋𝐈𝐗𝐈𝐑 𝐒𝐘𝐒𝐓𝐄𝐌 ✧ 〕───*\n\n⚜️ Modulo: *${feat.name}*\n✨ Stato: *${isEnable ? 'ATTIVO' : 'DISATTIVATO'}*`);
+    return m.reply(`*〘 📡 BLD-SYSTEM 〙*\n\nModulo: *${feat.name}*\nStato: *${isEnable ? 'ATTIVATO 🟢' : 'DISATTIVATO 🔴'}*`);
   }
 
-  const getStatus = (f) => (f.store === 'bot' ? bot[f.key] : chat[f.key]) ? '◈' : '◇';
+  const getStatus = (f) => (f.store === 'bot' ? bot[f.key] : chat[f.key]) ? '🟢' : '🔴';
 
-  let menu = `┏━━━〔 𝐄 𝐋 𝐈 𝐗 𝐈 𝐑 〕━━━┓
-┃  ✧  𝐂𝐎𝐍𝐓𝐑𝐎𝐋  𝐂𝐄𝐍𝐓𝐄𝐑  ✧  
-┗━━━━━━━━━━━━━━┛
-
-┌───  〔 ɪɴꜰᴏ ᴜᴛᴇɴᴛᴇ 〕  ───┐
+  let menu = `┎━━━━━━━━━━━━━━━━━━━━┑
+┃   ✧  ᴇʟɪxɪʀ - ᴍᴀꜱᴛᴇʀ ᴄᴏɴᴛʀᴏʟ  ✧   ┃
+┖━━━━━━━━━━━━━━━━━━━━┙
+┌────────────────────┐
   👤 𝚄𝚜𝚎𝚛: ${userName}
-  🌐 𝚂𝚝𝚊𝚝𝚞𝚜: 𝙾𝚗𝚕𝚒𝚗𝚎
-└──────────────────┘
+  📡 𝚂𝚝𝚊𝚝𝚞𝚜: 𝙾𝚗𝚕𝚒𝚗𝚎
+└────────────────────┘
 
-*───〔 ɢᴜɪᴅᴀ 〕───*
-> Utilizza i prefissi per gestire:
-*⊛* ${usedPrefix}attiva <modulo>
-*⊛* ${usedPrefix}disattiva <modulo>
+*〘 ɪɴsᴛʀᴜᴢɪᴏɴɪ ᴏᴘᴇʀᴀᴛɪᴠᴇ 〙*
+> Attiva o disattiva i moduli:
+*│ ➤* .attiva <nome>
+*│ ➤* .disattiva <nome>
 
-*〔 🛡️ sɪᴄᴜʀᴇᴢᴢᴀ 〕*\n`;
+*┍━━━━━〔 🛡️ sɪᴄᴜʀᴇᴢﾞᴀ 〕━━━━━┑*\n`;
 
+  // Aggiunto 'bestemmiometro' alla lista sicurezza
   const sicurezzaKeys = ['bestemmiometro', 'antidelete', 'antigore', 'modoadmin', 'antivoip', 'antiLink', 'antiLinkUni', 'antiLink2', 'antitrava', 'antinuke', 'antioneview', 'antispam', 'antisondaggi', 'antiparolacce', 'antiBot', 'antiBot2', 'antimedia', 'antitagall', 'antiporno'];
   featureRegistry.filter(f => sicurezzaKeys.includes(f.key)).forEach(f => {
-    menu += `${getStatus(f)} *${f.name}*\n   └─ _${f.key}_\n\n`;
+    menu += `┇ ${getStatus(f)} ${f.name}\n┇ _${f.desc}_\n┇ ➤ *${f.key}*\n┇\n`;
   });
 
-  menu += `*〔 🤖 ᴀᴜᴛᴏᴍᴀᴢɪᴏɴᴇ 〕*\n`;
+  menu += `*┕━━━━━━━──ׄ──ׅ──ׄ──━━━━━━━┙*
+
+*┍━━━━━〔 🤖 ᴀᴜᴛᴏᴍᴀﾞɪᴏɴᴇ 〕━━━━━┑*\n`;
 
   const automazioneKeys = ['ai', 'vocali', 'reaction', 'autolevelup', 'welcome', 'goodbye', 'autotrascrizione', 'autotraduzione', 'rileva'];
   featureRegistry.filter(f => automazioneKeys.includes(f.key)).forEach(f => {
-    menu += `${getStatus(f)} *${f.name}*\n   └─ _${f.key}_\n\n`;
+    menu += `┇ ${getStatus(f)} ${f.name}\n┇ _${f.desc}_\n┇ ➤ *${f.key}*\n┇\n`;
   });
 
-  menu += `*〔 ⚙️ sɪsᴛᴇᴍᴀ 〕*\n`;
+  menu += `*┕━━━━━━━──ׅ──ׄ──ׅ──━━━━━━━┙*
+
+*┍━━━━━〔 ⚙️ sɪsᴛᴇᴍᴀ ʙᴏᴛ 〕━━━━━┑*\n`;
 
   const sistemaKeys = ['antiprivato', 'soloe', 'multiprefix', 'jadibotmd', 'antispambot', 'autoread', 'anticall', 'registrazioni'];
   featureRegistry.filter(f => sistemaKeys.includes(f.key)).forEach(f => {
-    menu += `${getStatus(f)} *${f.name}*\n   └─ _${f.key}_\n\n`;
+    menu += `┇ ${getStatus(f)} ${f.name}\n┇ _${f.desc}_\n┇ ➤ *${f.key}*\n┇\n`;
   });
 
-  menu += `\n*─── 𝐄𝐋𝐈𝐗𝐈𝐑 𝐄𝐃𝐈𝐓𝐈𝐎𝐍 ───*`;
+  menu += `*┕━━━━━━━──ׄ──ׅ──ׄ──━━━━━━━┙*\n\nᴇʟɪxɪʀ-ʙᴏᴛ sᴇᴄᴜʀɪᴛʏ ɪɴᴛᴇʀꜰᴀᴄᴇ_`;
 
   let thumb;
   const imagePath = path.join(process.cwd(), 'menu-sicurezza.jpeg');
@@ -128,8 +132,8 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isS
     text: menu,
     contextInfo: {
       externalAdReply: {
-        title: "𝐄𝐋𝐈𝐗𝐈𝐑 𝐌𝐀𝐒𝐓𝐄𝐑 𝐂𝐎𝐍𝐓𝐑𝐎𝐋",
-        body: "Premium Security Interface",
+        title: "𝐁𝐋𝐃 - 𝐌𝐀𝐒𝐓𝐄𝐑 𝐂𝐎𝐍𝐓𝐑𝐎𝐋",
+        body: "Terminal Console v3.1",
         mediaType: 1,
         renderLargerThumbnail: true,
         thumbnail: thumb,
@@ -141,5 +145,6 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isS
 
 handler.help = ['attiva', 'disattiva'];
 handler.tags = ['main'];
+handler.command = ['enable', 'disable', 'attiva', 'disattiva', 'on', 'off'];
 
 export default handler;
