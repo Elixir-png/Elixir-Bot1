@@ -2,7 +2,7 @@ import fetch from 'node-fetch'
 import { join } from 'path'
 
 let handler = async (m, { conn, usedPrefix: _p, command, args, isOwner, isAdmin }) => {
-  const userName = m.pushName || 'Utente'
+  const userName = m.pushName || 'User'
   
   // --- PERCORSO IMMAGINE LOCALE ---
   const localImg = join(process.cwd(), 'menu-sicurezza.jpeg')
@@ -14,58 +14,57 @@ let handler = async (m, { conn, usedPrefix: _p, command, args, isOwner, isAdmin 
 
   // --- CONFIGURAZIONE MODULI ---
   const securityFeatures = [
-    { key: 'antigore', name: '🚫 Antigore', desc: 'Blocca contenuti splatter/gore' },
-    { key: 'modoadmin', name: '🛡️ Soloadmin', desc: 'Solo gli admin usano il bot' },
-    { key: 'antivoip', name: '📞 Antivoip', desc: 'Rifiuta chiamate nel gruppo' },
-    { key: 'antilink', name: '🔗 Antilink', desc: 'Elimina link gruppi WhatsApp' },
-    { key: 'antilinksocial', name: '🌐 Antilinksocial', desc: 'Elimina link social (IG, TT, ecc)' },
-    { key: 'antitrava', name: '🧱 Antitrava', desc: 'Blocca crash/messaggi lunghi' },
-    { key: 'antinuke', name: '☢️ Antinuke', desc: 'Sicurezza avanzata del gruppo' },
-    { key: 'antiviewonce', name: '👁️ Antiviewonce', desc: 'Invia messaggi visualizza una volta' },
-    { key: 'antispam', name: '🛑 Antispam', desc: 'Blocca spam di comandi' }
+    { key: 'antigore', name: 'ᴀɴᴛɪɢᴏʀᴇ', desc: 'Filtro contenuti sensibili' },
+    { key: 'modoadmin', name: 'ᴀᴅᴍɪɴ ᴍᴏᴅᴇ', desc: 'Restrizione comandi per admin' },
+    { key: 'antivoip', name: 'ᴀɴᴛɪ-ᴠᴏɪᴘ', desc: 'Rifiuta chiamate in entrata' },
+    { key: 'antilink', name: 'ᴀɴᴛɪ-ʟɪɴᴋ', desc: 'Rimozione link gruppi WA' },
+    { key: 'antilinksocial', name: 'sᴏᴄɪᴀʟ-ʟɪɴᴋ', desc: 'Rimozione link social media' },
+    { key: 'antitrava', name: 'ᴀɴᴛɪ-ᴄʀᴀsʜ', desc: 'Protezione contro messaggi binari' },
+    { key: 'antinuke', name: 'ᴀɴᴛɪ-ɴᴜᴋᴇ', desc: 'Sicurezza avanzata del gruppo' },
+    { key: 'antiviewonce', name: 'ᴀɴᴛɪ-ᴠɪᴇᴡᴏɴᴄᴇ', desc: 'Recupero messaggi temporanei' },
+    { key: 'antispam', name: 'ᴀɴᴛɪ-sᴘᴀᴍ', desc: 'Protezione flussi di comandi' }
   ]
 
   const automationFeatures = [
-    { key: 'ai', name: '🧠 IA', desc: 'Intelligenza artificiale attiva' },
-    { key: 'vocali', name: '🎤 Siri', desc: 'Risponde con audio ai messaggi' },
-    { key: 'reaction', name: '😎 Reazioni', desc: 'Reazioni automatiche ai messaggi' },
-    { key: 'autolevelup', name: '⬆️ Autolivello', desc: 'Messaggio di livello automatico' },
-    { key: 'welcome', name: '👋 Welcome', desc: 'Messaggio di benvenuto' }
+    { key: 'ai', name: 'ɪ.ᴀ. ᴄᴏɴᴛʀᴏʟ', desc: 'Risposta intelligente attiva' },
+    { key: 'vocali', name: 'ᴠᴏɪᴄᴇ ᴀssɪsᴛᴀɴᴛ', desc: 'Risposte vocali automatiche' },
+    { key: 'reaction', name: 'ᴀᴜᴛᴏ-ʀᴇᴀᴄᴛ', desc: 'Reazioni smart ai messaggi' },
+    { key: 'autolevelup', name: 'ʟᴇᴠᴇʟ-ᴜᴘ', desc: 'Notifica avanzamento livello' },
+    { key: 'welcome', name: 'ᴡᴇʟᴄᴏᴍᴇ', desc: 'Messaggio di benvenuto' }
   ]
 
   const ownerFeatures = [
-    { key: 'anticall', name: '📵 Antichiamate', desc: 'Blocca chiamate al bot (Global)' },
-    { key: 'antiprivate', name: '🔒 Antiprivato', desc: 'Blocca uso del bot in privato' },
-    { key: 'solocreatore', name: '👑 Solo Creatore', desc: 'Bot risponde solo all\'owner' }
+    { key: 'anticall', name: 'ᴀɴᴛɪ-ᴄᴀʟʟ', desc: 'Blocco chiamate globale' },
+    { key: 'antiprivate', name: 'ᴀɴᴛɪ-ᴘʀɪᴠᴀᴛᴇ', desc: 'Esclusività nei gruppi' },
+    { key: 'solocreatore', name: 'ᴘʀɪᴏʀɪᴛʏ ᴍᴏᴅᴇ', desc: 'Risposta esclusiva owner' }
   ]
 
   // --- GENERAZIONE MENU ---
   if (!args.length || /menu|help/i.test(args[0])) {
     let text = `
-┎━━━━━━━━━━━━━━━━━━━━┑
-┃ ✧ ᴇʟɪxɪʀ - ᴍᴀꜱᴛᴇʀ ᴄᴏɴᴛʀᴏʟ ✧ ┃
-┖━━━━━━━━━━━━━━━━━━━━┙
-┌────────────────────┐
-  👤 𝚄𝚜𝚎𝚛: ${userName}
-  📡 𝚂𝚝𝚊𝚝𝚞𝚜: 𝙾𝚗𝚕𝚒𝚗𝚎
-└────────────────────┘
+╭─━━  〔 ᴇʟɪxɪʀ ʙᴏᴛ 〕  ━━─╮
+┃ 𝖢𝖮𝖭𝖳𝖱𝖮𝖫 𝖯𝖠𝖭𝖤𝖫 𝖲𝖸𝖲𝖳𝖤𝖬 ┃
+╰───────────────╯
 
-*〘 ɪɴsᴛʀᴜᴢɪᴏɴɪ ᴏᴘᴇʀᴀᴛɪᴠᴇ 〙*
-> Attiva o disattiva i moduli:
-*│ ➤* ${_p}*attiva* <nome>
-*│ ➤* ${_p}*disattiva* <nome>
+「 ɪɴғᴏ ᴜᴛᴇɴᴛᴇ 」
+  👤 ᴜsᴇʀ: ${userName}
+  🌐 sᴛᴀᴛᴜs: ᴏɴʟɪɴᴇ
 
-*┍━━━━━〔 🛡️ sɪᴄᴜʀᴇᴢᴢᴀ 〕━━━━━┑*
-${securityFeatures.map(f => `┇ ${f.name}\n┇ _${f.desc}_\n┇ ➤ *${f.key}*\n┇`).join('\n')}
-*┕━━━━━━━──ׄ──ׅ──ׄ──━━━━━━━┙*
+「 ᴏᴘᴇʀᴀᴢɪᴏɴɪ 」
+  ⊸ ${_p}ᴀᴛᴛɪᴠᴀ <ɴᴏᴍᴇ>
+  ⊸ ${_p}ᴅɪsᴀᴛᴛɪᴠᴀ <ɴᴏᴍᴇ>
 
-*┍━━━━━〔 🤖 ᴀᴜᴛᴏᴍᴀᴢɪᴏɴᴇ 〕━━━━━┑*
-${automationFeatures.map(f => `┇ ${f.name}\n┇ _${f.desc}_\n┇ ➤ *${f.key}*\n┇`).join('\n')}
-*┕━━━━━━━──ׄ──ׅ──ׄ──━━━━━━━┙*
+╭─  🛡️ sɪᴄᴜʀᴇᴢᴢᴀ  ─╮
+${securityFeatures.map(f => `  ﹫${f.name}\n  └─ ${f.key}`).join('\n\n')}
 
-_ʙʟᴅ-ʙᴏᴛ sᴇᴄᴜʀɪᴛʏ ɪɴᴛᴇʀꜰᴀᴄᴇ_`
+╭─  🤖 ᴀᴜᴛᴏᴍᴀᴢɪᴏɴᴇ  ─╮
+${automationFeatures.map(f => `  ﹫${f.name}\n  └─ ${f.key}`).join('\n\n')}
 
-    // Invio con immagine locale
+╭─  👑 ᴏᴡɴᴇʀ sᴇᴛᴛɪɴɢs  ─╮
+${ownerFeatures.map(f => `  ﹫${f.name}\n  └─ ${f.key}`).join('\n\n')}
+
+_ᴇʟɪxɪʀ ɪɴᴛᴇʟʟɪɢᴇɴᴄᴇ sʏsᴛᴇᴍ ᴠ𝟸.𝟶_`
+
     await conn.sendMessage(m.chat, { 
       image: { url: localImg }, 
       caption: text.trim(),
@@ -73,7 +72,7 @@ _ʙʟᴅ-ʙᴏᴛ sᴇᴄᴜʀɪᴛʏ ɪɴᴛᴇʀꜰᴀᴄᴇ_`
         mentionedJid: [m.sender],
         forwardedNewsletterMessageInfo: {
           newsletterJid: '120363232743845068@newsletter',
-          newsletterName: "🛡️ 𝐒𝐘𝐒𝐓𝐄𝐌 𝐒𝐄𝐂𝐔𝐑𝐈𝐓𝐘 𝐂𝐎𝐍𝐓𝐑𝐎𝐋 🛡️"
+          newsletterName: "🛡️ ELIXIR SYSTEM SECURITY 🛡️"
         }
       }
     }, { quoted: m })
@@ -83,7 +82,7 @@ _ʙʟᴅ-ʙᴏᴛ sᴇᴄᴜʀɪᴛʏ ɪɴᴛᴇʀꜰᴀᴄᴇ_`
   // --- LOGICA DI ATTIVAZIONE ---
   let isEnable = !/disattiva|off|0/i.test(command)
   let type = args[0].toLowerCase()
-  let status = isEnable ? 'ATTIVATO ✅' : 'DISATTIVATO ❌'
+  let status = isEnable ? 'ᴀᴛᴛɪᴠᴀᴛᴏ' : 'ᴅɪsᴀᴛᴛɪᴠᴀᴛᴏ'
 
   let dbKey = type
   if (type === 'antilink') dbKey = 'antiLink'
@@ -97,18 +96,18 @@ _ʙʟᴅ-ʙᴏᴛ sᴇᴄᴜʀɪᴛʏ ɪɴᴛᴇʀꜰᴀᴄᴇ_`
   const isOwnerKey = ownerFeatures.some(f => f.key.toLowerCase() === type)
 
   if (isSecurity || isAuto) {
-    if (!m.isGroup && !isOwner) return m.reply('❌ Solo nei gruppi')
-    if (m.isGroup && !isAdmin && !isOwner) return m.reply('🛡️ Solo per Admin')
+    if (!m.isGroup && !isOwner) return m.reply('❌ ᴇʟɪxɪʀ: ǫᴜᴇsᴛᴏ ᴄᴏᴍᴀɴᴅᴏ è ᴅɪsᴘᴏɴɪʙɪʟᴇ sᴏʟᴏ ɴᴇɪ ɢʀᴜᴘᴘɪ.')
+    if (m.isGroup && !isAdmin && !isOwner) return m.reply('🛡️ ᴇʟɪxɪʀ: ᴀᴄᴄᴇssᴏ ɴᴇɢᴀᴛᴏ. sᴏʟᴏ ᴘᴇʀ ᴀᴅᴍɪɴ.')
     chat[dbKey] = isEnable
   } else if (isOwnerKey) {
-    if (!isOwner) return m.reply('👑 Solo per l\'Owner')
+    if (!isOwner) return m.reply('👑 ᴇʟɪxɪʀ: ᴀᴄᴄᴇssᴏ ʀɪsᴇʀᴠᴀᴛᴏ ᴀʟʟ\'ᴏᴡɴᴇʀ.')
     bot[dbKey] = isEnable
   } else {
-    return m.reply('❓ Modulo non trovato.')
+    return m.reply('❓ ᴍᴏᴅᴜʟᴏ ɴᴏɴ ʀɪᴄᴏɴᴏsᴄɪᴜᴛᴏ ᴅᴀ ᴇʟɪxɪʀ.')
   }
 
   await m.react(isEnable ? '✅' : '❌')
-  m.reply(`『 🛡️ 』 *SISTEMA AGGIORNATO*\n\nModulo: *${type.toUpperCase()}*\nStato: *${status}*`)
+  m.reply(`┏━━━━━━━━━━━━━━━━━━┓\n  ᴇʟɪxɪʀ sʏsᴛᴇᴍ ᴜᴘᴅᴀᴛᴇ\n┗━━━━━━━━━━━━━━━━━━┛\n\n▢ ᴍᴏᴅᴜʟᴏ: *${type.toUpperCase()}*\n▢ sᴛᴀᴛᴏ: *${status}*`)
 }
 
 handler.command = ['attiva', 'disattiva', 'on', 'off', 'enable', 'disable']
