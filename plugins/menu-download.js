@@ -80,7 +80,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
         mentionedJid: [m.sender],
         forwardedNewsletterMessageInfo: {
           newsletterJid: '120363232743845068@newsletter',
-          newsletterName: "✧ 𝙱𝙻𝙳-𝙱𝙾𝚃 𝙳𝙾𝚆𝙽𝙻𝙾𝙰𝙳𝙴𝚁 ✧"
+          newsletterName: "✧ ᴇʟɪxɪʀʙᴏᴛ ɢʀᴏᴜᴘ ᴅᴏᴡɴʟᴏᴀᴅᴇʀ ✧"
         }
       }
     }, { quoted: m })
