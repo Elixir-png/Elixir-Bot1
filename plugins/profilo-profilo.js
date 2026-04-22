@@ -110,7 +110,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     let partnerMention = marriages[who] ? `@${marriages[who].split('@')[0]}` : 'Single 🔓'
     let mentions = marriages[who] ? [who, marriages[who]] : [who]
 
-    let profileBox = `╔══════〔 *PROFILO UTENTE* 〕══════╗
+    let profileBox = `╔═══〔 *PROFILO UTENTE* 〕═══╗
 ║
 ║  ✨ *STATISTICHE*
 ║  • 🪙 *Euro:* *${formatNumber(user.euro)}*
@@ -135,7 +135,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 ║  • 🎵 *Musica:* *${user.profile.music || 'Non definita'}*
 ║  • 🎮 *Gioco:* *${user.profile.game || 'Non definito'}*
 ║
-╚══════════════════════╝`
+╚═════════════════════╝`
 
     try {
         await conn.sendMessage(m.chat, {
