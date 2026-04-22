@@ -83,9 +83,9 @@
   <img src="https://readme-typing-svg.herokuapp.com?font=Cinzel&size=35&pause=500&color=D4AF37&center=true&vCenter=true&width=700&height=80&lines=CONTATTI+UFFICIALI;SUPPORTO+TECNICO" alt="Staff" />
 </p>
 
-* **Sviluppatore Capo:** ᴇʟɪxɪʀ
-* **Supporto WhatsApp:** [+39 378 440 9415](https://wa.me/393784409415)
-* **Email Business:** ElixirBoTSupporto@proton.me
+* **𝚂𝚟𝚒𝚕𝚞𝚙𝚙𝚊𝚝𝚘𝚛𝚎 𝙲𝚊𝚙𝚘:** ᴇʟɪxɪʀ
+* **𝚂𝚞𝚙𝚙𝚘𝚛𝚝𝚘 𝚆𝚑𝚊𝚝𝚜𝚊𝚙𝚙:** [+39 378 440 9415](https://wa.me/393784409415)
+* **𝙴𝚖𝚊𝚒𝚕 𝙱𝚞𝚜𝚒𝚗𝚎𝚜𝚜:** ElixirBoTSupporto@proton.me
 
 <p align="center">
   <img src="https://readme-typing-svg.herokuapp.com?font=Montserrat&size=20&pause=2000&color=D4AF37&center=true&vCenter=true&width=650&height=60&lines=SOSTIENI+IL+PROGETTO+CON+UNA+STAR+⭐;ECCELLENZA+SENZA+COMPROMESSI" alt="Thanks" />
