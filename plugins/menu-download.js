@@ -10,7 +10,7 @@ const localImg = join(process.cwd(), 'menu-download.jpeg');
 const defaultMenu = {
   before: `
 ┎━━━━━━━━━━━━━━━━━━━┑
-┃   ✧  𝐁𝐋𝐃 - 𝐃𝐎𝐖𝐍𝐋𝐎𝐀𝐃  ✧  ┃
+┃ ✧ ᴇʟɪxɪʀ - ᴅᴏᴡɴʟᴏᴀᴅ ✧  ┃
 ┖━━━━━━━━━━━━━━━━━━━┙
 ┌───────────────────┐
   👤 𝚄𝚜𝚎𝚛: %name
@@ -23,7 +23,7 @@ const defaultMenu = {
   header: '┍━━━〔 %category 〕━━━┑',
   body: '┇ 📥  *%cmd*',
   footer: '┕━━━━━──ׄ──ׅ──ׄ──━━━━━┙\n',
-  after: `_ʙʟᴅ-ʙᴏᴛ ɴᴇᴛᴡᴏʀᴋ ᴅᴀᴛᴀ_`
+  after: `_ᴇʟɪxɪʀ-ʙᴏᴛ ɴᴇᴛᴡᴏʀᴋ ᴅᴀᴛᴀ_`
 }
 
 let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
