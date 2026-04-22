@@ -73,7 +73,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         const res = await fetch(url, {
             headers: {
                 'Accept': 'application/json',
-                'User-Agent': 'varebot/2.5.0'
+                'User-Agent': 'elixirbot/2.5.0'
             }
         })
 
@@ -182,7 +182,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             m.chat,
             {
                 text: `『 📝 』 \`Ricerca:\` \n➤  *\`${text}\`*`,
-                footer: 'vare ✧ bot',
+                footer: 'elixir ✧ bot',
                 cards: cards
             },
             { quoted: m }
@@ -207,7 +207,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             `┌⭓ Riprova tra poco\n` +
             `├⭓ Riduci il testo o semplifica\n` +
             `└⭓ Contatta lo staff con *.staff*\n\n` +
-            `> *vare ✧ bot*`
+            `> *elixir ✧ bot*`
         )
     }
 }
