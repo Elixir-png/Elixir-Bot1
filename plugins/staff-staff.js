@@ -1,24 +1,24 @@
 let handler = async (m, { conn, command, usedPrefix }) => {
     let staff = `
-ㅤㅤ⋆｡˚『 ╭ \`STAFF BLD BOT\` ╯ 』˚｡⋆\n╭\n│
+ㅤㅤ⋆｡˚『 ╭ \`STAFF ELIXIR BOT\` ╯ 』˚｡⋆\n╭\n│
 │ 『 🤖 』 \`Bot:\` *${global.nomebot}*
 │ 『 🍥 』 \`Versione:\` *${global.versione}*
 │
 │⭒─ׄ─『 👑 \`Sviluppatore\` 』 ─ׄ─⭒
 │
-│ • \`Nome:\` *𝐁𝐋𝐎𝐎𝐃#ᵛᵉˡᶦᵗʰ*
+│ • \`Nome:\` *ᴇʟɪxɪʀ*
 │ • \`Ruolo:\` *Creatore / dev*
-│ • \`Contatto:\` @393701330693
+│ • \`Contatto:\` @393784409415
 │
 │⭒─ׄ─『 🛡️ \`Moderatori\` 』 ─ׄ─⭒
 │
-│ • \`Nome:\` *Death*
+│ • \`Nome:\` *Elixir*
 │ • \`Ruolo:\` *Moderatore*
 │─ׄ─『 📌 \`Info Utili\` 』 ─ׄ─⭒
 │
-│ • \`GitHub:\` *github.com/BLOOD212*
-│ • \`Supporto:\` @393701330693
-│ • *instagram.com/blood_ilreal*
+│ • \`GitHub:\` *github.com/Elixir-png/Elixir-Bot1*
+│ • \`Supporto:\` @393784409415
+│ • *instagram.com/eli.xir_gg*
 │
 *╰⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*`;
     await conn.reply(
