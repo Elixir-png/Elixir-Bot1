@@ -15,30 +15,26 @@ let handler = async (m, { conn, usedPrefix }) => {
       hour: '2-digit',
       minute: '2-digit',
       day: '2-digit',
-      month: 'long',
+      month: '2-digit',
       year: 'numeric'
     })
 
     const message = `
-   *— ᴇʟɪxɪʀ sᴛᴀᴛᴜs —*
+*ᴇʟɪxɪʀʙᴏᴛ* — ꜱʏꜱᴛᴇᴍ ʀᴇᴘᴏʀᴛ
 
-  *sʏsᴛᴇᴍ ᴘᴇʀғᴏʀᴍᴀɴᴄᴇ*
-  
-  ⋄ *Latenza:* \`${latency} ms\`
-  ⋄ *Attività:* \`${uptimeStr}\`
-  ⋄ *Sessione:* \`${activationTime}\`
+  ✧ ʟᴀᴛᴇɴᴢᴀ: \`${latency} ms\`
+  ✧ ᴜᴘᴛɪᴍᴇ: \`${uptimeStr}\`
+  ✧ ᴀᴠᴠɪᴏ: \`${activationTime}\`
 
-  *sᴛᴀᴛᴜs:* 𝖮𝗇𝗅𝗂𝗇𝖾
-  *ᴏᴡɴᴇʀ:* 𝖤𝗅𝗂𝗑𝗂𝗋
-  
-  —`.trim()
+*ꜱᴛᴀᴛᴜꜱ:* ᴏɴʟɪɴᴇ
+*ᴏᴡɴᴇʀ:* ᴇʟɪxɪʀ`.trim()
 
     await conn.sendMessage(m.chat, {
       text: message,
       contextInfo: {
         externalAdReply: {
-          title: `ᴇʟɪxɪʀ | Diagnostic System`,
-          body: `Response time: ${latency}ms`,
+          title: `ᴇʟɪxɪʀʙᴏᴛ • ᴘᴇʀꜰᴏʀᴍᴀɴᴄᴇ`,
+          body: `ʟᴀᴛᴇɴᴢᴀ ᴀᴛᴛᴜᴀʟᴇ: ${latency}ms`,
           mediaType: 1,
           previewType: 0,
           renderLargerThumbnail: false,
