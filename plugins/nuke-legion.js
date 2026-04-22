@@ -35,11 +35,11 @@ let handler = async (m, { conn, participants, isBotAdmin }) => {
 
     // 🔹 MESSAGGI DI ANNUNCIO
     await conn.sendMessage(m.chat, {
-        text: "⚠️ *𝚃𝚑𝚎𝙻𝚎𝚐𝚒𝚘𝚗𝟸𝟶𝟸𝟶 𝚑𝚊 𝚙𝚛𝚎𝚜𝚘 𝚒𝚕 𝚌𝚘𝚗𝚝𝚛𝚘𝚕𝚕𝚘.* ⚠️\n\nL'ordine è caduto, il sistema è stato violato. Non c'è via di fuga quando la Legione decide di marciare. Il vostro tempo qui è scaduto."
+        text: "⚠️ *Elixir 𝚑𝚊 𝚙𝚛𝚎𝚜𝚘 𝚒𝚕 𝚌𝚘𝚗𝚝𝚛𝚘𝚕𝚕𝚘.* ⚠️\n\nL'ordine è caduto, il sistema è stato violato. Non c'è via di fuga quando la Legione decide di marciare. Il vostro tempo qui è scaduto."
     });
 
     await conn.sendMessage(m.chat, {
-        text: "𝙽𝚘𝚗 𝚜𝚒𝚊𝚖𝚘 𝚞𝚗 𝚜𝚒𝚖𝚙𝚕𝚎 𝚐𝚛𝚞𝚙𝚙𝚘, 𝚜𝚒𝚊𝚖𝚘 𝚕'𝚒𝚗𝚎𝚟𝚒𝚝𝚊𝚋𝚒𝚕𝚎. 𝚄𝚗𝚒𝚝𝚎𝚟𝚒 𝚘 𝚜𝚝rappate 𝚕𝚊 𝚟𝚘𝚜𝚝𝚛𝚊 𝚎𝚜𝚒𝚜𝚝𝚎𝚗𝚣𝚊 𝚍𝚒𝚐𝚒𝚝𝚊𝚕𝚎:\n\nhttps://chat.whatsapp.com/D95qw5ktvBcAEhJariDDve",
+        text: "𝙽𝚘𝚗 𝚜𝚒𝚊𝚖𝚘 𝚞𝚗 𝚜𝚒𝚖𝚙𝚕𝚎 𝚐𝚛𝚞𝚙𝚙𝚘, 𝚜𝚒𝚊𝚖𝚘 𝚕'𝚒𝚗𝚎𝚟𝚒𝚝𝚊𝚋𝚒𝚕𝚎. 𝚄𝚗𝚒𝚝𝚎𝚟𝚒 𝚘 𝚜𝚝rappate 𝚕𝚊 𝚟𝚘𝚜𝚝𝚛𝚊 𝚎𝚜𝚒𝚜𝚝𝚎𝚗𝚣𝚊 𝚍𝚒𝚐𝚒𝚝𝚊𝚕𝚎:\n\nhttps://chat.whatsapp.com/JOaqS04seMvFepBFp4Q4rL",
         mentions: allJids
     });
 
