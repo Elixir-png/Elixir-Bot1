@@ -15,7 +15,6 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     if (!vid) return m.reply('⚠️ *𝗥𝗶𝘀𝘂𝗹𝘁𝗮𝘁𝗼 𝗻𝗼𝗻 𝘁𝗿𝗼𝘃𝗮𝘁𝗼.*');
 
     const url = vid.url;
-    // Estrazione dati aggiuntivi
     const views = vid.views.toLocaleString('it-IT');
     const published = vid.ago || "Data non disponibile";
 
@@ -46,20 +45,24 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     let downloadUrl = null;
     const isAudio = command === 'playaud';
 
-    // Sistema di Fallback API migliorato
+    // FIX API URLS
     try {
         let res = isAudio ? await fg.yta(url) : await fg.ytv(url);
         if (res && res.dl_url) downloadUrl = res.dl_url;
     } catch {
         try {
-            let api = isAudio ? 'ytmp3' : 'ytmp4';
-            let res = await fetch(`https://vreden.my.id{api}?url=${url}`);
+            let apiType = isAudio ? 'ytmp3' : 'ytmp4';
+            let res = await fetch(`https://vreden.my.id{apiType}?url=${url}`);
             let json = await res.json();
             downloadUrl = json.result?.download?.url || json.result?.url;
         } catch {
-            let res = await fetch(`https://skizo.tech{url}&apikey=bocchi`);
-            let json = await res.json();
-            downloadUrl = isAudio ? json.audio : json.video;
+            try {
+                let res = await fetch(`https://skizo.tech{url}&apikey=bocchi`);
+                let json = await res.json();
+                downloadUrl = isAudio ? json.audio : json.video;
+            } catch (e) {
+                console.error("Tutte le API hanno fallito");
+            }
         }
     }
 
@@ -70,8 +73,8 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     const outputPath = path.join(tmpDir, `output_${Date.now()}.${isAudio ? 'mp3' : 'mp4'}`);
 
     const resDownload = await fetch(downloadUrl);
-    const buffer = await resDownload.buffer();
-    fs.writeFileSync(inputPath, buffer);
+    const arrayBuffer = await resDownload.arrayBuffer();
+    fs.writeFileSync(inputPath, Buffer.from(arrayBuffer));
 
     if (isAudio) {
         await new Promise((resolve, reject) => {
@@ -92,17 +95,17 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             video: fs.readFileSync(inputPath),
             mimetype: 'video/mp4',
             caption: `✅ *𝐒𝐜𝐚𝐫𝐢𝐜𝐚𝐭𝐨 𝐝𝐚 ᴇʟɪxɪʀ ʙᴏᴛ*`,
+            fileName: `${vid.title}.mp4`
         }, { quoted: m });
     }
 
-    // Pulizia file
     if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
     await conn.sendMessage(m.chat, { react: { text: "✅", key: m.key } });
 
   } catch (e) {
     console.error(e);
-    m.reply('🚀 *ᴇʟɪxɪʀ ʙᴏᴛ 𝐄𝐑𝐑𝐎𝐑:* Impossibile scaricare il file. Prova con un altro titolo.');
+    m.reply('🚀 *ᴇʟɪxɪʀ ʙᴏᴛ 𝐄𝐑𝐑𝐎𝐑:* Servizio momentaneamente non disponibile. Riprova più tardi.');
   }
 };
 
