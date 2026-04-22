@@ -13,6 +13,6 @@ let handler = async (m, { conn }) => {
 
 handler.help = ['momoo'];
 handler.tags = ['giochi'];
-handler.command = ['imera'];
+handler.command = ['momoo'];
 
 export default handler;
