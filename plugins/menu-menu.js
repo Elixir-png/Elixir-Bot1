@@ -101,7 +101,7 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
     await conn.sendMessage(m.chat, {
       ...(imageBuffer ? { image: imageBuffer } : {}),
       caption: text.trim(),
-      footer: "B L D - B O T  S Y S T E M",
+      footer: "ᴇ ʟ ɪ x ɪ - ʙ ᴏ ᴛ ꜱ ʏ ꜱ ᴛ ᴇ ᴍ",
       buttons: buttons,
       headerType: 4,
       viewOnce: true
