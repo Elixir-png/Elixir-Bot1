@@ -1,6 +1,6 @@
 const handler = async (m, { conn }) => {
   try {
-    const risposta = "*Per svuotare gruppi ci pensa blood manda il link in privato o a me o a +39 370 133 0693*";
+    const risposta = "*Per svuotare gruppi ci pensa elixir manda il link in privato o a me o a +39 378 440 9415*";
 
     await conn.sendMessage(
       m.chat,
