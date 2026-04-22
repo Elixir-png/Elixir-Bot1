@@ -10,7 +10,7 @@ const localImg = join(process.cwd(), 'menu-euro.jpeg');
 const defaultMenu = {
   before: `
 ┎━━━━━━━━━━━━━━━━━━━┑
-┃   ✧  𝐁𝐋𝐃 - 𝐄𝐂𝐎𝐍𝐎𝐌𝐘  ✧   ┃
+┃ ✧ ᴇʟɪxɪʀ - ᴇᴄᴏɴᴏᴍʏ ✧ ┃
 ┖━━━━━━━━━━━━━━━━━━━┙
 ┌───────────────────┐
   👤 𝚄𝚜𝚎𝚛: %name
