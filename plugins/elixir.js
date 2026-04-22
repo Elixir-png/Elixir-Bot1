@@ -7,6 +7,6 @@ let handler = async (m, { conn }) => {
 
 handler.help = ['elixir'];
 handler.tags = ['giochi'];
-handler.command = /^(blood)$/i; // Corretto il regex per attivarsi con "elixir"
+handler.command = /^(elixir)$/i; // Corretto il regex per attivarsi con "elixir"
 
 export default handler;
