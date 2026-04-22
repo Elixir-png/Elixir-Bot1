@@ -2,50 +2,43 @@ import os from 'os'
 
 let handler = async (m, { conn, usedPrefix }) => {
   try {
-    // Misurazione ad altissima precisione (Nanosecondi)
     const start = process.hrtime.bigint()
     await conn.readMessages([m.key])
     const end = process.hrtime.bigint()
     
-    // Conversione in ms con precisione al millesimo
     const latency = (Number(end - start) / 1000000).toFixed(3)
-
     const uptimeMs = process.uptime() * 1000
     const uptimeStr = clockString(uptimeMs)
 
-    // Calcolo esatto timestamp di avvio
     const botStartTime = new Date(Date.now() - uptimeMs)
     const activationTime = botStartTime.toLocaleString('it-IT', {
       hour: '2-digit',
       minute: '2-digit',
-      second: '2-digit',
       day: '2-digit',
-      month: '2-digit',
+      month: 'long',
       year: 'numeric'
     })
 
     const message = `
-╭━━━━━━•✦•━━━━━━╮
-              ✨ ᴘɪɴɢ ✨
-            ᴇʟɪxɪʀ-ʙᴏᴛ
-╰━━━━━━•✦•━━━━━━╯
+   *— ᴇʟɪxɪʀ sᴛᴀᴛᴜs —*
 
-◈ 𝖴𝗉𝗍𝗂𝗆𝖾: \`${uptimeStr}\`
-◈ 𝖫𝖺𝗍𝖾𝗇𝗓𝖺: \`${latency} ms\`
-◈ 𝖠𝗏𝗏𝗂𝗈: \`${activationTime}\`
+  *sʏsᴛᴇᴍ ᴘᴇʀғᴏʀᴍᴀɴᴄᴇ*
+  
+  ⋄ *Latenza:* \`${latency} ms\`
+  ⋄ *Attività:* \`${uptimeStr}\`
+  ⋄ *Sessione:* \`${activationTime}\`
 
-╭━━━━━━•✦•━━━━━━╮
-   𝖮𝗐𝗇𝖾𝗋: *ᴇʟɪxɪʀ*
-   𝖲𝗍𝖺𝗍𝗈: _Online_
-╰━━━━━━•✦•━━━━━━╯
-`.trim()
+  *sᴛᴀᴛᴜs:* 𝖮𝗇𝗅𝗂𝗇𝖾
+  *ᴏᴡɴᴇʀ:* 𝖤𝗅𝗂𝗑𝗂𝗋
+  
+  —`.trim()
 
     await conn.sendMessage(m.chat, {
       text: message,
       contextInfo: {
         externalAdReply: {
-          title: `ᴇʟɪxɪʀ ᴘᴇʀꜰᴏʀᴍᴀɴᴄᴇ ᴄᴏɴᴛʀᴏʟ`,
-          body: `Latenza reale: ${latency}ms`,
+          title: `ᴇʟɪxɪʀ | Diagnostic System`,
+          body: `Response time: ${latency}ms`,
           mediaType: 1,
           previewType: 0,
           renderLargerThumbnail: false,
