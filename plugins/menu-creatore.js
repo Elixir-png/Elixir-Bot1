@@ -7,7 +7,7 @@ import { join } from 'path'
 const defaultMenu = {
   before: `
 ┎━━━━━━━━━━━━━━━━━━━┑
-┃   ✧  𝐁𝐋𝐃 - 𝐂𝐑𝐄𝐀𝐓𝐎𝐑  ✧   ┃
+┃   ✧  ᴇʟɪxɪʀ ᴄʀᴇᴀᴛᴏʀ  ✧   ┃
 ┖━━━━━━━━━━━━━━━━━━━┙
 ┌───────────────────┐
   👤 𝙾𝚠𝚗𝚎𝚛: %name
@@ -20,7 +20,7 @@ const defaultMenu = {
   header: '┍━━━〔 %category 〕━━━┑',
   body: '┇ 👨‍💻  *%cmd*',
   footer: '┕━━━━━──ׄ──ׅ──ׄ──━━━━━┙\n',
-  after: `_ʙʟᴅ-ʙᴏᴛ ᴀᴅᴍɪɴ ɪɴᴛᴇʀꜰᴀᴄᴇ_`
+  after: `_ᴇʟɪxɪʀ-ʙᴏᴛ ᴀᴅᴍɪɴ ɪɴᴛᴇʀꜰᴀᴄᴇ_`
 }
 
 let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
