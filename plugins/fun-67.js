@@ -12,11 +12,11 @@ let handler = async (m, { conn }) => {
     
     // Costruisce il percorso locale verso la tua cartella media/SixSeven/
     // process.cwd() è la cartella principale del tuo bot
-    let gifPath = path.join(process.cwd(), `media/SixSeven/sixseven${num}.gif`);
+    let gifPath = path.join(process.cwd(), `media/SixSeven/sixseven${randomnum}.gif`);
     
     // Controlla se il file esiste davvero per evitare crash
     if (!fs.existsSync(gifPath)) {
-        return m.reply(`⚠️ Errore: Il file sixseven${num}.gif non è stato trovato in media/SixSeven/`);
+        return m.reply(`⚠️ Errore: Il file sixseven${randomnum}.gif non è stato trovato in media/SixSeven/`);
     }
 
     const tempMp4 = path.join(process.cwd(), `temp67_${Date.now()}.mp4`);
