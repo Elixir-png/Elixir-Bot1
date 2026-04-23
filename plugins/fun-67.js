@@ -6,38 +6,51 @@ import { promisify } from 'util';
 
 const execAsync = promisify(exec);
 
-const handler = async (m, { conn }) => {
-  // Se vuoi che funzioni solo nei gruppi, lascia la riga sotto, altrimenti commentala
-  // if (!m.isGroup) return;
+// Lista dei link originali convertiti in formati diretti per il bot
+const sixSevenMoves = {
+  "SixSeven Classico": "https://giphy.com",
+  "SixSeven Windpress": "https://giphy.com",
+  "SixSeven Tenor": "https://tenor.com"
+};
 
-  const gifUrl = "https://tenor.com"; // Link diretto alla GIF del meme
-  const caption = "🕺 *SixSeven mood!* 🕺";
+const handler = async (m, { conn }) => {
+  const moves = Object.keys(sixSevenMoves);
+  const randomMove = moves[Math.floor(Math.random() * moves.length)];
+  const gifUrl = sixSevenMoves[randomMove];
+  
+  const caption = "🕺 *67! 67! 67!* 🕺";
 
   try {
     const response = await fetch(gifUrl);
+    if (!response.ok) throw new Error(`Errore HTTP: ${response.status}`);
+    
     const buffer = Buffer.from(await response.arrayBuffer());
-    fs.writeFileSync('sixseven.gif', buffer);
+    const tempGif = `temp_67_${Date.now()}.gif`;
+    const tempMp4 = `temp_67_${Date.now()}.mp4`;
 
-    // Converte la GIF in un formato video MP4 compatibile con WhatsApp per l'effetto GIF fluida
-    await execAsync('ffmpeg -i sixseven.gif -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" sixseven.mp4');
+    fs.writeFileSync(tempGif, buffer);
+
+    // Converte la GIF in MP4 (necessario per Baileys/WhatsApp per l'effetto loop)
+    await execAsync(`ffmpeg -i ${tempGif} -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" ${tempMp4}`);
 
     await conn.sendMessage(m.chat, {
-      video: { url: 'sixseven.mp4' },
+      video: { url: tempMp4 },
       caption: caption,
-      gifPlayback: true // Questo lo rende una GIF che si riproduce in loop
+      gifPlayback: true // Questo abilita l'invio come GIF animata su WhatsApp
     }, { quoted: m });
 
     // Pulizia file temporanei
-    fs.unlinkSync('sixseven.gif');
-    fs.unlinkSync('sixseven.mp4');
+    if (fs.existsSync(tempGif)) fs.unlinkSync(tempGif);
+    if (fs.existsSync(tempMp4)) fs.unlinkSync(tempMp4);
+
   } catch (error) {
     console.error("Errore:", error);
-    m.reply("⚠️ Errore nel caricamento della GIF di SixSeven.");
+    m.reply("⚠️ Errore nel caricamento del meme.");
   }
 };
 
 handler.help = ['sixseven', '67'];
 handler.tags = ['fun'];
-handler.command = ['sixseven', '67']; // Risponde a entrambi i comandi
+handler.command = ['sixseven', '67']; 
 
 export default handler;
