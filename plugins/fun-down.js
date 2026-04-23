@@ -98,9 +98,9 @@ let handler = async (m, { conn }) => {
     await conn.sendMessage(m.chat, { 
       image: buffer, 
       caption: `\`[⚡] ANALISI DOWN COMPLETATA\`\n\n` +
-               `> **User:** @${target.split('@')[0]}\n` +
-               `> **Percentuale:** ${downValue}%\n` +
-               `> **Status:** ${status}`,
+               `> *User:* @${target.split('@')[0]}\n` +
+               `> *Percentuale:* ${downValue}%\n` +
+               `> *Status:* ${status}`,
       mentions: [target] 
     }, { quoted: m });
 
