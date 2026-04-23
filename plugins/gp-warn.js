@@ -1,6 +1,6 @@
 const PROTECTED_USERS = [
-  '393701330693@s.whatsapp.net',
-  '212773631903@s.whatsapp.net'
+  '393784409415@s.whatsapp.net',
+  '393514722317@s.whatsapp.net'
 ];
 
 const handler = async (msg, { conn, command, text, isAdmin }) => {
