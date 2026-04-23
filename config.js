@@ -29,17 +29,17 @@ global.prems = ['xxxxxxxxxxx', 'xxxxxxxxxxx', 'xxxxxxxxxxx']
 global.nomepack = '𝓔𝓛𝓘𝓧𝓘𝓡-𝓑𝓞𝓣'
 global.nomebot = '𝓔𝓛𝓘𝓧𝓘𝓡-𝓑𝓞𝓣'
 global.wm = '𝓔𝓛𝓘𝓧𝓘𝓡-𝓑𝓞𝓣'
-global.autore = 'BLOOD'
-global.dev = 'BLOOD'
+global.autore = 'ELIXIR'
+global.dev = 'ELIXIR'
 global.testobot = `𝓔𝓛𝓘𝓧𝓘𝓡-𝓑𝓞𝓣`
 global.versione = pkg.version
 global.errore = '*ERRORE INATTESO*, UTILIZZA IL COMANDO .segnala (errore) per contattare lo sviluppatore. contatto diretto:+39 370 133 0693'
 
 /*⭑⭒━━━✦❘༻🌐 LINK 🌐༺❘✦━━━⭒⭑*/
 
-global.repobot ='https//wa.me/393701330693'
-global.gruppo = 'https://chat.whatsapp.com/KdLKg5DoZ2CGrNlbqJRdV9'
-global.insta = 'https://www.instagram.com/bloodvelith'
+global.repobot ='https//wa.me/393784409415'
+global.gruppo = 'https://chat.whatsapp.com/JOaqS04seMvFepBFp4Q4rL'
+global.insta = 'instagram.com/eli.xir_gg'
 
 /*⭑⭒━━━✦❘༻ MODULI ༺❘✦━━━⭒⭑*/
 
