@@ -6,23 +6,19 @@ import { promisify } from 'util';
 
 const execAsync = promisify(exec);
 
-// Lista dei link originali convertiti in formati diretti per il bot
-const sixSevenMoves = {
-  "SixSeven Classico": "https://giphy.com",
-  "SixSeven Windpress": "https://giphy.com",
-  "SixSeven Tenor": "https://tenor.com"
-};
-
 const handler = async (m, { conn }) => {
-  const moves = Object.keys(sixSevenMoves);
-  const randomMove = moves[Math.floor(Math.random() * moves.length)];
-  const gifUrl = sixSevenMoves[randomMove];
+  // Sceglie un numero casuale da 1 a 6
+  const randomNumber = Math.floor(Math.random() * 6) + 1;
+  
+  // URL grezzo del tuo repository GitHub
+  const baseUrl = "https://githubusercontent.com";
+  const gifUrl = `${baseUrl}sixseven${randomNumber}.gif`;
   
   const caption = "🕺 *67! 67! 67!* 🕺";
 
   try {
     const response = await fetch(gifUrl);
-    if (!response.ok) throw new Error(`Errore HTTP: ${response.status}`);
+    if (!response.ok) throw new Error(`Errore nel recupero della GIF ${randomNumber}: ${response.statusText}`);
     
     const buffer = Buffer.from(await response.arrayBuffer());
     const tempGif = `temp_67_${Date.now()}.gif`;
@@ -30,13 +26,13 @@ const handler = async (m, { conn }) => {
 
     fs.writeFileSync(tempGif, buffer);
 
-    // Converte la GIF in MP4 (necessario per Baileys/WhatsApp per l'effetto loop)
+    // Conversione in MP4 per mantenere l'effetto loop fluido su WhatsApp
     await execAsync(`ffmpeg -i ${tempGif} -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" ${tempMp4}`);
 
     await conn.sendMessage(m.chat, {
       video: { url: tempMp4 },
       caption: caption,
-      gifPlayback: true // Questo abilita l'invio come GIF animata su WhatsApp
+      gifPlayback: true 
     }, { quoted: m });
 
     // Pulizia file temporanei
@@ -45,7 +41,7 @@ const handler = async (m, { conn }) => {
 
   } catch (error) {
     console.error("Errore:", error);
-    m.reply("⚠️ Errore nel caricamento del meme.");
+    m.reply(`⚠️ Errore: non sono riuscito a caricare la mossa numero ${randomNumber} dal server.`);
   }
 };
 
