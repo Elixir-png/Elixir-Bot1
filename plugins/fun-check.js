@@ -1,49 +1,50 @@
-// Plug-in by blood
+// Plug-in by elixir
 let handler = async (m, { conn }) => {
-  if (!m.quoted) return m.reply('Down rispondi a un messaggio per analizzare il dispositivo usato');
+  if (!m.quoted) return m.reply('`[!] ERROR: Rispondi a un pacchetto dati per analizzare l\'hardware sorgente.`');
 
   const msgID = m.quoted.id || m.quoted.key?.id;
   const senderJid = m.quoted.sender || 'sconosciuto';
   const tagUtente = senderJid.replace(/@.+/, '');
 
-  let device = 'Dispositivo sconosciuto 🕵️‍♂️';
+  let device = 'Sconosciuto 🕵️‍♂️';
 
   if (!msgID) {
-    device = '⚠️ Impossibile rilevare il dispositivo';
+    device = '⚠️ IMPOSSIBILE RILEVARE SOURCE';
   } else if (/^[a-zA-Z]+-[a-fA-F0-9]+$/.test(msgID)) {
-    device = '🤖 Messaggio da bot';
+    device = '🤖 BOT_EMULATOR';
   } else if (msgID.startsWith('false_') || msgID.startsWith('true_')) {
-    device = '💻 WhatsApp Web';
+    device = '💻 WHATSAPP_WEB';
   } else if (
     msgID.startsWith('3EB0') &&
     /^[A-Z0-9]+$/.test(msgID)
   ) {
-    device = '💻 WhatsApp Web o bot';
+    device = '💻 WEB/BOT_TERMINAL';
   } else if (msgID.includes(':')) {
-    device = '🖥️ WhatsApp Desktop';
+    device = '🖥️ DESKTOP_CLIENT';
   } else if (/^[A-F0-9]{32}$/i.test(msgID)) {
-    device = '📱 Android';
+    device = '📱 ANDROID_OS';
   } else if (
     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(msgID)
   ) {
-    device = '🍏 iOS';
+    device = '🍏 IOS_KERNEL (iPhone)';
   } else if (
     /^[A-Z0-9]{20,25}$/i.test(msgID) &&
     !msgID.startsWith('3EB0')
   ) {
-    device = '🍏 Ha un iphone è ricco/a sfondato';
+    device = '🍏 IOS_KERNEL (iPhone - High Tier)';
   } else if (msgID.startsWith('3EB0')) {
-    device = '🤖 Nie questo ne ha meno di soldi ha un android';
+    device = '🤖 ANDROID_OS (Low Tier)';
   } else {
-    device = 'Dispositivo sconosciuto 🕵️‍♂️';
+    device = 'Sconosciuto 🕵️‍♂️';
     console.log('[ANALISI] Nuovo ID non riconosciuto:', msgID);
   }
 
-  const messaggio = ` *Ora se devi mandargli i trava sai il dispositivo* 
- ┃ 👤 𝐔𝐭𝐞𝐧𝐭𝐞: 
-*@${tagUtente}*
- ┃ 💽 𝐃𝐢𝐬𝐩𝐨𝐬𝐢𝐭𝐢𝐯𝐨:
- ${device}`;
+  const messaggio = `\`[⚡] ELIXIR_SCANNER: Risultati Perquisizione\`
+\`--------------------------\`
+> \`TARGET:\` *@${tagUtente}*
+> \`HARDWARE:\` *${device}*
+\`--------------------------\`
+\`[!] Tracciamento completato. Payload pronto.\``;
 
   await conn.sendMessage(m.chat, {
     text: messaggio,
