@@ -6,66 +6,52 @@ let handler = async (m, { conn, text, command, isAdmin, isOwner }) => {
   const mods = chat?.moderatori || []
   const isMod = mods.includes(sender)
 
-  if (isMod && !isOwner) {
-    return conn.reply(m.chat, '『 🚫 』 𝐀𝐜𝐜𝐞𝐬𝐬𝐨 𝐃𝐞𝐧𝐞𝐠𝐚𝐭𝐨: Come Moderatore non hai il permesso di gestire i ruoli.', m)
-  }
+  if (isMod && !isOwner) return conn.reply(m.chat, '『 🚫 』 𝐀𝐜𝐜𝐞𝐬𝐬𝐨 𝐃𝐞𝐧𝐞𝐠𝐚𝐭𝐨.', m)
+  if (!isAdmin && !isOwner) return conn.reply(m.chat, '『 ❌ 』 𝐀𝐜𝐜𝐞𝐬𝐬𝐨 𝐃𝐞𝐧𝐞𝐠𝐚𝐭𝐨.', m)
+  if (isAntinukeOn && !isOwner) return conn.reply(m.chat, '『 🛡️ 』 𝐀𝐧𝐭𝐢𝐧𝐮𝐤𝐞 𝐀𝐭𝐭𝐢𝐯𝐨.', m)
 
-  if (!isAdmin && !isOwner) {
-    return conn.reply(m.chat, '『 ❌ 』 𝐀𝐜𝐜𝐞𝐬𝐬𝐨 𝐃𝐞𝐧𝐞𝐠𝐚𝐭𝐨: Solo gli amministratori possono usare questo comando.', m)
-  }
-
-  if (isAntinukeOn && !isOwner) {
-    return conn.reply(m.chat, '『 🛡️ 』 𝐀𝐧𝐭𝐢𝐧𝐮𝐤𝐞 𝐀𝐭𝐭𝐢𝐯𝐨: Solo il Creatore può gestire i gradi.', m)
-  }
-
-  let number
-  if (m.mentionedJid && m.mentionedJid[0]) {
-    number = m.mentionedJid[0]
-  } else if (m.quoted && m.quoted.sender) {
-    number = m.quoted.sender
-  } else if (text) {
-    number = text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
-  }
-
-  if (!number || number.length < 10) {
-    return conn.reply(m.chat, '『 👤 』 𝐌𝐞𝐧𝐳𝐢𝐨𝐧𝐚 un utente, quota un messaggio o scrivi il numero.', m)
-  }
-
-  if (number === sender) return conn.reply(m.chat, '『 🤡 』 Non puoi farlo su te stesso.', m)
-  if (number === conn.user.jid) return conn.reply(m.chat, '『 🤖 』 Non posso modificare i miei permessi.', m)
+  let number = m.mentionedJid?.[0] || m.quoted?.sender || (text ? text.replace(/[^0-9]/g, '') + '@s.whatsapp.net' : null)
+  if (!number || number.length < 10) return conn.reply(m.chat, '『 👤 』 𝐌𝐞𝐧𝐳𝐢𝐨𝐧𝐚 qualcuno.', m)
 
   const isPromote = ['promote', 'promuovi', 'p'].includes(command)
   const action = isPromote ? 'promote' : 'demote'
 
-  // URL Immagine (Assicurati che sia quadrata per un risultato perfetto)
-  const imgElixir = 'https://githubusercontent.com' 
+  // LOGICA ADATTAMENTO:
+  // Assicurati che questo link punti a un'immagine QUADRATA.
+  const imgElixir = 'https://percorso-tua-immagine-quadrata.jpg' 
 
-  const textMsg = isPromote 
-    ? `┌  『 𝐍𝐔𝐎𝐕𝐎 𝐀𝐃𝐌𝐈𝐍 』\n│  \n│  👤  𝐀: @${number.split('@')[0]}\n│  🛠️  𝐃𝐚: @${sender.split('@')[0]}\n└──────────────`
-    : `『 ⚠️ 』 𝐋’𝐮𝐭𝐞𝐧𝐭𝐞 @${number.split('@')[0]} è stato retrocesso.`
+  const titleText = `test | 𝐄𝐥𝐢𝐱𝐢𝐫`
+  const bodyText = isPromote ? 'NUOVO ADMIN PROMOSSO' : 'ADMIN RETROCESSO'
+  
+  const decorativeText = `*｡  °  ┌  ⌜  ${isPromote ? 'NUOVO ADMIN' : 'ADMIN RETRO'}  ⌟  ┘  °  ｡*
+  
+┌   
+│  ⌜ 👤 ⌟   𝐀: @${number.split('@')[0]}
+│  ⌜ 🛠️ ⌟   𝐃𝐚: @${sender.split('@')[0]}
+└──────────────`
 
   try {
     await conn.groupParticipantsUpdate(m.chat, [number], action)
     
-    // Invio con anteprima quadrata (renderLargerThumbnail)
     await conn.sendMessage(m.chat, {
-      text: textMsg,
+      text: decorativeText,
       contextInfo: {
         mentionedJid: [sender, number],
         externalAdReply: {
-          title: `test | 𝐄𝐥𝐢𝐱𝐢𝐫`,
-          body: isPromote ? `NUOVO ADMIN PROMOSSO` : `ADMIN RETROCESSO`,
-          thumbnailUrl: imgElixir,
+          title: titleText,
+          body: bodyText,
+          thumbnailUrl: imgElixir, // L'immagine deve essere 1:1 per non essere tagliata
           sourceUrl: null,
           mediaType: 1,
-          renderLargerThumbnail: true // Forza il formato quadrato perfetto
+          renderLargerThumbnail: true, // Questo crea il "cuadratino" grande
+          showAdAttribution: false
         }
       }
     }, { quoted: m })
 
   } catch (e) {
     console.error(e)
-    conn.reply(m.chat, '『 ❌ 』 Errore durante l\'operazione.', m)
+    conn.reply(m.chat, '『 ❌ 』 Errore.', m)
   }
 }
 
