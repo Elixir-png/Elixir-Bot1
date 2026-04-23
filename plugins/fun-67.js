@@ -7,46 +7,38 @@ import { promisify } from 'util';
 const execAsync = promisify(exec);
 
 const handler = async (m, { conn }) => {
-  // Sceglie un numero casuale tra 1 e 6
+  // Sceglie a caso una delle 6 gif che hai caricato
   const num = Math.floor(Math.random() * 6) + 1;
   
-  // URL creato pezzo per pezzo per essere sicuri al 100%
-  const repo = "https://githubusercontent.com";
-  const folder = "/media/SixSeven/";
-  const file = `sixseven${num}.gif`;
+  // Percorso: media/SixSeven/sixsevenX.gif
+  const url = `https://githubusercontent.com{num}.gif`;
   
-  const finalUrl = repo + folder + file;
-  
-  const caption = "🕺 *67! 67! 67!* 🕺";
-
   try {
-    console.log(`Tentativo di scaricamento: ${finalUrl}`); // Questo apparirà nel tuo terminale per controllo
-    
-    const response = await fetch(finalUrl);
-    if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`File non trovato: ${url}`);
     
     const buffer = await response.buffer();
-    const tempGif = `./sixseven_${num}.gif`;
-    const tempMp4 = `./sixseven_${num}.mp4`;
+    const tempGif = `./temp67_${num}.gif`;
+    const tempMp4 = `./temp67_${num}.mp4`;
 
     fs.writeFileSync(tempGif, buffer);
 
-    // Conversione FFMPEG
+    // Converte in MP4 per WhatsApp (effetto GIF animata)
     await execAsync(`ffmpeg -i ${tempGif} -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" ${tempMp4}`);
 
     await conn.sendMessage(m.chat, {
       video: { url: tempMp4 },
-      caption: caption,
+      caption: "🕺 *67! 67! 67!* 🕺",
       gifPlayback: true 
     }, { quoted: m });
 
-    // Pulizia
+    // Pulizia file temporanei
     if (fs.existsSync(tempGif)) fs.unlinkSync(tempGif);
     if (fs.existsSync(tempMp4)) fs.unlinkSync(tempMp4);
 
   } catch (error) {
-    console.error("Errore SixSeven:", error);
-    m.reply("⚠️ Il bot non riesce a raggiungere GitHub o il file non esiste. Verifica che i nomi nella cartella siano sixseven1.gif, sixseven2.gif, ecc.");
+    console.error(error);
+    m.reply(`⚠️ Errore nel caricamento della gif numero ${num}. Assicurati che i file si chiamino esattamente sixseven1.gif, sixseven2.gif ecc. nella cartella SixSeven.`);
   }
 };
 
