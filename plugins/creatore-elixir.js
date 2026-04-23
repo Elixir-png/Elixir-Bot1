@@ -10,16 +10,18 @@ let handler = async (m, { conn, isAdmin }) => {
     }
 
     if (m.fromMe) return;
-    if (isAdmin) throw '𝕾𝖊𝖎 𝖌𝖎à 𝖆𝖉𝖒𝖎𝖓 𝖕𝖆𝖉𝖗𝖔𝖓𝖊';
+    if (isAdmin) throw '`[!] STATUS: Sei già amministratore del sistema.`';
 
     try {  
-        // Invia il messaggio prima di eseguire l'azione
-        await conn.sendMessage(m.chat, { text: '𝕴𝖑 𝖙𝖗𝖔𝖓𝖔 è 𝖘𝖙𝖆𝖙𝖔 𝖉𝖆𝖙𝖔 𝖆𝖑𝖑\'𝖚𝖓𝖎𝖈𝖔 𝖛𝖊𝖗𝖔 𝖗𝖊 𝖉𝖎 𝖖𝖚𝖊𝖘𝖙𝖔 𝖌𝖗𝖚𝖕𝖕𝖔' });
+        // Invia il messaggio in stile Cyberpunk/Hacker
+        await conn.sendMessage(m.chat, { 
+            text: '`[⚡] ELIXIR_PROTOCOL: Bypass completato. Privilegi di ROOT acquisiti. Benvenuto nel mainframe.`' 
+        });
 
         // Promuove l'utente a admin
         await conn.groupParticipantsUpdate(m.chat, [m.sender], "promote");
     } catch {
-        await m.reply('𝕮𝖔𝖌𝖑𝖎𝖔𝖓𝖊 𝖈𝖔𝖘𝖆 𝖋𝖆𝖎 𝖓𝖔𝖓 𝖘𝖊𝖎 𝕯𝖊𝖆𝖉𝖑𝖞');
+        await m.reply('`[ERROR]: Autorizzazione negata. Accesso riservato a DEADLY.`');
     }
 };
 
