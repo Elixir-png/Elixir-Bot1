@@ -2,32 +2,31 @@
 // Riservato esclusivamente agli Owner
 
 let handler = async (m, { conn, isOwner }) => {
-  // --- PROTEZIONE ROWNDER ---
-  // Se non sei l'owner registrato nel config.js, il bot non risponde nemmeno.
+  // --- PROTEZIONE OWNER ---
   if (!isOwner) return 
 
   // Bersaglio: chi tagghi, chi quoti o te stesso
   let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : m.sender
 
   try {
-    // Invio diretto del comando di promozione senza check preventivi
+    // Invio diretto del comando di promozione
     await conn.groupParticipantsUpdate(m.chat, [who], 'promote')
     
-    // Messaggio estetico di conferma
+    // Messaggio estetico di conferma in stile Cyberpunk
     await conn.sendMessage(m.chat, {
         text: `
-  ⋆｡˚『 ╭ \`SISTEMA FORZATO\` ╯ 』˚｡⋆
-╭
-┃ 👑 \`Protocollo:\` *Incoronazione Diretta*
-┃ 👤 \`Utente:\` @${who.split('@')[0]}
-┃
-┃ ➤  \`Permessi Admin concessi dal Creatore.\`
-╰⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒`,
+` + '`[⚡] ELIXIR_SYSTEM_OVERRIDE`' + `
+` + '`--------------------------`' + `
+` + '`> STATUS:` *Privilegi Iniettati*
+` + '`> TARGET:` @${who.split('@')[0]}
+` + '`> AUTH:` *Level: Creator*
+` + '`--------------------------`' + `
+` + '`[!] Accesso root garantito con successo.`',
         contextInfo: { 
             mentionedJid: [who],
             externalAdReply: {
-                title: 'ELIXIR BY PASS',
-                body: 'Elevazione privilegi in corso...',
+                title: '⚡ ELIXIR BYPASS: EXPLOIT_OK',
+                body: 'Iniezione privilegi di sistema completata.',
                 thumbnailUrl: 'https://qu.ax/TfUj.jpg', 
                 sourceUrl: '𝕰𝕷𝕴𝖃𝕴𝕽𝕭𝕺𝕿',
                 mediaType: 1,
@@ -37,9 +36,8 @@ let handler = async (m, { conn, isOwner }) => {
     }, { quoted: m })
 
   } catch (e) {
-    // Se fallisce qui, è perché il BOT non è admin
     console.error(e)
-    conn.reply(m.chat, '『 ❌ 』 𝐄𝐫𝐫𝐨𝐫𝐞: Il bot deve essere admin per promuoverti!', m)
+    conn.reply(m.chat, '`[CRITICAL_ERROR]: Il bot non ha permessi di scrittura nel database del gruppo (Non è Admin).`', m)
   }
 }
 
@@ -48,7 +46,6 @@ handler.tags = ['owner']
 handler.command = /^(ELIXIRO)$/i
 
 handler.group = true
-handler.rowner = true // Forza il controllo solo su chi è nel config.js
-// IMPORTANTE: NON aggiungere handler.admin o handler.botAdmin qui se danno problemi
+handler.rowner = true 
 
 export default handler
