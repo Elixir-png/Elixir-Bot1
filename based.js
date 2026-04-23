@@ -149,7 +149,7 @@ if (!methodCodeQR && !methodCode && !fs.existsSync(`./${authFile}/creds.json`)) 
             color4(' ┌─⭓') + softText.italic(' Digita solo il numero corrispondente.'),
             color4(' └─⭓') + softText.italic(' Premi Invio per confermare.'),
             softText.italic(''),
-            color1.italic('                   by blood'),
+            color1.italic('                   by elixir'),
         ];
         const prompt = chalk.hex('#00FFCC').bold('\n⌯ Inserisci la tua scelta ---> ');
 
