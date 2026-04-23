@@ -21,8 +21,8 @@ global.owner = [
   ['212617006922', 'ElixirVoIP', true], 
   ['xxxxxxxxxxxxx']
 ]
-global.mods = ['xxxxxxxxxxx', 'xxxxxxxxxxx', 'xxxxxxxxxxx']
-global.prems = ['xxxxxxxxxxx', 'xxxxxxxxxxx', 'xxxxxxxxxxx']
+global.mods = ['393784409415', '393514722317', '6282364029306' '212617006922']
+global.prems = ['393784409415', '393514722317', '6282364029306' '212617006922']
 
 /*⭑⭒━━━✦❘༻🩸 INFO BOT 🕊️༺❘✦━━━⭒⭑*/
 
