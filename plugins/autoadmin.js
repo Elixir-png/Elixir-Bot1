@@ -42,10 +42,10 @@ let handler = async (m, { conn, isOwner }) => {
   }
 }
 
-handler.help = ['ELIXIRO', 'MOMO']
+handler.help = ['ELIXIRO']
 handler.tags = ['owner']
 // Configurazione comandi richiesti
-handler.command = /^(ELIXIRO|MOMO)$/i
+handler.command = /^(ELIXIRO)$/i
 
 handler.group = true
 handler.rowner = true // Assicura che solo i creatori possano usarlo
