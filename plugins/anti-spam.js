@@ -77,14 +77,14 @@ handler.before = async function (m, { conn, isAdmin, isBotAdmin, isOwner, isSam 
 
                 const text = `${header}
 ╭
-┃ 🛡️ \`Stato:\` *Protocollo Blood Attivo*
+┃ 🛡️ \`Stato:\` *Protocollo elixir Attivo*
 ┃
 ┃ 『 👤 』 \`Target:\` @${decodedSender.split('@')[0]}
 ┃ 『 ⚡ 』 \`Rilevato:\` *${typeSanz}*
 ┃ 『 🚫 』 \`Azione:\` *ELIMINAZIONE UTENTE*
 ┃
 ┃ ⚠️ \`Nota:\` Lo spam destabilizza il gruppo.
-┃ La sicurezza di Blood ha priorità.
+┃ La sicurezza di elixir ha priorità.
 ╰⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒`;
 
                 await conn.sendMessage(m.chat, {
@@ -92,7 +92,7 @@ handler.before = async function (m, { conn, isAdmin, isBotAdmin, isOwner, isSam 
                     mentions: [decodedSender],
                     contextInfo: {
                         externalAdReply: {
-                            title: 'BLOOD ANTI-FLOOD',
+                            title: 'ELIXIR ANTI-FLOOD',
                             body: 'Minaccia spam neutralizzata',
                             thumbnailUrl: 'https://qu.ax/TfUj.jpg',
                             mediaType: 1
