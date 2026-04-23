@@ -104,9 +104,9 @@ const handler = async (m, { conn, usedPrefix, text, command }) => {
     const userInfo = await getUserInfo(username)
     const likes = getLikesReceived(username)
 
-    let infoMsg = `┏━━━━━━━━━━━━━━━━━━━━┓\n`
-    infoMsg += `   🎧  *𝐁𝐋𝐎𝐎𝐃 𝐋𝐀𝐒𝐓.𝐅𝐌* 🎧\n`
-    infoMsg += `┗━━━━━━━━━━━━━━━━━━━━┛\n\n`
+    let infoMsg = `┏━━━━━━━━━━━━━━━━━━━┓\n`
+    infoMsg += `      🎧  *𝐁𝐋𝐎𝐎𝐃 𝐋𝐀𝐒𝐓.𝐅𝐌* 🎧\n`
+    infoMsg += `┗━━━━━━━━━━━━━━━━━━━┛\n\n`
     infoMsg += `◈ 👤 *𝗨𝘁𝗲𝗻𝘁𝗲:* ${username}\n`
     infoMsg += `◈ 📀 *𝗦𝘁𝗮𝘁𝗼:* ${nowPlaying ? '🔥 _In riproduzione..._' : '🕒 _Ultimo ascolto_'}\n\n`
     infoMsg += `◈ 📌 *𝗧𝗶𝘁𝗼𝗹𝗼:* ${title}\n`
