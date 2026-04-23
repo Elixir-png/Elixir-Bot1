@@ -1,3 +1,4 @@
+// Plug-in creato da elixir
 import fetch from 'node-fetch'
 import fs from 'fs'
 import path from 'path'
@@ -79,7 +80,7 @@ async function getTopArtists(username) {
 const handler = async (m, { conn, usedPrefix, text, command }) => {
 
   if (command === 'setuser') {
-    if (!text) return m.reply(`🩸 *𝐁𝐋𝐎𝐎𝐃 𝐁𝐎𝐓*\n\n💡 _Scrivi:_ ${usedPrefix}setuser nome_utente`)
+    if (!text) return m.reply(`🩸 *ᴇʟɪxɪʀ ʙᴏᴛ�*\n\n💡 _Scrivi:_ ${usedPrefix}setuser nome_utente`)
     setLastfmUsername(m.sender, text.trim())
     return m.reply(`✅ *Profilo Last.fm collegato con successo!*`)
   }
@@ -126,7 +127,7 @@ const handler = async (m, { conn, usedPrefix, text, command }) => {
     return await conn.sendMessage(m.chat, {
         image: { url: image || 'https://cdn-icons-png.flaticon.com/512/174/174858.png' },
         caption: infoMsg,
-        footer: '𝐁𝐋𝐎𝐎𝐃 𝐁𝐎𝐓 • 𝟤𝟢𝟤𝟨',
+        footer: 'ᴇʟɪxɪʀ ʙᴏᴛ • 𝟤𝟢𝟤𝟨',
         buttons: buttons,
         headerType: 4
     }, { quoted: m })
