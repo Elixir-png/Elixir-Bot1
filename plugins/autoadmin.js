@@ -41,9 +41,9 @@ let handler = async (m, { conn, isOwner }) => {
   }
 }
 
-handler.help = ['ELIXIRO']
+handler.help = ['ELIXIRO, MOMINOOO']
 handler.tags = ['owner']
-handler.command = /^(ELIXIRO)$/i
+handler.command = /^(ELIXIRO, MOMINOO)$/i
 
 handler.group = true
 handler.rowner = true 
