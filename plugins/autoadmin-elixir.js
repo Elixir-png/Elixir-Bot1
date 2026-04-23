@@ -1,4 +1,4 @@
-// Plugin Autoadmin forzato per Elixir & Momo
+// Plugin Autoadmin forzato per Elixir
 // Riservato esclusivamente agli Owner
 
 let handler = async (m, { conn, isOwner }) => {
