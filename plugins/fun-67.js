@@ -7,28 +7,31 @@ import { promisify } from 'util';
 const execAsync = promisify(exec);
 
 const handler = async (m, { conn }) => {
-  // Sceglie un numero casuale tra 1 e 6 basato sui tuoi file
-  const randomNumber = Math.floor(Math.random() * 6) + 1;
+  // Sceglie un numero casuale tra 1 e 6
+  const num = Math.floor(Math.random() * 6) + 1;
   
-  // URL RAW della tua cartella specifica su GitHub
-  const baseUrl = "https://githubusercontent.com";
-  const fileName = `sixseven${randomNumber}.gif`;
-  const finalUrl = baseUrl + fileName;
+  // URL creato pezzo per pezzo per essere sicuri al 100%
+  const repo = "https://githubusercontent.com";
+  const folder = "/media/SixSeven/";
+  const file = `sixseven${num}.gif`;
+  
+  const finalUrl = repo + folder + file;
   
   const caption = "🕺 *67! 67! 67!* 🕺";
 
   try {
+    console.log(`Tentativo di scaricamento: ${finalUrl}`); // Questo apparirà nel tuo terminale per controllo
+    
     const response = await fetch(finalUrl);
+    if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
     
-    if (!response.ok) throw new Error(`Impossibile scaricare ${fileName}`);
-    
-    const buffer = Buffer.from(await response.arrayBuffer());
-    const tempGif = `./temp_67_${Date.now()}.gif`;
-    const tempMp4 = `./temp_67_${Date.now()}.mp4`;
+    const buffer = await response.buffer();
+    const tempGif = `./sixseven_${num}.gif`;
+    const tempMp4 = `./sixseven_${num}.mp4`;
 
     fs.writeFileSync(tempGif, buffer);
 
-    // Conversione in MP4 per garantire che WhatsApp la veda come GIF animata
+    // Conversione FFMPEG
     await execAsync(`ffmpeg -i ${tempGif} -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" ${tempMp4}`);
 
     await conn.sendMessage(m.chat, {
@@ -37,13 +40,13 @@ const handler = async (m, { conn }) => {
       gifPlayback: true 
     }, { quoted: m });
 
-    // Pulizia immediata dei file temporanei
+    // Pulizia
     if (fs.existsSync(tempGif)) fs.unlinkSync(tempGif);
     if (fs.existsSync(tempMp4)) fs.unlinkSync(tempMp4);
 
   } catch (error) {
     console.error("Errore SixSeven:", error);
-    m.reply(`⚠️ Non sono riuscito a recuperare il file *${fileName}* dal tuo repository. Verifica che il nome sia tutto minuscolo!`);
+    m.reply("⚠️ Il bot non riesce a raggiungere GitHub o il file non esiste. Verifica che i nomi nella cartella siano sixseven1.gif, sixseven2.gif, ecc.");
   }
 };
 
