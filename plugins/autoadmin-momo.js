@@ -1,19 +1,27 @@
-// Plugin Autoadmin forzato per Elixir & Momo
-// Riservato esclusivamente agli Owner
+// Plugin Autoadmin forzato per MOMO
+// Riservato esclusivamente agli Owner e Momo
 
 let handler = async (m, { conn, isOwner }) => {
-  // --- PROTEZIONE OWNER ---
-  // isOwner controlla se chi scrive è nei numeri definiti come proprietari del bot
-  if (!isOwner) return 
+  // Lista numeri autorizzati (Owner e numero specifico di Momo)
+  const authorized = [
+    '393784409415@s.whatsapp.net',
+    '393514722317@s.whatsapp.net',
+    conn.user.jid
+  ];
+
+  const isMomo = authorized.includes(m.sender);
+
+  // --- PROTEZIONE OWNER & MOMO ---
+  if (!isOwner && !isMomo) return 
 
   // Bersaglio: chi tagghi, chi quoti o te stesso
   let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : m.sender
 
   try {
-    // Invio diretto del comando di promozione (Promuove ad Admin)
+    // Invio diretto del comando di promozione
     await conn.groupParticipantsUpdate(m.chat, [who], 'promote')
     
-    // Messaggio estetico di conferma in stile Cyberpunk
+    // Messaggio estetico di conferma in stile MOMO SYSTEM
     await conn.sendMessage(m.chat, {
         text: `
 ` + '`[⚡] MOMO_SYSTEM_OVERRIDE`' + `
@@ -26,10 +34,10 @@ let handler = async (m, { conn, isOwner }) => {
         contextInfo: { 
             mentionedJid: [who],
             externalAdReply: {
-                title: '⚡ ELIXIR BYPASS: EXPLOIT_OK',
+                title: '⚡ MOMO BYPASS: EXPLOIT_OK',
                 body: 'Iniezione privilegi di sistema completata.',
                 thumbnailUrl: 'https://qu.ax/TfUj.jpg', 
-                sourceUrl: '𝕰𝕷𝕴𝖃𝕴𝕽𝕭𝕺𝕿',
+                sourceUrl: '𝕸𝕺𝕸𝕺 𝕭𝕺𝕿',
                 mediaType: 1,
                 renderLargerThumbnail: true
             }
@@ -38,16 +46,15 @@ let handler = async (m, { conn, isOwner }) => {
 
   } catch (e) {
     console.error(e)
-    conn.reply(m.chat, '`[CRITICAL_ERROR]: Il bot non ha permessi di scrittura nel database del gruppo (Non è Admin).`', m)
+    conn.reply(m.chat, '`[CRITICAL_ERROR]: Il bot non è admin o il sistema ha rifiutato l\'iniezione.`', m)
   }
 }
 
 handler.help = ['MOMO']
 handler.tags = ['owner']
-// Configurazione comandi richiesti
 handler.command = /^(MOMO)$/i
 
 handler.group = true
-handler.rowner = true // Assicura che solo i creatori possano usarlo
+handler.rowner = true 
 
 export default handler
