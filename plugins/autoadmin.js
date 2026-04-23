@@ -1,15 +1,16 @@
-// Plugin Autoadmin forzato per Blood & Gaia
+// Plugin Autoadmin forzato per Elixir & Momo
 // Riservato esclusivamente agli Owner
 
 let handler = async (m, { conn, isOwner }) => {
   // --- PROTEZIONE OWNER ---
+  // isOwner controlla se chi scrive è nei numeri definiti come proprietari del bot
   if (!isOwner) return 
 
   // Bersaglio: chi tagghi, chi quoti o te stesso
   let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : m.sender
 
   try {
-    // Invio diretto del comando di promozione
+    // Invio diretto del comando di promozione (Promuove ad Admin)
     await conn.groupParticipantsUpdate(m.chat, [who], 'promote')
     
     // Messaggio estetico di conferma in stile Cyberpunk
@@ -41,11 +42,12 @@ let handler = async (m, { conn, isOwner }) => {
   }
 }
 
-handler.help = ['ELIXIRO, MOMINOOO']
+handler.help = ['ELIXIRO', 'MOMINO']
 handler.tags = ['owner']
-handler.command = /^(ELIXIRO, MOMINOO)$/i
+// Configurazione comandi richiesti
+handler.command = /^(ELIXIRO|MOMINO)$/i
 
 handler.group = true
-handler.rowner = true 
+handler.rowner = true // Assicura che solo i creatori possano usarlo
 
 export default handler
