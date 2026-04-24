@@ -85,7 +85,7 @@ let handler = async (m, { conn, command }) => {
     }
 };
 
-handler.help = ['roulette', 'entra', 'spara'];
+handler.help = ['roulette', 'trasi', 'spara'];
 handler.tags = ['giochi'];
 handler.command = /^(roulette|entra|spara)$/i;
 handler.group = true;
