@@ -1,7 +1,5 @@
-// Plug-in personalizzato: Elixir Lockdown
-let handler = async (m, { conn, isAdmin }) => {
-    if (!isAdmin) return 
-
+// Plug-in creato da elixir
+let handler = async (m, { conn }) => {
     try {
         const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -41,7 +39,7 @@ let handler = async (m, { conn, isAdmin }) => {
         // 4. RIAPERTURA
         await conn.groupSettingUpdate(m.chat, 'not_announcement');
         await conn.sendMessage(m.chat, {
-            text: '🔓 *PUNIZIONE TERMINATA*\n\n𝐨𝐫𝐚 𝐩𝐚𝐫𝐥𝐚𝐭𝐞 𝐩𝐥𝐞𝐛𝐞𝐢, 𝐦𝐚 𝐟𝐚𝐭𝐞𝐥𝐨 𝐜𝐨𝐧 𝐜𝐫ITERIO.',
+            text: '🔓 *PUNIZIONE TERMINATA*\n\nᴏʀᴀ ᴘᴀʀʟᴀᴛᴇ ᴘʟᴇʙᴇɪ, ᴍᴀ ꜰᴀᴛᴇʟᴏ ᴄᴏɴ ᴄʀɪᴛᴇʀɪᴏ.',
             contextInfo: {
                 forwardingScore: 99,
                 isForwarded: true,
@@ -60,10 +58,10 @@ let handler = async (m, { conn, isAdmin }) => {
 }
 
 handler.help = ['elixirkg']
-handler.tags = ['staff']
+handler.tags = ['owner']
 handler.command = /^(elixirkg)$/i
 handler.group = true
-handler.admin = true
+handler.owner = true // Solo il creatore/owner può usarlo
 handler.botAdmin = true 
 
 export default handler
