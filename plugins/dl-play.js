@@ -9,6 +9,11 @@ import os from 'os';
 let handler = async (m, { conn, text, usedPrefix, command }) => {
   if (!text) return m.reply(`🩸 *ᴇʟɪxɪʀ ʙᴏᴛ*\n\n💡 _Scrivi:_ ${usedPrefix + command} nome canzone`);
 
+  // Percorsi file temporanei definiti fuori per essere accessibili al finally
+  const tmpDir = os.tmpdir();
+  const inputPath = path.join(tmpDir, `input_${Date.now()}`);
+  const outputPath = path.join(tmpDir, `output_${Date.now()}.${command === 'playaud' ? 'mp3' : 'mp4'}`);
+
   try {
     const search = await yts(text);
     const vid = search.videos[0];
@@ -16,6 +21,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
     const url = vid.url;
 
+    // Menu principale con bottoni
     if (command === 'play') {
         let infoMsg = `┏━━━━━━━━━━━━━━━━━━━┓\n`;
         infoMsg += `      🎧 ᴇʟɪxɪʀ ʙᴏᴛ ᴘʟᴀʏᴇʀ 🎧\n`;
@@ -36,34 +42,34 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         }, { quoted: m });
     }
 
+    // Reazione di caricamento
     await conn.sendMessage(m.chat, { react: { text: "🩸", key: m.key } });
 
     let downloadUrl = null;
     const isAudio = command === 'playaud';
 
+    // Tentativo di download tramite API
     try {
         let res = isAudio ? await fg.yta(url) : await fg.ytv(url);
         if (res && res.dl_url) downloadUrl = res.dl_url;
     } catch {
         let api = isAudio ? 'ytmp3' : 'ytmp4';
-        let res = await fetch(`https://api.vreden.my.id/api/${api}?url=${url}`);
+        let res = await fetch(`https://vreden.my.id{api}?url=${url}`);
         let json = await res.json();
         downloadUrl = json.result?.download?.url || json.result?.url;
     }
 
-    if (!downloadUrl) throw new Error();
+    if (!downloadUrl) throw new Error('Download URL non trovato');
 
-    const tmpDir = os.tmpdir();
-    const inputPath = path.join(tmpDir, `input_${Date.now()}`);
-    const outputPath = path.join(tmpDir, `output_${Date.now()}.${isAudio ? 'mp3' : 'mp4'}`);
-
-    const res = await fetch(downloadUrl);
-    const arrayBuffer = await res.arrayBuffer();
-    fs.writeFileSync(inputPath, Buffer.from(arrayBuffer));
+    // Download del file bufferizzato
+    const response = await fetch(downloadUrl);
+    const buffer = await response.buffer();
+    fs.writeFileSync(inputPath, buffer);
 
     if (isAudio) {
+        // Conversione Audio con FFmpeg (virgolette aggiunte per sicurezza nomi file)
         await new Promise((resolve, reject) => {
-            exec(`ffmpeg -i ${inputPath} -vn -ar 44100 -ac 2 -b:a 128k ${outputPath}`, (err) => {
+            exec(`ffmpeg -i "${inputPath}" -vn -ar 44100 -ac 2 -b:a 128k "${outputPath}"`, (err) => {
                 if (err) reject(err);
                 else resolve();
             });
@@ -76,6 +82,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             ptt: false
         }, { quoted: m });
     } else {
+        // Invio Video
         await conn.sendMessage(m.chat, {
             video: fs.readFileSync(inputPath),
             mimetype: 'video/mp4',
@@ -83,13 +90,16 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         }, { quoted: m });
     }
 
-    if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
-    if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
     await conn.sendMessage(m.chat, { react: { text: "✅", key: m.key } });
 
   } catch (e) {
     console.error(e);
     m.reply('🚀 *ᴇʟɪxɪʀ ʙᴏᴛ ᴇʀʀᴏʀ:* File non disponibile o server offline.');
+    await conn.sendMessage(m.chat, { react: { text: "❌", key: m.key } });
+  } finally {
+    // Pulizia file temporanei (Fondamentale!)
+    if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
+    if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
   }
 };
 
