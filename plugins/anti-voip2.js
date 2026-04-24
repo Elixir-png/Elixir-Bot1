@@ -19,7 +19,6 @@ function getCountry(number) {
   }
 }
 
-// DB safe
 function loadDB() {
   if (!fs.existsSync(DB_FILE)) {
     fs.writeFileSync(DB_FILE, JSON.stringify({ blocked: [] }, null, 2))
@@ -61,7 +60,6 @@ export async function before(m, { conn }) {
   try {
     const chat = global.db.data.chats[m.chat] || {}
 
-    // 🔥 FIX CRITICO: supporto multi formato
     const enabled =
       chat.antivoip2 === true ||
       chat.antivoip2 === 'true' ||
@@ -87,7 +85,14 @@ export async function before(m, { conn }) {
       const group = await conn.groupMetadata(m.chat).catch(() => ({}))
       const groupName = group.subject || 'unknown'
 
-      await conn.groupParticipantsUpdate(m.chat, [jid], 'remove')
+      // 🔥 FIX: SOLO RIFIUTO RICHIESTA (NO REMOVE)
+      try {
+        if (conn.groupRequestParticipantsUpdate) {
+          await conn.groupRequestParticipantsUpdate(m.chat, [jid], 'reject')
+        }
+      } catch (e) {
+        console.log('reject error:', e)
+      }
 
       saveNumber(num, groupName, jid)
 
