@@ -1,3 +1,4 @@
+// Plug-in modificato da elixir
 let handler = async (m, { conn }) => {
   try {
     const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
