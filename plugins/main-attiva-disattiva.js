@@ -31,7 +31,7 @@ const featureRegistry = [
   { key: 'ai', store: 'chat', perm: PERM.ADMIN, name: '🧠 IA', desc: 'Intelligenza Artificiale attiva' },
   { key: 'vocali', store: 'chat', perm: PERM.ADMIN, name: '🎤 Siri', desc: 'Risponde con audio ai messaggi' },
   { key: 'antivoip', store: 'chat', perm: PERM.ADMIN, name: '📞 Antivoip', desc: 'Blocca numeri non italiani' },
-  { key: 'antivoip2', store: 'bot', perm: PERM.ADMIN, name: '📛 AntiVoip2', desc: 'Rifiuta richieste Voip' },
+  { key: 'antivoip2', store: 'chat', perm: PERM.ADMIN, name: '📛 AntiVoip2', desc: 'Firewall VOIP avanzato' }
   { key: 'antiLink', store: 'chat', perm: PERM.ADMIN, name: '🔗 Antilink', desc: 'Blocca link WhatsApp' },
   { key: 'antiLinkUni', store: 'chat', perm: PERM.ADMIN, name: '🌍 Antilink Uni', desc: 'Blocca ogni tipo di link/URL' },
   { key: 'antiLink2', store: 'chat', perm: PERM.ADMIN, name: '🌐 Antilinksocial', desc: 'Blocca link social (IG, TT, YT)' },
