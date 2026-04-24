@@ -1,4 +1,4 @@
-const owner = ['393701330693@s.whatsapp.net']
+const owner = ['393784409415@s.whatsapp.net']
 const staff = [
   '39gimmepussybloodclat@s.whatsapp.net', // aggiungi qui altri membri dello staff
 ]
@@ -28,6 +28,6 @@ const handler = async (m, { conn, args }) => {
 
 handler.help = ['annuncio <testo>']  
 handler.command = /^annuncio$/i
-handler.owner = false
+handler.owner = true
 
 export default handler
