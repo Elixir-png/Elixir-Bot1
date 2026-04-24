@@ -1,26 +1,20 @@
 import { createCanvas, loadImage } from 'canvas'
 
 const handler = async (m, { conn, args, usedPrefix }) => {
+  // Determina l'utente target: la persona menzionata, l'autore del messaggio citato, o chi invia il comando
+  let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : m.sender
+  
+  // Recupera il nome: se c'è un tag/citazione usa il pushName di quell'utente, altrimenti usa il testo dopo il comando
+  let name = args.length > 0 && !m.mentionedJid[0] && !m.quoted ? args.join(" ") : conn.getName(who)
 
-  if (!args[0]) {
-    return conn.reply(
-      m.chat,
-      `❌ Usa il comando così:\n${usedPrefix}onlyfans nomeprofilo`,
-      m
-    )
-  }
-
-  const nome = args.join(" ")
-
-  const random = (min, max) =>
-    Math.floor(Math.random() * (max - min + 1)) + min
+  const random = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min
 
   const id = random(100000, 999999)
   const prezzo = random(5, 50)
   const followers = random(1000, 900000)
   const post = random(5, 350)
   const likes = random(10000, 900000)
-  const verified = Math.random() < 0.4 // 40% verificato
+  const verified = Math.random() < 0.4 
 
   const bioList = [
     "🔥 Contenuti esclusivi ogni giorno",
@@ -33,17 +27,16 @@ const handler = async (m, { conn, args, usedPrefix }) => {
 
   const bio = bioList[Math.floor(Math.random() * bioList.length)]
 
-  // Ottieni foto profilo WhatsApp
+  // Ottieni foto profilo dell'utente target
   let avatarUrl
   try {
-    avatarUrl = await conn.profilePictureUrl(m.sender, 'image')
+    avatarUrl = await conn.profilePictureUrl(who, 'image')
   } catch {
     avatarUrl = 'https://i.imgur.com/8Km9tLL.png'
   }
 
   const avatar = await loadImage(avatarUrl)
 
-  // Canvas
   const canvas = createCanvas(900, 1100)
   const ctx = canvas.getContext('2d')
 
@@ -72,13 +65,13 @@ const handler = async (m, { conn, args, usedPrefix }) => {
   // Nome
   ctx.fillStyle = '#ffffff'
   ctx.font = 'bold 38px Sans'
-  ctx.fillText(nome, 450, 480)
+  ctx.fillText(name, 450, 480)
 
   // Badge verificato
   if (verified) {
     ctx.fillStyle = '#00aff0'
     ctx.beginPath()
-    ctx.arc(650, 465, 15, 0, Math.PI * 2)
+    ctx.arc(450 + (ctx.measureText(name).width / 2) + 25, 465, 15, 0, Math.PI * 2)
     ctx.fill()
   }
 
@@ -108,11 +101,12 @@ const handler = async (m, { conn, args, usedPrefix }) => {
 
   await conn.sendMessage(m.chat, {
     image: buffer,
-    caption: `🔞 Profilo onlyfans di ${nome}`
-  })
+    caption: `🔞 Profilo OnlyFans di ${name}`,
+    mentions: [who]
+  }, { quoted: m })
 }
 
-handler.help = ['onlyfans <nome>']
+handler.help = ['onlyfans <@tag/nome>']
 handler.tags = ['fun']
 handler.command = /^onlyfans$/i
 
