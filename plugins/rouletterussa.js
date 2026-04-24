@@ -87,7 +87,7 @@ let handler = async (m, { conn, command }) => {
 
 handler.help = ['roulette', 'trasi', 'spara'];
 handler.tags = ['giochi'];
-handler.command = /^(roulette|entra|spara)$/i;
+handler.command = /^(roulette|trasi|spara)$/i;
 handler.group = true;
 
 export default handler;
