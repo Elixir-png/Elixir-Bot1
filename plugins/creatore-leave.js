@@ -8,6 +8,7 @@ let handler = async (m, { conn, text, command }) => {
     return await conn.reply(m.chat, `*｢ 💀 ACCESSO NEGATO ｣*\n\nNon hai l'autorità per invocare il mio distacco. Solo il mio *Creatore* può decidere il vostro destino.`, m)
   }
 
+  // ID del gruppo (o quello passato come testo)
   let id = text ? text : m.chat
   
   // Design Estetico Aggressivo
@@ -15,7 +16,7 @@ let handler = async (m, { conn, text, command }) => {
 💀 *〔 𝓔𝓛𝓘𝓧𝓘𝓡-𝓑𝓞𝓣 : EXTERMINATUS 〕* 💀
 
 ┏──────────────────────────────┓
-│ ⚠️  *PROTOCOLLO DI EPURAZIONE ATTIVO*│
+│ ⚠️  *PROTOCOLLO DI EPURAZIONE ATTIVO*
 ┗──────────────────────────────┛
 
 > *Il mio tempo è troppo prezioso per essere sprecato tra gli scarti.*
@@ -31,17 +32,18 @@ let handler = async (m, { conn, text, command }) => {
 *Goodbye, Losers.* 🖕`.trim()
 
   try {
-    // Invia il messaggio con un'immagine o un video se vuoi renderlo ancora più cattivo
-    await conn.sendMessage(id, { 
-        text: leaveMessage,
-        mentions: (await conn.groupMetadata(id)).participants.map(v => v.id) // Tagga tutti per far leggere l'insulto
-    })
+    // 1. Invia il messaggio d'addio (senza tag per evitare crash di permessi)
+    await conn.sendMessage(id, { text: leaveMessage })
     
-    await new Promise(resolve => setTimeout(resolve, 2000)) // Pausa drammatica di 2 secondi
+    // 2. Pausa drammatica di 2 secondi per far leggere il messaggio
+    await new Promise(resolve => setTimeout(resolve, 2000)) 
+    
+    // 3. Il bot abbandona il gruppo
     await conn.groupLeave(id)
+    
   } catch (e) {
     console.error('Errore durante l\'uscita:', e)
-    await m.reply('❌ Nemmeno per andarmene voglio restare in questo errore. Forza bruta in corso...')
+    // Se c'è un errore nell'invio del messaggio, forza comunque l'uscita
     await conn.groupLeave(id)
   }
 }
