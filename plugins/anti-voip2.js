@@ -1,43 +1,28 @@
 // Plug-in creato da elixir
 /**
- * 🛡️ ULTIMATE VOIP BLOCKER v7.4
- * (Con accesso diretto al database, compatibile con anti-insta)
- * 
- * @description 
- * Blocca i numeri stranieri mostrando il nome del gruppo 
- * e salva i dati in un database JSON, rispettando l'impostazione antivoip.
+ * 🛡️ ULTIMATE VOIP BLOCKER v7.5 FIXED
  */
 
 import PhoneNumber from 'awesome-phonenumber'
 import fs from 'fs'
-import path from 'path'
 
 // ====================== COSTANTI ======================
-const ITALIAN_CODE = 39
-const LOG_CHAT = '120363408934217962@g.us'
+const LOG_CHAT = global.logChat || null
 const DB_FILE = 'voip.json'
 
-// Set per prevenire duplicazione di messaggi
 let processingNumbers = new Set()
 
 // ====================== UTILS ======================
 
-/**
- * Formatta una data nel formato GG/MM/AAAA HH:MM
- */
 function formatDate(date = new Date()) {
-  const day = String(date.getDate()).padStart(2, '0')
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const year = date.getFullYear()
-  const hours = String(date.getHours()).padStart(2, '0')
-  const minutes = String(date.getMinutes()).padStart(2, '0')
-
-  return `${day}/${month}/${year} ${hours}:${minutes}`
+  const d = String(date.getDate()).padStart(2, '0')
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const y = date.getFullYear()
+  const h = String(date.getHours()).padStart(2, '0')
+  const min = String(date.getMinutes()).padStart(2, '0')
+  return `${d}/${m}/${y} ${h}:${min}`
 }
 
-/**
- * Restituisce il paese da un numero
- */
 function getCountryFromNumber(number) {
   try {
     const pn = new PhoneNumber(number)
@@ -49,41 +34,27 @@ function getCountryFromNumber(number) {
 
 // ====================== DATABASE ======================
 
-/**
- * Gestisce il database dei numeri VOIP bloccati
- */
 function manageVoipDatabase(number, groupName, nickname = "") {
   try {
-    // Se il DB non esiste, crealo
     if (!fs.existsSync(DB_FILE)) {
       fs.writeFileSync(DB_FILE, JSON.stringify({ blockedNumbers: [] }, null, 2))
     }
 
-    const dbContent = fs.readFileSync(DB_FILE, 'utf8')
-    const database = JSON.parse(dbContent)
-    const existingEntry = database.blockedNumbers.find(entry => entry.numero === number)
-    const timestamp = formatDate()
+    const db = JSON.parse(fs.readFileSync(DB_FILE))
+    const existing = db.blockedNumbers.find(e => e.numero === number)
+    const time = formatDate()
 
-    if (existingEntry) {
-      // Aggiorna entry esistente
-      existingEntry.ultimoTentativo = timestamp
-      existingEntry.gruppi = existingEntry.gruppi || []
-      if (!existingEntry.gruppi.includes(groupName)) {
-        existingEntry.gruppi.push(groupName)
-      }
-      existingEntry.tentativi = (existingEntry.tentativi || 0) + 1
-
-      // Aggiorna nickname solo se valido e diverso
-      if (nickname && (!existingEntry.nickname || existingEntry.nickname !== nickname)) {
-        existingEntry.nickname = nickname
-      }
+    if (existing) {
+      existing.ultimoTentativo = time
+      existing.tentativi = (existing.tentativi || 0) + 1
+      if (!existing.gruppi.includes(groupName)) existing.gruppi.push(groupName)
+      if (nickname) existing.nickname = nickname
     } else {
-      // Nuovo entry
-      database.blockedNumbers.push({
+      db.blockedNumbers.push({
         numero: number,
         nickname: nickname || "Sconosciuto",
-        primoTentativo: timestamp,
-        ultimoTentativo: timestamp,
+        primoTentativo: time,
+        ultimoTentativo: time,
         gruppi: [groupName],
         tentativi: 1,
         paese: getCountryFromNumber(number),
@@ -91,243 +62,117 @@ function manageVoipDatabase(number, groupName, nickname = "") {
       })
     }
 
-    fs.writeFileSync(DB_FILE, JSON.stringify(database, null, 2))
-    console.log(`📊 Numero ${number} salvato nel DB con nickname: ${nickname || "N/D"}`)
-    return true
-
-  } catch (error) {
-    console.error('❌ Errore nel gestire il database:', error)
-    return false
+    fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2))
+  } catch (e) {
+    console.error('DB error:', e)
   }
 }
 
-// ====================== NICKNAME ======================
-
-/**
- * Recupera il nickname di un utente da diverse fonti
- */
-async function getUserNickname(conn, userJid) {
-  try {
-    const rawNumber = userJid.split('@')[0]
-    const formattedNumber = rawNumber.startsWith('+') ? rawNumber : `+${rawNumber}`
-    let nickname = null
-
-    // Metodo 1: conn.getName
-    try {
-      if (typeof conn.getName === 'function') {
-        nickname = await conn.getName(userJid)
-        if (nickname && nickname.trim() !== '' && !nickname.match(/^\+?\d+$/)) {
-          console.log(`👤 Nome trovato via getName: ${nickname}`)
-          return nickname.trim()
-        }
-      }
-    } catch (e) {
-      console.log('⚠️ Errore in getName:', e.message)
-    }
-
-    // Metodo 2: fetchContactInfo / getContact
-    try {
-      let contact = null
-      if (typeof conn.fetchContactInfo === 'function') {
-        contact = await conn.fetchContactInfo(userJid)
-      } else if (typeof conn.getContact === 'function') {
-        contact = await conn.getContact(userJid)
-      }
-
-      if (contact?.pushname && contact.pushname.trim() !== '' && !contact.pushname.match(/^\+?\d+$/)) {
-        console.log(`👤 Nome trovato via pushname: ${contact.pushname}`)
-        return contact.pushname.trim()
-      }
-
-      if (contact?.notify && contact.notify.trim() !== '' && !contact.notify.match(/^\+?\d+$/)) {
-        console.log(`👤 Nome trovato via notify: ${contact.notify}`)
-        return contact.notify.trim()
-      }
-
-      if (contact?.name && contact.name.trim() !== '' && !contact.name.match(/^\+?\d+$/)) {
-        console.log(`👤 Nome trovato via name: ${contact.name}`)
-        return contact.name.trim()
-      }
-    } catch (e) {
-      console.log('⚠️ Errore in fetchContactInfo:', e.message)
-    }
-
-    // Metodo 3: business profile
-    try {
-      if (typeof conn.getBusinessProfile === 'function') {
-        const businessProfile = await conn.getBusinessProfile(userJid)
-        if (businessProfile?.name?.trim()) {
-          console.log(`👤 Nome via business profile: ${businessProfile.name}`)
-          return businessProfile.name.trim()
-        }
-      }
-    } catch (e) {
-      console.log('⚠️ Errore in getBusinessProfile:', e.message)
-    }
-
-    // Metodo 4: status con ~nickname~
-    try {
-      if (typeof conn.fetchStatus === 'function') {
-        const status = await conn.fetchStatus(userJid)
-        const match = status?.status?.match(/~([^~]+)~/)
-        if (match?.[1]?.trim()) {
-          console.log(`👤 Nome via status: ${match[1]}`)
-          return match[1].trim()
-        }
-      }
-    } catch (e) {
-      console.log('⚠️ Errore in fetchStatus:', e.message)
-    }
-
-    // Metodo 5: DB
-    try {
-      if (fs.existsSync(DB_FILE)) {
-        const dbContent = fs.readFileSync(DB_FILE, 'utf8')
-        const database = JSON.parse(dbContent)
-        const existingEntry = database.blockedNumbers.find(entry => entry.numero === formattedNumber)
-        if (existingEntry?.nickname && existingEntry.nickname !== "Sconosciuto" && !existingEntry.nickname.match(/^\+?\d+$/)) {
-          console.log(`👤 Nome trovato nel DB: ${existingEntry.nickname}`)
-          return existingEntry.nickname
-        }
-      }
-    } catch (e) {
-      console.log('⚠️ Errore nella lettura DB:', e.message)
-    }
-
-    console.log(`⚠️ Nessun nome trovato per ${formattedNumber}, uso numero come fallback`)
-    return formattedNumber
-
-  } catch (error) {
-    console.error('❌ Errore nel recupero nickname:', error)
-    const number = userJid.split('@')[0]
-    return number.startsWith('+') ? number : `+${number}`
-  }
-}
-
-// ====================== HOOK PRINCIPALE ======================
+// ====================== HOOK ======================
 
 export async function before(m, { conn }) {
   if (!m.isGroup) return true
 
-  const isJoinRequest = (
+  // 🔥 FIX: hook più robusto
+  const isJoinRequest =
     m.messageStubType === 21 ||
+    m.messageStubType === 27 ||
+    m.messageStubType === 31 ||
     m.message?.protocolMessage?.type === 5 ||
-    (m.messageStubParameters?.length > 0)
-  )
+    m.messageStubParameters?.length
 
   if (!isJoinRequest) return true
 
   try {
-    let requesterJid = m.messageStubParameters?.[0] || 
-                       m.message?.protocolMessage?.key?.participant || 
-                       m.sender
+    // 🔥 FIX: recupero jid migliorato
+    let requesterJid =
+      m.messageStubParameters?.[0] ||
+      m.message?.protocolMessage?.key?.participant ||
+      m.participant ||
+      m.sender
+
     if (!requesterJid) return true
 
-    const rawNumber = requesterJid.split('@')[0]
-    const formattedNumber = rawNumber.startsWith('+') ? rawNumber : `+${rawNumber}`
+    const raw = requesterJid.split('@')[0]
+    const number = raw.startsWith('+') ? raw : `+${raw}`
 
-    if (processingNumbers.has(formattedNumber)) {
-      console.log(`⚠️ Duplicazione evitata per ${formattedNumber}`)
-      return true
-    }
-
-    processingNumbers.add(formattedNumber)
+    if (processingNumbers.has(number)) return true
+    processingNumbers.add(number)
 
     const groupMetadata = await conn.groupMetadata(m.chat).catch(() => null)
     const groupName = groupMetadata?.subject || 'Gruppo sconosciuto'
-    const isBotAdmin = groupMetadata?.participants?.some(p => p.id === conn.user.jid && p.admin !== null) || false
-    const isAdmin = groupMetadata?.participants?.some(p => p.id === requesterJid && p.admin !== null) || false
-    const chatData = global.db.data.chats[m.chat]
-    const antivoipEnabled = chatData?.antivoip2 === true
+
+    const isBotAdmin = groupMetadata?.participants?.some(p => p.id === conn.user.jid && p.admin) || false
+    const isAdmin = groupMetadata?.participants?.some(p => p.id === requesterJid && p.admin) || false
+
+    // 🔥 FIX: chatData sicuro
+    const chatData = global.db.data.chats[m.chat] || {}
+    const antivoipEnabled = chatData.antivoip2 === true
+
+    console.log('🧪 DEBUG:', { antivoipEnabled, number, groupName, isBotAdmin })
 
     if (!antivoipEnabled) {
-      console.log(`ℹ️ Anti-VOIP disabilitato per "${groupName}". Accesso consentito.`)
-      processingNumbers.delete(formattedNumber)
+      processingNumbers.delete(number)
       return true
     }
 
-    const isItalian = formattedNumber.startsWith('+39')
+    // 🔥 FIX: controllo paese reale
+    const country = getCountryFromNumber(number)
+    const isItalian = country === 'IT'
+
     if (!isItalian) {
-      await executeBlock(conn, m.chat, requesterJid, formattedNumber, groupName, isAdmin, groupMetadata, isBotAdmin)
-      setTimeout(() => processingNumbers.delete(formattedNumber), 5000)
+      await executeBlock(conn, m.chat, requesterJid, number, groupName, isAdmin, isBotAdmin)
+      setTimeout(() => processingNumbers.delete(number), 5000)
       return false
     }
 
-    processingNumbers.delete(formattedNumber)
+    processingNumbers.delete(number)
     return true
 
-  } catch (error) {
-    console.error('🔥 ERRORE:', error)
-    if (isJoinRequest) {
+  } catch (e) {
+    console.error('🔥 ERRORE:', e)
+
+    if (LOG_CHAT) {
       await conn.sendMessage(LOG_CHAT, {
-        text: `*ERRORE FIREWALL*\n• Errore: ${error.message}`
+        text: `Errore firewall: ${e.message}`
       })
     }
+
     return true
   }
 }
 
 // ====================== BLOCCO ======================
 
-async function executeBlock(conn, chatJid, userJid, number, groupName, isAdmin, groupMetadata, isBotAdmin) {
-  if (!isAdmin && isBotAdmin) {  
-    try {
-      const normalizeJid = (jid) => jid.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
-      const normalizedJid = normalizeJid(userJid)
-      const mention = '@' + normalizedJid.split('@')[0]
-      const nickname = mention
+async function executeBlock(conn, chatJid, userJid, number, groupName, isAdmin, isBotAdmin) {
+  if (isAdmin || !isBotAdmin) return
 
-      await conn.groupRequestParticipantsUpdate(chatJid, [userJid], 'reject')
-      console.log(`☠️ VOIP BLOCCATO: ${number} (${nickname}) in "${groupName}"`)
+  try {
+    const jid = userJid.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+    const mention = '@' + jid.split('@')[0]
 
-      manageVoipDatabase(number, groupName, nickname)
+    await conn.groupRequestParticipantsUpdate(chatJid, [userJid], 'reject')
 
+    console.log(`🚫 BLOCCATO: ${number} in ${groupName}`)
+
+    manageVoipDatabase(number, groupName, mention)
+
+    if (LOG_CHAT) {
       await conn.sendMessage(LOG_CHAT, {
-        text: 
-          `🚫 *RICHIESTA BLOCCATA*\n` +
-          `──────────────────────\n` +
-          `👤 *Numero:* ${number}\n` +
-          `🏷️ *Menzione:* ${mention}\n` +
-          `👥 *Gruppo:* ${groupName}\n` +
-          `📅 *Data:* ${formatDate()}\n` +
-          `──────────────────────\n` +
-          `🛡️ *Firewall Anti-VOIP v7.4*`,
-        mentions: [normalizedJid]
+        text:
+          `🚫 BLOCCATO\n` +
+          `Numero: ${number}\n` +
+          `Gruppo: ${groupName}\n` +
+          `Data: ${formatDate()}`,
+        mentions: [jid]
       })
+    }
 
-    } catch (error) {
-      try {
-        if (!groupMetadata) groupMetadata = await conn.groupMetadata(chatJid)
-        const alreadyInGroup = groupMetadata?.participants?.some(p => p.id === userJid)
-
-        if (!alreadyInGroup) {
-          const normalizeJid = (jid) => jid.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
-          const normalizedJid = normalizeJid(userJid)
-          const mention = '@' + normalizedJid.split('@')[0]
-
-          await conn.groupParticipantsUpdate(chatJid, [userJid], 'remove')
-          console.log(`☠️ VOIP BLOCCATO (fallback): ${number} (${mention}) in "${groupName}"`)
-
-          manageVoipDatabase(number, groupName, mention)
-
-          await conn.sendMessage(LOG_CHAT, {
-            text: 
-              `🚫 *RICHIESTA BLOCCATA (Fallback)*\n` +
-              `──────────────────────\n` +
-              `👤 *Numero:* ${number}\n` +
-              `🏷️ *Menzione:* ${mention}\n` +
-              `👥 *Gruppo:* ${groupName}\n` +
-              `📅 *Data:* ${formatDate()}\n` +
-              `──────────────────────\n` +
-              `🛡️ *Firewall Anti-VOIP v7.4*`,
-            mentions: [normalizedJid]
-          })
-        } else {
-          console.warn(`❗ Utente ${number} è già nel gruppo, non lo rimuovo.`)
-        }
-      } catch (innerError) {
-        console.error(`❌ Errore nel fallback per ${number}:`, innerError.message)
-      }
+  } catch {
+    try {
+      await conn.groupParticipantsUpdate(chatJid, [userJid], 'remove')
+    } catch (e) {
+      console.error('Fallback error:', e.message)
     }
   }
 }
@@ -335,20 +180,14 @@ async function executeBlock(conn, chatJid, userJid, number, groupName, isAdmin, 
 // ====================== INIT ======================
 
 export function init() {
-  console.log('🛡️ Firewall Anti-VOIP v7.4 attivato con DB diretto e compatibilità anti-instagram')
+  console.log('🛡️ Anti-VOIP v7.5 FIXED attivo')
 
   if (!fs.existsSync(DB_FILE)) {
-    try {
-      fs.writeFileSync(DB_FILE, JSON.stringify({ blockedNumbers: [] }, null, 2))
-      console.log('📁 Database voip.json creato con successo')
-    } catch (error) {
-      console.error('❌ Errore nella creazione del database:', error)
-    }
+    fs.writeFileSync(DB_FILE, JSON.stringify({ blockedNumbers: [] }, null, 2))
   }
 
   return {
     name: 'voip-firewall',
-    description: 'Blocca numeri stranieri in base alle impostazioni del gruppo e salva i dati in un database JSON',
     priority: 9999
   }
 }
