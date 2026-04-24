@@ -238,7 +238,7 @@ export async function before(m, { conn }) {
     const isBotAdmin = groupMetadata?.participants?.some(p => p.id === conn.user.jid && p.admin !== null) || false
     const isAdmin = groupMetadata?.participants?.some(p => p.id === requesterJid && p.admin !== null) || false
     const chatData = global.db.data.chats[m.chat]
-    const antivoipEnabled = chatData?.antivoip !== false
+    const antivoipEnabled = chatData?.antivoip2 === true
 
     if (!antivoipEnabled) {
       console.log(`ℹ️ Anti-VOIP disabilitato per "${groupName}". Accesso consentito.`)
