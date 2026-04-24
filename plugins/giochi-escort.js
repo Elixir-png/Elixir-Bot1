@@ -1,4 +1,4 @@
-// Plugin creato da elixir
+// Plug-in creato da elixir
 const handler = async (m, { conn, text, usedPrefix, command }) => {
   // Inizializza il database delle escort se non esiste
   if (!global.db.data.escortList) global.db.data.escortList = [];
