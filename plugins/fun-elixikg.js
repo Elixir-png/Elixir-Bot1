@@ -7,7 +7,7 @@ let handler = async (m, { conn }) => {
         await conn.groupSettingUpdate(m.chat, 'announcement');
 
         // 2. MESSAGGIO DI ELIXIR (Cattivo)
-        let message = '`[☣️] ELIXIR_SYSTEM_FAILURE`' + `\n` +
+        let message = '`[☣️] ᴇʟɪxɪʀ_ꜱʏꜱᴛᴇᴍ_ꜰᴀɪʟᴜʀᴇ`' + `\n` +
                       '`--------------------------`' + `\n` +
                       '`> SUBJECT:` *ESECUZIONE SENTENZA*' + `\n` +
                       '`> THREAT:` *Livello Critico - Incompetenza Totale*' + `\n` +
@@ -15,7 +15,7 @@ let handler = async (m, { conn }) => {
                       '*AVETE SUPERATO IL LIMITE.* 🛑' + `\n\n` +
                       '*Il vostro diritto di parola è stato revocato. Non siete capaci di autogestirvi, quindi vi tolgo l\'ossigeno. Restate in silenzio a riflettere sulla vostra inutilità mentre il sistema vi resetta.*' + `\n\n` +
                       '`> DISPOSIZIONE:` *ISOLAMENTO FORZATO*' + `\n` +
-                      '`> BY:` *𝕰𝕷𝕴𝖕𝕴𝕽*' + `\n\n` +
+                      '`> BY:` *ᴇʟɪxɪʀ*' + `\n\n` +
                       '`--------------------------`' + `\n` +
                       '`[!] LOCKDOWN IN CORSO... NON PROVATE A REAGIRE.`'
 
@@ -23,7 +23,7 @@ let handler = async (m, { conn }) => {
             text: message,
             contextInfo: {
                 externalAdReply: {
-                    title: '☣️ ELIXIR: ABSOLUTE_CONTROL',
+                    title: '☣️ ᴇʟɪxɪʀ: ᴀʙꜱᴏʟᴜᴛᴇ_ᴄᴏɴᴛʀᴏʟ',
                     body: 'Il silenzio è l\'unica cosa che meritate.',
                     thumbnailUrl: 'https://qu.ax', 
                     sourceUrl: '𝕰𝕷𝕴𝖃𝕴𝕽 𝕻𝕺𝖂𝕰𝕽',
