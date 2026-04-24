@@ -1,101 +1,70 @@
-import { getDevice } from '@whiskeysockets/baileys'
-
+// Plugin creato da elixir
 const handler = async (m, { conn, text, usedPrefix, command }) => {
-  // Fix identificazione: controlla menzioni, poi risposta, poi se stesso
-  let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : m.sender;
-  
-  let nome = await conn.getName(who);
-  
-  await m.reply('🔍 *Analisi dei pacchetti in corso...*');
+  // Inizializza il database delle escort se non esiste
+  if (!global.db.data.escortList) global.db.data.escortList = [];
 
-  const realDeviceInfo = await getRealDeviceInfo(m, conn, who);
-  const fakeData = generateFakeData(realDeviceInfo);
-  
-  // Passiamo il JID intero alla funzione format per creare il tag corretto
-  const doxMessage = formatDoxMessage(nome, fakeData, realDeviceInfo, who);
-  
-  await conn.sendMessage(m.chat, { 
-    text: doxMessage, 
-    mentions: [who] // Questa riga rende il tag blu e cliccabile
-  }, { quoted: m });
-};
+  // Identificazione target
+  let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : null;
 
-handler.help = ['dox'];
-handler.tags = ['giochi'];
-handler.command = /^dox/i;
-
-export default handler;
-
-// === FUNZIONI HELPER (Fixate) ===
-
-async function getRealDeviceInfo(m, conn, target) {
-  let numeroTelefono = target.split('@')[0];
-  let msgId = m.quoted ? m.quoted.id : m.key.id;
-  let rawDevice = getDevice(msgId);
-  
-  let deviceModel = '';
-  switch(rawDevice) {
-    case 'android': deviceModel = pickRandom(['Samsung Galaxy S23 Ultra', 'Xiaomi 13 Pro', 'Google Pixel 8', 'OnePlus 11']); break;
-    case 'ios': deviceModel = pickRandom(['iPhone 15 Pro Max', 'iPhone 14', 'iPhone 13 Mini']); break;
-    case 'web': deviceModel = 'WhatsApp Web (Chrome/Win10)'; break;
-    default: deviceModel = 'PC Desktop (Windows 11)';
+  // --- COMANDO AGGIUNGI ---
+  if (command === 'addescort') {
+    if (!who) return m.reply(`*⚠️ Tagga chi vuoi far diventare una escort!*`);
+    if (global.db.data.escortList.includes(who)) return m.reply(`*✨ Questo utente è già nella lista del degrado.*`);
+    
+    global.db.data.escortList.push(who);
+    return m.reply(`*✅ @${who.split('@')[0]} è ora ufficialmente una escort del gruppo.*`, null, { mentions: [who] });
   }
 
-  return {
-    numero: `+${numeroTelefono.substring(0, 2)} ${numeroTelefono.substring(2, 5)} *** **`,
-    modello: deviceModel,
-    rawDevice
-  };
-}
+  // --- COMANDO RIMUOVI ---
+  if (command === 'remescort') {
+    if (!who) return m.reply(`*⚠️ Tagga chi vuoi "licenziare".*`);
+    if (!global.db.data.escortList.includes(who)) return m.reply(`*L'utente non è in lista.*`);
+    
+    global.db.data.escortList = global.db.data.escortList.filter(u => u !== who);
+    return m.reply(`*❌ @${who.split('@')[0]} è stato rimosso dalla lista escort.*`, null, { mentions: [who] });
+  }
 
-function generateFakeData(realInfo) {
-  return {
-    ip: `151.42.${randomInt(1, 255)}.${randomInt(1, 255)}`,
-    mac: `${randomHex()}:${randomHex()}:${randomHex()}:${randomHex()}:${randomHex()}:${randomHex()}`,
-    isp: pickRandom(['TIM SpA', 'Vodafone Italia', 'Wind Tre S.p.A', 'Fastweb']),
-    citta: pickRandom(['Roma', 'Milano', 'Napoli', 'Torino', 'Palermo', 'Genova']),
-    batteria: `${randomInt(5, 98)}%`,
-    archiviazione: `${randomInt(40, 90)}% pieno`,
-    lat: (41.8 + Math.random()).toFixed(4),
-    lon: (12.4 + Math.random()).toFixed(4)
-  };
-}
+  // --- LOGICA ESCORT / POLE DANCE ---
+  if (command === 'escor' || command === 'escort') {
+    if (!who) return conn.reply(m.chat, `*⚠️ Tagga una escort per farla ballare!*`, m);
+    
+    // Controllo se l'utente è in lista
+    if (!global.db.data.escortList.includes(who)) {
+        return m.reply(`*🚫 @${who.split('@')[0]} non è ancora una escort. Usa ${usedPrefix}addescort per aggiungerlo!*`, null, { mentions: [who] });
+    }
 
-function formatDoxMessage(nome, data, realInfo, who) {
-  // Il segreto è usare @ + il numero estratto dal JID
-  return `*[ ✔ ] DOX COMPLETATO PER @${who.split('@')[0]}*
+    let userTag = `@${who.split('@')[0]}`;
+    const fasiShow = [
+      `🔞 *LUCI ROSSE:* Il palco si illumina. ${userTag} entra in scena coperto solo da un velo pietoso e olio per il corpo.`,
+      `💃 *L'ATTACCO AL PALO:* Con una mossa goffa, ${userTag} si arrampica sul palo. Si sente il rumore della pelle che stride.`,
+      `✨ *POLE DANCE:* Inizia a ruotare vorticosamente. Il pubblico fischia, qualcuno lancia monetine.`,
+      `🔥 *IL FINALE:* Si lascia scivolare lentamente fino a terra, aprendo le gambe davanti alla prima fila.`,
+      `💰 *UMILIAZIONE:* ${userTag} raccoglie i pochi spiccioli da terra. Che degrado.`
+    ];
 
-*🎯 DATI PERSONALI:*
-• *Nome:* ${nome}
-• *Numero:* ${realInfo.numero}
-• *Codice Fiscale:* ${generateFakeCF()}
-• *Email:* ${nome.toLowerCase().replace(/ /g, '.')}@gmail.com
+    for (let riga of fasiShow) {
+      await conn.sendMessage(m.chat, { text: riga, mentions: [who] });
+      await new Promise(resolve => setTimeout(resolve, 3000));
+    }
+    return;
+  }
 
-*📱 DISPOSITIVO:*
-• *Modello:* ${realInfo.modello}
-• *Batteria:* ${data.batteria}
-• *Storage:* ${data.archiviazione}
-• *WhatsApp:* v2.24.${randomInt(10, 80)}
+  // --- COMANDO MANCIA ---
+  if (command === 'mancia') {
+    if (!who) return m.reply(`*⚠️ A chi vuoi dare la mancia?*`);
+    let userTag = `@${who.split('@')[0]}`;
+    const mance = [
+      `💸 Lanci 5€ sudatissimi in faccia a ${userTag}. "Muoviti schiavo!"`,
+      `🪙 Lanci 1€ nel perizoma di ${userTag}. Il freddo lo fa sussultare.`,
+      `💵 Lanci banconote false a ${userTag} solo per vederlo correre a raccoglierle.`,
+      `🤮 Lanci a ${userTag} un bottone e una cicca masticata. È il suo valore.`
+    ];
+    return conn.sendMessage(m.chat, { text: mance[Math.floor(Math.random() * mance.length)], mentions: [who] }, { quoted: m });
+  }
+};
 
-*🌐 RETE & POSIZIONE:*
-• *IP:* ${data.ip}
-• *MAC:* ${data.mac}
-• *ISP:* ${data.isp}
-• *Città:* ${data.citta}
-• *Coordinate:* ${data.lat}, ${data.lon}
+handler.help = ['addescort', 'remescort', 'escort @user', 'mancia @user'];
+handler.tags = ['fun'];
+handler.command = /^(addescort|remescort|escor|escort|mancia)$/i;
 
-*⚠️ VULNERABILITÀ:*
-• *Porte aperte:* 80, 443, 8080
-• *Rischio Ban:* Basso
-• *Sicurezza:* WPA2-PSK`.trim();
-}
-
-function pickRandom(list) { return list[Math.floor(Math.random() * list.length)]; }
-function randomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-function randomHex() { return Math.floor(Math.random() * 255).toString(16).toUpperCase().padStart(2, '0'); }
-function generateFakeCF() { 
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let res = '';
-  for(let i=0; i<16; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
-  return res;
-}
+export default handler;
