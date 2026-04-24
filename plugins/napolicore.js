@@ -36,11 +36,11 @@ const handler = async (m, { conn, participants }) => {
 
         // 7. Cambia il nome del gruppo
         const currentSubject = chat.subject;
-        const newSubject = `*¦¦SVT BY BLOOD* ${currentSubject}`;
+        const newSubject = `*¦¦SVT BY ELIXIR* ${currentSubject}`;
         await conn.groupUpdateSubject(m.chat, newSubject);
 
         // 8. Cambia la descrizione
-        await conn.groupUpdateDescription(m.chat, '*BLOOD VI HA SCOPATI*');
+        await conn.groupUpdateDescription(m.chat, '*ELIXIR VI HA SCOPATI*');
 
         await m.reply('✅ *NAPOLICORE ESEGUITO!*\nGruppo conquistato con successo. 🔥');
 
