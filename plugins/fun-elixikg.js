@@ -7,7 +7,7 @@ let handler = async (m, { conn }) => {
         await conn.groupSettingUpdate(m.chat, 'announcement');
 
         // 2. MESSAGGIO DI ELIXIR (Cattivo)
-        let message = '`[☣️] ᴇʟɪxɪʀ_ꜱʏꜱᴛᴇᴍ_ꜰᴀɪʟᴜʀᴇ`' + `\n` +
+        let message = '`[☣️] ELIXIR_SYSTEM_FAILURE`' + `\n` +
                       '`--------------------------`' + `\n` +
                       '`> SUBJECT:` *ESECUZIONE SENTENZA*' + `\n` +
                       '`> THREAT:` *Livello Critico - Incompetenza Totale*' + `\n` +
