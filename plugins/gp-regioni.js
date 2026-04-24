@@ -1,58 +1,52 @@
 let handler = async (m, { conn }) => {
   try {
-    const nordregioni = '📍 Di quale regione sei? (Nord + Centro)';
-    const sudregioni = '📍 Di quale regione sei? (Sud + Isole)';
-    const regioninord = [
-      'Emilia-Romagna',
-      'Friuli Venezia Giulia',
-      'Lazio',
-      'Liguria',
-      'Lombardia',
-      'Marche',
-      'Piemonte',
-      'Toscana',
-      'Trentino-Alto Adige',
-      'Umbria',
-      "Valle d'Aosta",
-      'Veneto'
-    ];
-    const regionisud = [
-      'Abruzzo',
-      'Basilicata',
-      'Calabria',
-      'Campania',
-      'Molise',
-      'Puglia',
-      'Sardegna',
-      'Sicilia'
-    ];
-    await conn.sendMessage(m.chat, {
-      poll: {
-        name: nordregioni,
-        values: regioninord,
-        selectableCount: 1,
-        toAnnouncementGroup: false
+    const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+    const polls = [
+      {
+        name: "📍 Nord-Ovest (Piemonte, Lombardia, Liguria, VdA)",
+        values: ["Torino", "Milano", "Genova", "Aosta", "Bergamo", "Brescia", "Varese", "Como", "Pavia", "Novara", "Cuneo", "Imperia"]
+      },
+      {
+        name: "📍 Nord-Est (Veneto, FVG, Emilia-Romagna, Trentino)",
+        values: ["Venezia", "Verona", "Padova", "Trieste", "Udine", "Bologna", "Modena", "Parma", "Rimini", "Trento", "Bolzano", "Piacenza"]
+      },
+      {
+        name: "📍 Centro (Lazio, Toscana, Marche, Umbria)",
+        values: ["Roma", "Firenze", "Pisa", "Livorno", "Ancona", "Pesaro", "Perugia", "Terni", "Latina", "Frosinone", "Viterbo", "Arezzo"]
+      },
+      {
+        name: "📍 Sud (Campania, Puglia, Calabria, Basilicata)",
+        values: ["Napoli", "Caserta", "Salerno", "Bari", "Lecce", "Foggia", "Taranto", "Reggio Calabria", "Catanzaro", "Cosenza", "Potenza", "Matera"]
+      },
+      {
+        name: "📍 Isole e Altri (Sicilia, Sardegna, Abruzzo, Molise)",
+        values: ["Palermo", "Catania", "Messina", "Cagliari", "Sassari", "L'Aquila", "Pescara", "Chieti", "Campobasso", "Isernia", "Olbia", "Nuoro"]
       }
-    });
-    await new Promise(resolve => setTimeout(resolve, 500));
-    await conn.sendMessage(m.chat, {
-      poll: {
-        name: sudregioni,
-        values: regionisud,
-        selectableCount: 1,
-        toAnnouncementGroup: false
-      }
-    });
+    ];
+
+    for (const poll of polls) {
+      await conn.sendMessage(m.chat, {
+        poll: {
+          name: poll.name,
+          values: poll.values,
+          selectableCount: 1,
+          toAnnouncementGroup: false
+        }
+      });
+      await delay(1000); // Delay di 1 secondo per evitare lo spam-lock
+    }
 
   } catch (error) {
     console.error('Errore in pollregioni:', error);
-    await conn.reply(m.chat, `${global.errore}`, m);
+    await conn.reply(m.chat, `❌ Si è verificato un errore durante l'invio dei sondaggi.`, m);
   }
 };
 
-handler.help = ['pollregioni'];
+handler.help = ['pollregioni', 'province'];
 handler.tags = ['gruppo'];
-handler.command = ['pollregioni', 'regioni'];
+handler.command = ['pollregioni', 'regioni', 'province'];
 handler.group = true;
 handler.admin = true;
+
 export default handler;
