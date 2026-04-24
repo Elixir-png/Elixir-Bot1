@@ -14,7 +14,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     // Estrai il codice di invito dal link
     let [_, code] = text.match(linkRegex) || [];
     if (!code) {
-        return m.reply('『 ❌ 』 **Link non valido**\n\n' +
+        return m.reply('『 ❌ 』 *Link non valido*\n\n' +
                       '✅ Formato corretto: `https://chat.whatsapp.com/xxxxxxxxx`');
     }
     
@@ -27,7 +27,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         try {
             groupInfo = await conn.groupGetInviteInfo(code);
         } catch (error) {
-            return m.reply('『 ❌ 』 **Errore nell\'ottenere informazioni sul gruppo**\n\n' +
+            return m.reply('『 ❌ 』 *Errore nell\'ottenere informazioni sul gruppo*\n\n' +
                           '💡 *Possibili cause:*\n' +
                           '• Link scaduto o revocato\n' +
                           '• Link non valido\n' +
@@ -37,7 +37,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         // Controlla il numero di membri (deve essere almeno 40)
         const MIN_MEMBERS = 40;
         if (groupInfo.size < MIN_MEMBERS) {
-            return m.reply(`『 ❌ 』 **Gruppo troppo piccolo**\n\n` +
+            return m.reply(`『 ❌ 』 *Gruppo troppo piccolo*\n\n` +
                           `📊 *Membri attuali:* ${groupInfo.size}\n` +
                           `📋 *Minimo richiesto:* ${MIN_MEMBERS} membri\n\n` +
                           `💡 Torna quando il gruppo avrà più membri!`);
@@ -45,7 +45,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         
         // Controlla se gli inviti sono limitati agli amministratori
         if (groupInfo.restrict) {
-            return m.reply('『 ❌ 』 **Accesso limitato**\n\n' +
+            return m.reply('『 ❌ 』 *Accesso limitato*\n\n' +
                           '🔒 Solo gli amministratori possono invitare membri in questo gruppo.\n' +
                           '💡 Chiedi a un admin di aggiungermi manualmente.');
         }
@@ -54,7 +54,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         try {
             let groupData = await conn.groupMetadata(groupInfo.id).catch(() => null);
             if (groupData) {
-                return m.reply('『 ⚠️ 』 **Sono già in questo gruppo!**\n\n' +
+                return m.reply('『 ⚠️ 』 *Sono già in questo gruppo!*\n\n' +
                               `📝 Nome: ${groupData.subject}\n` +
                               `👥 Membri: ${groupData.participants.length}`);
             }
@@ -77,7 +77,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         chats.expired = Date.now() + expiredTime;
         chats.joinedBy = m.sender;
         chats.joinedAt = Date.now();
-        let successMessage = `✅ **Ingresso completato con successo!**\n\n` +
+        let successMessage = `✅ *Ingresso completato con successo!*\n\n` +
                             `🏷️ *Gruppo:* ${groupInfo.subject || 'Nome non disponibile'}\n` +
                             `👥 *Membri:* ${groupInfo.size}\n` +
                             `📅 *Data ingresso:* ${new Date().toLocaleString('it-IT')}\n` +
@@ -89,8 +89,8 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         try {
             await new Promise(resolve => setTimeout(resolve, 2000));
             await conn.sendMessage(joinResult, {
-                text: `👋 **Ciao a tutti!**\n\n` +
-                     `🤖 Sono un bot e rimarrò qui per **${EXPIRY_DAYS} giorni**\n` +
+                text: `👋 *Ciao a tutti!*\n\n` +
+                     `🤖 Sono un bot e rimarrò qui per *${EXPIRY_DAYS} giorni*\n` +
                      `📅 Scadenza: ${expiryDate.toLocaleString('it-IT')}\n\n` +
                      `💡 Per assistenza o per estendere la permanenza:\n` +
                      `📱 Contatta: wa.me/212617006922\n\n` +
@@ -103,10 +103,10 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             try {
                 console.log(`Uscita automatica programmata per il gruppo: ${joinResult}`);
                 await conn.sendMessage(joinResult, {
-                    text: `👋 **Tempo scaduto!**\n\n` +
+                    text: `👋 *Tempo scaduto!*\n\n` +
                          `⏰ La mia permanenza di ${EXPIRY_DAYS} giorni è terminata.\n` +
                          `🚪 Sto per lasciare il gruppo automaticamente.\n\n` +
-                         `💡 **Per riavermi nel gruppo:**\n` +
+                         `💡 *Per riavermi nel gruppo:*\n` +
                          `📱 Contatta il creatore: wa.me/212617006922\n\n` +
                          `👋 Arrivederci a tutti!`
                 });
@@ -134,7 +134,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     } catch (error) {
         console.error('Errore nel comando entra:', error);
         
-        let errorMessage = '『 ❌ 』 **Errore durante l\'ingresso nel gruppo**\n\n';
+        let errorMessage = '『 ❌ 』 *Errore durante l\'ingresso nel gruppo*\n\n';
         if (error.message.includes('forbidden')) {
             errorMessage += '🔒 Accesso negato. Il gruppo potrebbe aver limitazioni.';
         } else if (error.message.includes('not-found')) {
