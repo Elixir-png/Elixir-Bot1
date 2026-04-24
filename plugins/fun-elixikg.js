@@ -14,10 +14,10 @@ let handler = async (m, { conn, isAdmin }) => {
                       '`> SUBJECT:` *ESECUZIONE SENTENZA*' + `\n` +
                       '`> THREAT:` *Livello Critico - Incompetenza Totale*' + `\n` +
                       '`--------------------------`' + `\n\n` +
-                      '**AVETE SUPERATO IL LIMITE.** 🛑' + `\n\n` +
+                      '*AVETE SUPERATO IL LIMITE.* 🛑' + `\n\n` +
                       '*Il vostro diritto di parola è stato revocato. Non siete capaci di autogestirvi, quindi vi tolgo l\'ossigeno. Restate in silenzio a riflettere sulla vostra inutilità mentre il sistema vi resetta.*' + `\n\n` +
                       '`> DISPOSIZIONE:` *ISOLAMENTO FORZATO*' + `\n` +
-                      '`> BY:` **𝕰𝕷𝕴𝖕𝕴𝕽**' + `\n\n` +
+                      '`> BY:` *𝕰𝕷𝕴𝖕𝕴𝕽*' + `\n\n` +
                       '`--------------------------`' + `\n` +
                       '`[!] LOCKDOWN IN CORSO... NON PROVATE A REAGIRE.`'
 
