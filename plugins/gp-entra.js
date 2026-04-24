@@ -83,7 +83,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
                             `📅 *Data ingresso:* ${new Date().toLocaleString('it-IT')}\n` +
                             `⏰ *Scadenza:* ${expiryDate.toLocaleString('it-IT')}\n` +
                             `🕐 *Durata permanenza:* ${EXPIRY_DAYS} giorni\n\n` +
-                            `💡 *Per estendere il tempo, contatta:* wa.me/393701330693`;
+                            `💡 *Per estendere il tempo, contatta:* wa.me/212617006922`;
         
         await m.reply(successMessage);
         try {
@@ -93,7 +93,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
                      `🤖 Sono un bot e rimarrò qui per **${EXPIRY_DAYS} giorni**\n` +
                      `📅 Scadenza: ${expiryDate.toLocaleString('it-IT')}\n\n` +
                      `💡 Per assistenza o per estendere la permanenza:\n` +
-                     `📱 Contatta: wa.me/393701330693\n\n` +
+                     `📱 Contatta: wa.me/212617006922\n\n` +
                      `🚀 Buona giornata a tutti!`
             });
         } catch (welcomeError) {
@@ -107,7 +107,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
                          `⏰ La mia permanenza di ${EXPIRY_DAYS} giorni è terminata.\n` +
                          `🚪 Sto per lasciare il gruppo automaticamente.\n\n` +
                          `💡 **Per riavermi nel gruppo:**\n` +
-                         `📱 Contatta il creatore: wa.me/393701330693\n\n` +
+                         `📱 Contatta il creatore: wa.me/212617006922\n\n` +
                          `👋 Arrivederci a tutti!`
                 });
                 await new Promise(resolve => setTimeout(resolve, 5000));
@@ -145,7 +145,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             errorMessage += '💡 Riprova tra qualche minuto o verifica il link.';
         }
         
-        errorMessage += '\n\n📧 Se il problema persiste, contatta: wa.me/393701330693';
+        errorMessage += '\n\n📧 Se il problema persiste, contatta: wa.me/212617006922';
         
         return m.reply(errorMessage);
     }
