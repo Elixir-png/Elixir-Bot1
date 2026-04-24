@@ -7,8 +7,7 @@ const DB_FILE = 'voip.json'
 let processingNumbers = new Set()
 
 function formatDate() {
-  const d = new Date()
-  return d.toLocaleString('it-IT', { hour12: false })
+  return new Date().toLocaleString('it-IT', { hour12: false })
 }
 
 function getCountry(number) {
@@ -30,15 +29,15 @@ function saveDB(db) {
   fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2))
 }
 
-function saveNumber(number, group, nick) {
-  let db = loadDB()
+function saveNumber(number, group, jid) {
+  const db = loadDB()
 
-  let found = db.blocked.find(v => v.number === number)
+  const found = db.blocked.find(v => v.number === number)
 
   if (!found) {
     db.blocked.push({
       number,
-      nick,
+      jid,
       group,
       count: 1,
       first: formatDate(),
@@ -48,7 +47,6 @@ function saveNumber(number, group, nick) {
   } else {
     found.count++
     found.last = formatDate()
-    if (!found.group.includes(group)) found.group = group
   }
 
   saveDB(db)
@@ -67,16 +65,15 @@ export async function before(m, { conn }) {
 
     if (!enabled) return true
 
-    let jid =
+    const jid =
       m.messageStubParameters?.[0] ||
       m.key?.participant ||
       m.sender
 
     if (!jid) return true
 
-    let num = jid.split('@')[0]
+    const num = jid.split('@')[0]
     if (processingNumbers.has(num)) return true
-
     processingNumbers.add(num)
 
     const isItalian = num.startsWith('39') || num.startsWith('+39')
@@ -85,11 +82,25 @@ export async function before(m, { conn }) {
       const group = await conn.groupMetadata(m.chat).catch(() => ({}))
       const groupName = group.subject || 'unknown'
 
-      // 🔥 FIX: SOLO RIFIUTO RICHIESTA (NO REMOVE)
+      // 🔥 FIX REALE: REJECT JOIN REQUEST CORRETTO
       try {
-        if (conn.groupRequestParticipantsUpdate) {
-          await conn.groupRequestParticipantsUpdate(m.chat, [jid], 'reject')
-        }
+        const requests =
+          group?.pendingRequests ||
+          group?.joinRequests ||
+          []
+
+        const target = requests.find(r =>
+          r.jid === jid ||
+          r.participant === jid
+        )
+
+        const targetJid = target?.jid || jid
+
+        await conn.groupRequestParticipantsUpdate(
+          m.chat,
+          [targetJid],
+          'reject'
+        )
       } catch (e) {
         console.log('reject error:', e)
       }
