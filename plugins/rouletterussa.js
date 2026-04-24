@@ -6,7 +6,7 @@ let handler = async (m, { conn, command }) => {
 
     // --- APRI IL TAVOLO (.roulette) ---
     if (command === 'roulette') {
-        if (rouletteSessioni[chat]) return m.reply('⚠️ C\'è già una partita in corso. Non vedi il sangue a terra? Scrivi *.entra*');
+        if (rouletteSessioni[chat]) return m.reply('⚠️ C\'è già una partita in corso. Non vedi il sangue a terra? Scrivi *.trasi*');
 
         rouletteSessioni[chat] = {
             giocatori: [who],
@@ -20,14 +20,14 @@ let handler = async (m, { conn, command }) => {
         intro += `_Le luci soffuse illuminano un tavolo circolare. Il freddo acciaio di una Smith & Wesson rimbalza sul legno mentre l'odore di polvere da sparo riempie la stanza._\n\n`;
         intro += `📜 *REGOLAMENTO:* Ci si siede, si carica un solo colpo e si preme il grilletto a turno. L'ultimo che resta intero vince la gloria.\n\n`;
         intro += `👤 *Giocatori attuali:* 1/6\n`;
-        intro += `👉 Scrivi *.entra* per sederti al tavolo.\n`;
+        intro += `👉 Scrivi *.trasi* per sederti al tavolo.\n`;
         intro += `👉 L'organizzatore può scrivere *.spara* per sigillare le porte e iniziare.`;
 
         return conn.sendMessage(chat, { text: intro, mentions: [who] }, { quoted: m });
     }
 
-    // --- ENTRA NEL TAVOLO (.entra) ---
-    if (command === 'entra') {
+    // --- trasi NEL TAVOLO (.trasi) ---
+    if (command === 'trasi') {
         let sessione = rouletteSessioni[chat];
         if (!sessione) return m.reply('La sedia è vuota. Crea un tavolo con *.roulette*');
         if (sessione.stato !== 'ATTESA') return m.reply('Troppo tardi. Il tamburo sta già girando...');
